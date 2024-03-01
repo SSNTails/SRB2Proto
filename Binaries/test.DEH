@@ -1,0 +1,20 @@
+Patch File for DeHackEd v3.0
+
+# Note: Use the pound sign ('#') to start comment lines.
+
+Doom version = 19
+Patch format = 6
+
+Thing 2 (Trooper)
+Close attack frame = 0
+Far attack frame = 0
+
+Thing 3 (Sargeant)
+Close attack frame = 0
+Far attack frame = 0
+
+Thing 23 (Pain Elemental)
+Close attack frame = 127
+Far attack frame = 0
+Death frame = 127
+Bits = 4212230

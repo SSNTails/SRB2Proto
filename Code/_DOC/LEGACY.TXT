@@ -1,0 +1,780 @@
+
+ DooM LEGACY
+ Release v1.25, August 1998.
+
+ Last Updated: 25-Aug-1998.
+
+ Original game & sources by: Id Software.
+ Additions (c)1998 by: Denis Fabrice & Boris Pereira
+
+ Doom LEGACY web site: HTTP://www.frag.com/doomlegacy
+	      mail to: legacy@frag.com
+
+
+ -----------------------------------------------------------------------
+ MAIN DOCUMENTATION
+ -----------------------------------------------------------------------
+
+
+
+ ---------
+ WHATS NEW
+ ---------
+
+ Here's some of the new or revised sections for the last updates:
+
+     Update v1.27  15-Feb-1999
+     -------------------------
+     - new section [5-8] HOW DOES LEGACY HANDLE THE MULTIPLAYER STARTS ?
+       cut and pasted form the "Whatsnew.txt" file.
+     - new section [5-9] The new intermision screen
+       cut and pasted form the "Whatsnew.txt" file.
+     - update section [5-5] How to play with tcp/ip, with the new tcp/ip
+       support
+     - update section [5-7] Network parameters with the news paramters
+     - update section [6] Command-line options with "+" ability
+
+     Update v1.25  25-Aug-1998
+     -------------------------
+     - section [6] : '-teamplay', '-teamskin', '-file' enhanced.
+
+     04-August-1998 (forgot to document this in last update)
+     --------------
+     - section [6] : '-nocd' option.
+
+     Update v1.23 19-July-1998
+     -------------------------
+     - new section: [3-4] New cheats.
+
+
+
+ --------
+ CONTENTS
+ --------
+
+ [1] Introduction
+     [1-1] What's New
+     [1-2] What's coming
+
+ [2] Installation
+     [2-1] Setting up the game
+     [2-2] Setting up the controls
+     [2-3] Setting up the sound
+     [2-4] Tuning up the mouse speed
+     [2-5] the Setup Controls menu
+
+ [3] Additions
+     [3-1] Shooting up and down
+     [3-2] Auto aim toggle
+     [3-3] Weapon changes
+     [3-4] New cheats
+
+ [4] Console
+
+ [5] Network game (multiplayer)
+     [5-1] Quick-start of a 5-32 players network game
+     [5-2] the new Client/Server model
+     [5-3] Setting up the SERVER
+     [5-4] the return of -left/-right
+     [5-5] How to play with tcp/ip
+     [5-6] Playing Legacy over modem
+     [5-7] Network parameters
+     [5-8] HOW DOES LEGACY HANDLE THE MULTIPLAYER STARTS ?
+     [5-9] The new intermision screen
+
+ [6] Command-line options
+
+ [7] Notes
+     [7-3] Copyright stuff
+     [7-5] Dehacked patch
+
+ Belgian note (!?)
+ Acknowledgments
+
+
+
+ ----------------
+ [1] INTRODUCTION
+ ----------------
+
+  Hello all Doom fans of the world, here is the latest release of
+  Doom LEGACY project by Fab & Boris (we still didn't found a name
+  for our team, let's say it is 'Fab & Boris').
+
+  Well, if you are reading this you probably know by now that the
+  gods at IdSoftware have released the sources of the greatest game
+  on earth : Doom !!
+
+  Of course a lot of projects have started around the sources since
+  about January 1998, and Doom LEGACY is competing to be the best of
+  the choices!
+
+  We have always dreamed of Doom sources being released, and all the
+  features that we'd like to add. Since Doom1 was out we are fans
+  of deathmatching. Don't ask us why we like it more than Duke Nukem
+  or other clones, we like the atmosphere of Doom and its like that!
+
+  This new version of Doom is not commercial anymore, but you should
+  have the original Doom2 data (doom2.wad and other files), that comes
+  with the original Doom2 software.
+
+  If you have problems running this version or want more informations,
+  first: READ THE FAQ. If the FAQ doesn't help, mail us at:
+  legacy@frag.com
+
+  We hope that this new version brings you a lot of enjoyment,
+  especially for the deathmatch fans out there.
+
+  Have much fun!!
+
+
+ [1-1]: What's new
+ =================
+
+     See whatsnew.txt for the latest changes.
+
+
+ [1-2]: What's coming
+ ====================
+
+     We have planned other features. See our site:
+     http://www.frag.com/doomlegacy
+
+
+
+ -------------------------------
+ [2] INSTALLATION OF DOOM LEGACY
+ -------------------------------
+
+  Doom Legacy should be installed in the directory where you have
+  your original Doom, Doom2, or Ultimate Doom installed.
+
+  It won't replace any existing file from the original Doom.
+
+  Doom Legacy will run in the mode of the original Doom version
+  where it is installed. That is, if you have installed Legacy in
+  Ultimate Doom directory, it will act like Ultimate Doom, pro-
+  viding 4 episodes, and no super shotgun.
+
+
+
+
+ [2-1]: Setting up the game
+ ==========================
+
+     Legacy doesn't use SETUP.EXE anymore, it uses 'config.cfg' now.
+     There won't be anymore problems with the original Doom config
+     file 'default.cfg' : it will never be changed.
+
+     To configure your original Doom, use SETUP.EXE.
+
+
+
+ [2-2]: Setting up the controls
+ ==============================
+
+     Setting up the controls, mouse and joystick, video mode is done
+     while in the game, using the main game menus : Setup Controls,
+     Video Options, Game Options. You can change all game settings
+     at any time during the game, forget about SETUP.EXE !!
+
+     The mouse will be activated as default, to disable it, change
+     the 'use_mouse' variable in the console (see console.txt)
+
+     The joystick will not be used as default, set the 'use_joystick'
+     variable at the console, to one of the joystick types supported
+     by Legacy (up to 6button joysticks + hat, see console.txt)
+
+
+
+ [2-3]: Setting up the sound
+ ===========================
+
+     The sound and music card is auto-detected at the game startup.
+
+     If you don't get any sound in Legacy, check that the BLASTER
+     variable is set. Type 'set' at the dos prompt (or dosbox under
+     Windows) : do you see a line like 'BLASTER=A220 I5 D1 ...' ?
+     If not, run the installation of your soundcard for Dos mode,
+     it will usually modify your autoexec.bat so that the BLASTER
+     variable will be set. See the FAQ.TXT for more.
+
+     If the BLASTER variable is set, but you still don't hear any
+     sounds, or the sounds are not right, then edit the SOUND.CFG
+     file, and manually set your type of soundcard, see there for
+     more.
+
+
+
+ [2-4]: Tuning up the mouse speed
+ ================================
+
+     The main Options menu still limit the mouse sensitivity value
+     to a 'normal range', but you can now increase this value even
+     more using the console variables 'mousesens' and 'mlooksens'.
+
+     If you used to edit default.cfg for the mouse sensitivity,
+     forget about it and use the console!
+
+
+
+ [2-5]: the Setup Controls menu
+ ==============================
+
+     You don't need to use the SETUP.EXE now, there's that cool
+     'Setup Controls' menu.
+
+     Using this menu is pretty straight forward, you can bind actions
+     to one or two keys, like in Quake.
+
+     A single key can be set to multiple actions, eg: go backward and
+     'use' at the same time.
+
+     To CLEAR the keys attached to a control, use the BACKSPACE key.
+
+     To setup the DOUBLE CLICK for mouse/joystick buttons : enter the
+     click one time, so that it displays, eg: 'MOUSEBUTTON1'. Then
+     re-enter the click a second time, and it will transform into a
+     dbl-click, eg: 'MOUSEBUTTON1' will become 'DOUBLEMOUSE1'.
+
+     You can use double-clicks for any joystick/mouse button, and you
+     can even attach any action to it, eg: strafe left/right with mouse
+     buttons, it works. Just enter the button two times like said before.
+
+
+
+ -----------------------------
+ [3] ADDITIONS TO DEATHMATCHES
+ -----------------------------
+
+ [3-1]: Shooting up and down
+ ===========================
+
+     There's nothing changed, except of course a totally new
+     deathmatch experience.
+
+
+     About the BFG : the bfg ball can be fired up or down, but
+     the invisible rays that spray from you are totally independent of
+     your aiming. The invisible BFG rays have always 'autoaim', they're
+     not dependent of your aim. Let's be clear: apart from being able
+     to shoot the BIG BFG BALL up or down, the side-effect of the BFG
+     is like before.
+
+
+ [3-2]: Auto aim toggle
+ ======================
+
+     We wanted to keep the compatibility with the older Doom gameplay,
+     but we needed also to go forward and bring some more depth to the
+     deathmatches. On of these steps, is going for the manual-aiming.
+
+     You may feel like it's unbalanced if some people use the autoaim,
+     as they don't have to do the effort of aiming right, and others
+     don't use it and do their best to aim up and down right...
+
+     NEW since Legacy v1.2 : with allowautoaim (see console.txt) , you can
+	 disable autoaiming, that is, impose manual aim to all players
+	 in a network game, use with caution!!
+
+
+ [3-3]: Weapon changes
+ =====================
+
+     We didn't dare of course change the existing weapons functionality!
+
+     You may appreciate however, the fact that you can remap every
+     weapon to any key, in the Setup Controls menu. Since you can map two
+     keys per 'control', you can keep the original keys '1'-'8' for the
+     weapons, and add a shortcut to your preferred ones. eg: '5' and 'r'
+     for rockets...
+
+     New weapons are planned in the future releases: probably a grenade
+     nearly like Quake1 ones. Maybe an addon for the rocket launcher to
+     transform it into a 'guided rockets' launcher... like the Revenant's
+     fireballs.
+
+
+ [3-4]: New cheats
+ =================
+
+     'idcd##' : Will work only if MSCDEX driver is loaded.
+		Similar to the 'idcmus##', but for CD Audio tracks.
+		Example : idcd02 start cd track 2.
+
+     'idfly'  : Fly around levels, using 'jump' key to get altitude.
+
+
+
+ ---------------
+ [4] THE CONSOLE
+ ---------------
+
+  Check 'console.txt' documentation for more about the console.
+
+
+
+ ------------------------------
+ [5] NETWORK GAME (MULTIPLAYER)
+ ------------------------------
+
+ IMPORTANT NOTE!
+
+  NEW, since Legacy v1.2, the network part of Doom has been totally
+       rewritten. It now uses a better transfer method for the packets,
+       (which is usually faster), and also implements a basic
+       Client/Server model, where some critical game options are
+       changeable only by the server in multiplayer games.
+
+       Since the network communication is faster, we have upped
+       the number of players to 32 !!
+
+
+ [5-1]: Quick-start of a 5-32 players network game
+ =================================================
+
+     To start a game with more than 4 players, we recommend using
+     Doomatic. Doomatic is a utility written by us before the source
+     release, we wanted to create a deathmatch launcher with all the
+     features that we always needed.
+
+     It replaces IPXSETUP and DM. Just read the 'QUICK START' sec-
+     tion of DOOMATIC.TXT file to get started with Doomatic.
+
+     Since we've added more than 4 players support into Doom LEGACY,
+     we have modified DOOMATIC to allow starting games with up to
+     32 players.
+
+     Make sure that the map you use has enough deathmatch starts!
+
+     Search on internet Doom sites, there has been a number of wads
+     specifically made for the new Doom ports with more than 4 players.
+
+     Cooperative play with more than 4 players should work with map
+     using the JDS cooperative player starts.
+
+
+ [5-2]: the new Client/Server model
+ ==================================
+
+     The network code has been totally rewritten, here are the
+     main changes:
+
+     - Doom Legacy version 1.2 supports up to 32 players.
+
+     - The speed is now dependent from the Server. if the server looses
+       frames, that is: if it runs too slow, all the other players will
+       experience the slow down, or 'choppyness'.
+
+       Thus, make sure that the server's machine runs smooth, example:
+
+       a P100 running the game at 320X200 may be very smooth. while
+       a PII 300 at 1024x768 will slow down the network. Why? simply
+       because while the server is occupied drawing his screen, he can't
+       send or receive any packets, and thus the other players are slowed
+       down at the speed of the server (well, now it is possible that
+       a PII 300 is very smooth at 1024x768.. but you get the idea).
+
+     - The memory is very important so 16 Mb is a MINIMUM for a server.
+       Why? Because a server with not enough memory will often load
+       data from the disk, and this will probably slow down the game.
+
+     - Don't forget to put a very good disk cache, like 4 Mb or more.
+       A good disk cache will reduce the loading from the server, thus
+       reduce possible slow downs.
+
+     - The server can kick any player ouf of the game. The player will
+       be returned to the title screen.
+
+     - Consistancy failure now kicks only the player who was not
+       'up-to-date', but not the others.
+
+     - Parameters -left -right came back (using 3 screens for left,right
+       and front views).
+
+     - Most critical game variables are send to all the players when they
+       are changed by the server, and only the server can change them.
+
+       Examples are 'allowjump', and 'respawnitemtime'
+
+     - The new possibilities are barely demonstrated in Legacy v1.2 :
+       we can now make any console command work on the network, so there
+       are very good things ahead!
+
+
+     The new system is still compatible with IPXSETUP and SERSETUP, so you
+     can use these to play games up to 4 players.
+
+     To play with up to 32 players, use DOOMATIC.
+
+     Note that DOOMATIC was created by us long before the release of the
+     Doom sources, and it works with the orginal Doom, and with most
+     other ports, too. We didn't create DOOMATIC specifically for Legacy,
+     but we updated it so that it could start games with more than 4
+     players for Legacy.
+
+
+
+ [5-3]: Setting up the SERVER
+ ============================
+
+     There is no interface for now.
+
+     The server is the player 0, which is the GREEN player in DOOMATIC.
+
+     Note that the GREEN player in Doomatic, is not necessarily Green
+     later in the game : the server can choose any color in the
+     Multiplayer menu. Legacy doesn't use the colors from Doomatic,
+     but will recognise the Green player of Doomatic as the server.
+
+     In other words, you can't choose who is the server using IPXSETUP.
+
+     We reassure you: this is a hack, and we will add a '-server'
+     parameter as soon as possible to determine explicitly the server.
+
+     The color you choose in Doomatic is useful for the original Doom
+     game only : it was a key feature of Doomatic, to choose the colour
+     you wanted to be instead of getting always the same color from
+     IPXSETUP. It became obsolete with Legacy, as you can choose your
+     color in the game itself.
+
+     The SERVER has more rights in the game, and no, it can't cheat.
+     It can change the game parameters like 'repspawnitem','respawn-
+     monsters', ect. and can Kick players. Therefore, choose the server
+     with attention.
+
+     NOTE that there is no 'dedicated' server for now, everybody in
+     a multiplayer game and even single player, is always a server
+     and a client at the same time. That is: in single player, you
+     can slow down yourself, when you loose frames, usually in the
+     higher resolutions, you will experience a small 'lag' like on
+     a 'choppy' multiplayer game.
+
+     See CONSOLE.TXT for more about the server & multiplayer commands.
+
+
+
+ [5-4]: the return of -left/-right
+ =================================
+
+     We have restored the -left and -right command-line parameters,
+     that allowed in the earlier versions of Doom, to play using
+     3 monitors: one for the front view, one for the left, and one
+     for the right.
+
+     Here is how it works:
+
+     Use DOOMATIC and create a game on the machine that will display
+     the 'front view'. Make sure it has the GREEN player color
+     (in Doomatic, not in Legacy). Set '-left' and '-right' in the
+     local parameters of Doomatic, for the other two machines.
+     That is : the 'left view' machine has '-left' in the local
+     parameters of Doomatic, the 'right view' machine has '-right'.
+
+     Join the game with the other two computers, and start the game.
+
+     This will work only for SINGLE player, but the player will have
+     a very wide view!
+
+
+
+ [5-5]: How to play with tcp/ip
+ ==============================
+
+     For the moment this work ONLY with Winsock 1.1. But DON'T work
+     with winsock 2.0, since Windows 98 is chipped with winsock 2.0
+     Legacy will don't detect the tcp/ip and say "no tcp/ip driver detected".
+     We will try to fix this in nexts versions. Anyway the incoming
+     Win32 version of legacy will, for good, fix this.
+
+     So this section is for Win95 users or expert that have Winsock 1.1
+     over Win98.
+
+     You want to know some things : you need a good ping value, perfect
+     is less than 30, more than this will be very unplayable, because
+     there is not, for the moment, code to reduce the latency between
+     command entered at keyboard and command execution.
+
+     In other words, Doom Legacy doesn't use 'interpolation' to make
+     you believe like the game is 'smooth' when it is not in reality.
+
+     We have heard that ppp conection (internet modem user) has a
+     minimum ping value of 100 to 200...
+
+     Using the -server <numplayer> and -connect <server_address>
+     You can play through internet. One computer is the server and lunck
+     Legacy with "-server" and specifying the number of players. The other
+     are the client and connect to the server using "-connect" and put the
+     address ip or name of the server.
+
+     Exemple for tree player :
+       the server type: 	 doom3 -server 3
+       the two client type:	 doom3 -connect 192.168.12.78
+
+     You don't need to put all parameter on the client side like :
+     -deathmatch, -warp xx, -respawn, -fast, etc because the server
+     will send it. Unortunately -file isn't send by the server eatch
+     computer must have the same "-file" parameter.
+
+     If you have some problem or question read the faq section [4] Network.
+
+     If you have played Doom Legacy v1.2x on internet, please mail us!!
+
+
+ [5-6]: Playing Legacy over modem
+ ================================
+
+     DOOMATIC, doesn't support modem play as today.
+
+     There are several problems with the original SERSETUP. And with most
+     of their equivalents like SER7-5 and others.
+
+     We no more support the original SERSETUP and recommend using 'HX8'.
+
+     We have currenlty only received positive feedback with 'HX8' :
+     people have succesfully played Doom Legacy in serial, even with
+     8 players using 'daisy-chain'. It was told to us that using more
+     than 2 players and modem is feasible too with 'HX8', but it is
+     a little more difficult to set up.
+
+     We will appreciate more feedback to be sure it works fine. Send
+     us your positive or negatve experiences with this.
+
+     HX8 works also with Hexen and other Id games, you'll find it here:
+
+     ftp://ftp.cdrom.com/pub/idgames/utils/serial/hx8.zip
+
+
+
+ [5-7]: Network parameters
+ =========================
+
+     The following game parameters are changeable only by the SERVER,
+     using the console and menu:
+
+     (they also work in single player since in single player you are
+      the server AND the client)
+
+      allowjump, allowautoaim,
+      respawnitem, respawnitemtime,
+      respawnmonsters, respawnmonstertime,
+      gravity, bloodtime, solidecorps,
+      fraglimit, deathmatch
+
+     Of course all the player parameters works in network :
+       name, color, autoaim, weaponpref, originalweaponswitch.
+
+     See CONSOLE.TXT for more about multiplayer commands.
+
+
+ [5-8]: HOW DOES LEGACY HANDLE THE MULTIPLAYER STARTS ?
+ ======================================================
+
+    Doom LEGACY supports the extended player starts defined by
+    the JDS group : 4001 to 4060 for player 5 to player 64.
+
+    Those player starts are for cooperative, looks like JDS
+    wanna have 64 players cooperative games !
+
+    Doom LEGACY supports up to 64 deathmatch starts, but the
+    original Doom games used up to 10 dm starts.
+
+    Thus, for compatibility with the existing maps, Legacy
+    will use the player starts if all the deathmatch starts
+    in a map are occupied. If all the player starts are
+    occupied (including extended ones), then a dm start
+    chosen randomly will be used.. and players might get
+    stuck together, but this will happen normally only
+    at the beginning of games with maps with few dm starts.
+
+
+ [5-9]: The new intermision screen
+ =================================
+
+    FRAGS  : the usual frags rankings
+    BUCHOLZ: a chess scoring system: you earn more points,
+       when you frag a good player. That is, a player that
+       has a lot of frags at the end of the game. This is
+       more balanced that the original frags system, because
+       you can do less frags, but on good players, while
+       in the original system, 'newbies' players could
+       score as much frags between them. Also a good player
+       won't earn a lot of points if he goes for easy targets,
+       so he'll better choose an challenging enough target.
+       Chess players will know this system (Boris is a very
+       good chess player :)
+
+       Seriously if F is the frag table like player i have fraged
+       player j F[i][j] times. The total farg of a player i is
+       F[i][1]+F[i][2]+ ... + F[i][32] whe can call this Total[i]
+	 there bucholz of a player i is
+	 F[i][1]*Total[1] + F[i][2]*Total[2] + ... + F[i][32]*Total[32]
+
+    INDIVIDUAL: the players are all compared 1 to 1, when a
+       player wins he earns 3 points, if they draw they each
+       get 1 point, then all the points are added and the
+       winner is the one with the more points. This was
+       suggested by Cristian Romero (romero-c@usa.net).
+       Is is not perfect, but is already interesting enough:
+       think of it more 'individual'. You have to make more frags
+       compared to each other player to earn points. So you will
+       want to go on players that you can make more frags, and
+       forget about the ones which have already too much frags
+       compared to you. Go for the victories, more than the frags.
+    DEATHS: this ranking shows the players who have died the
+       most!!
+
+ ------------------------
+ [6] COMMAND-LINE OPTIONS
+ ------------------------
+
+  There's a new environment variable 'DOOMWADDIR' that you can set
+  to the path where the original Doom and LEGACY Doom wad files are.
+  This enable to run LEGACY from any place on your harddrive, by
+  default, LEGACY searches its wad files in "." dir (the current dir).
+
+  Here's the new parameters that you can use from the command prompt.
+
+  In DOOMATIC, you can add command-line options as a server in the
+  Server menu's Add Parameters, or in the Prefs menu 'Local parms'.
+  (the Local parms will be used only on your side, while the server
+   parms are sent to everybody)
+
+
+
+  Additional parameters info:
+  ---------------------------
+
+  +<any console prompt>
+
+      You can put all console command at command line, Legacy will
+      execute it first.
+
+
+  -file  ** DEHACKED SUPPORT **
+
+      Has been enhanced to load dehacked files too! It makes
+      it much more easy to use deahcked patches in multiplayer,
+      for example:
+
+      -file gfx.wad snd.wad patch.deh
+
+
+  -teamplay
+  -teamskin
+
+      Similar to the good old '-deathmatch', this activates team
+      play by either color (teamplay) or skin (teamskin).
+
+
+  -nocd
+
+
+      Disable checking for the cd driver. In case you have a faulty
+      cd driver, this will prevent troubles. The functionality is
+      equivalent to -nomusic and -nosound.
+
+
+  -dehacked <dehfile.deh> [dehfile.deh] [ect...]
+  -deh
+
+      DooM LEGACY supports the dehacked patches... of course its
+      now done a more subtle way : you just specify the dehacked
+      patch file at the command prompt, no need to patch the exe!
+
+      You can specify multiple .deh files, and they will all be
+      executed, on the order you have put them on the command line.
+
+
+  -mb <number>
+
+      If you run out of memory, or want more memory, this sets the
+      number of megabytes of mem to allocate at Doom startup.
+
+      The default is 8.
+
+
+  -width <xxx> -height <yyy>
+
+      If you like the pain, you can set the screen size at the
+      command line instead of using the new 'Video Mode' menu.
+
+      Doom LEGACY will switch to 320x200 if it can't find a
+      corresponding mode. So remember to load your Univbe or
+      equivalent for extra video modes.
+
+
+  The rest is like Doom2 original, all the standard parameters
+  are still functional.
+
+
+
+ ---------
+ [7] NOTES
+ ---------
+
+
+ [7-3] Copyright stuff
+ =====================
+
+     In general, the new data included in doom3.wad is a proprietary of the
+     authors (Denis Fabrice & Boris Pereira). These data is not for public
+     use, except the data that is build from Doom2 original graphics, they're
+     not public either, but they're proprietary of Id Software.
+
+     The Doom LEGACY project is by Denis Fabrice and Boris Pereira, if you
+     use our modifications, please give credits where its due. Thanks.
+
+     The sources of our modifications are released for the general interest
+     and in the hope that our project will grow bigger with other people's
+     talents and ideas.
+
+
+ [7-5] Dehacked patch note
+ =========================
+
+     We don't check for the dehacked patch version, we added support for the
+     patches version 6, it should run ok with (not too) old patches.
+
+     If you have a problem with the version of the patch, try to convert it.
+     Just load the .deh file into a recent version of Dehacked (3.0),
+     and then save it again. It will then be saved as a text-file, that
+     Legacy will be able to use.
+
+     All text changes are supported, you can edit the .deh manually and
+     replace strings by larger strings than the original Doom, it works.
+     Sprite renaming works too, well, pretty anything :)
+
+     If you can't run your dehacked patch with Legacy, please mail us!
+
+
+
+ ------------
+ BELGIAN NOTE
+ ------------
+
+     Yeeeeeeeeeehaaaaaaa! We BELGIANS are very very PROUD because our
+     greatest compatriots have launched twenty custard pies to Bill
+     Gates's face, and four of them have landed succesfully!!!
+     (beginning February 1998)
+
+     It's 'pastry' terrorism here in Belgium!
+
+
+ ---------------
+ ACKNOWLEDGMENTS
+ ---------------
+
+     A lot of thanks to Shawn Hargreaves for the great Allegro library.
+
+     Thanks to Chi Hoang for DosDoom which got us started.
+
+     Sebastien Bacquet for Qmus2mid
+
+     Brennan Underwood for bcd le cd-audio library.
+
+     Indrek Mandre & Richard Dawe for libsocket (tcp/ip).
+
+     To all of you who send us ideas and bug reports, thank you!
+
+     To IdSoftware of course, for creating the greatest game of all times!

@@ -1,0 +1,785 @@
+
+21 et 22 -2-98
+
+- I forget to put all the djgpp from the in the new join therefor i have reput
+  ctrl-break handling
+- Added function SendExtraData(int type) and all stuff with it
+  tested ok type supported for the moment : name&color, weapon pref,
+  gamesetup
+- little modif in broadcast send
+- now we can see : Boris Left the Game
+- Restructuration of d_net is more clean now
+
+2-3-98
+
+- lmps 1.12 : only changes will be write
+
+3-3-98
+
+- add extras data in lmps
+
+4-3-98
+
+- no more pad sounds (linux hack)
+- finished : extra data in lmps
+- no more pause in lmps
+- message shown to all players (even ourself message)
+  therefore in demos we can see message from consoleplayer
+- paramater -timer and fastparm are now sent by the server
+- write timer in demos
+
+5-3-98
+
+- limite dethmatch start pushed to 64 (before 10)
+- added joystick support see in i_system for joystick type
+- reorganization of keys : the mouse and joystick butons are now virtuals keys
+
+?-3-98
+- version 112a released
+
+8-3-98
+
+- no more crossed reference limitatoin in dehacked patch (d2xgold work)
+- fixed bug of saving only on the slote 1
+- pushed savegame buffer to 512kb (128k before)
+- changed a little camera but still a preview
+
+15-3-98
+- debug of dehacked load + added checks and print errors
+
+16-3-98
+- addad text support for dehacked
+
+17-3-98
+
+- and text dehacking it work but not for all text
+- remove skull number limit (pain elemental don't spawn a skull if there is
+  20 skull already in level (level 9))
+- changed weapon pref. switch only if pickup a weapon with more priority
+- can talk to oneself (for demos)
+- fixed bug of eat key (automap, chat, final cast, ...) :
+
+19-3-98
+- version 112b released officielement with the new site
+
+22-3-98
+
+- fixed sky for doom ultimate
+
+30-3-98
+- no more need vesa for start
+- no more load sound in memory when no sound driver (intersting with 8Meg)
+
+1-4-98
+- multiple dehacked load. syntax : -dehacked <borol.deh> <brol2.deh> ...
+- doom3.wad can be loaded using the doomwaddir environement varaible
+
+from 2-4-98 to 20-4-98
+
+- client/server work but it skip frames one the client
+
+22-4-98
+
+- added intermission : buchols, individuel, dead + fixed frag bug
+- wait 10 sec in the intermision screen !!
+
+25-4-98
+- fixed bug of spwaning player out of map
+- fixed ctfdoom playersart
+
+26-4-98
+- fixed demos play with the server
+- added support for demos 1.12 for extras data
+
+27-4-98
+- end lmps
+- internal modif of server now node!=>player but player=>node
+  (no split sreen)
+- comebak of -left and -right for single player ! (too easy)
+
+
+7-5-98
+- up to 32 player (not tested)
+- fixed color of player in the automap
+
+8-5-98
+- break packet if too large
+- backuptic up to 64
+- showmassage bonus, ammo, heald pack only if cv_showmessage==1
+
+9-5-98
+- whoohoo i found why it don't work under os/2 : we have forget to lock
+  some varaible, DON'T forget to unlock it when we swap out sample
+  It will work better under NT
+- fixed bug of extra packets ...
+
+10-5-98
+- consistancy come bak (removed when devloping client/server)
+
+17-5-98
+
+- restructuration of m_cheat moved all check_cheat from st_stuff to
+  m_cheat, all cheats are now in m_cheat (even am_cheat)
+- iddt work now
+- added netvar : itemrespawn and itemrespawntime
+- fixed bug of extra data in lmps and on network
+- added respawnmonster and respawnmonstertime
+
+19-5-98
+
+- version 1.20 released
+
+20-5-98
+
+- fixed bug of demos 1.20
+
+21-5-98
+
+- fixer bug of demos 1.12
+- fixer bug of left et right keyboard turn when it lag
+
+23-5-98
+- fixed deathmatchstart < players
+
+24-5-98
+
+- fabrice fixed vesa detection code
+- no more save game "net game" on single player
+
+25-5-98
+
+- release of 1.21
+
+27-5-98
+
+- oops, bad join : left & right bug in 1.21 ! et spawnplayer problem
+- version 1.22
+- added command say and sayto
+- remover code for chatchar and the structure
+
+5-6-98
+- release of 1.22
+
+7-6-98
+- fixed bug of backspace
+- fixed replay of demo <=1.20 (chatchar)
+
+from 29-5-98 to 21-6-98
+
+- Boris studies there exam and don't work in Legacy
+
+27-6-98
+- clean the unfinished stuffs put #ifdef with all this junk code
+
+2-7-98
+- split d_net in two file d_clisrv and d_net : d_net is the low-level part
+  it implement releability of packets, d_clisrv is the implementation of
+  the client/server
+
+?-7-98
+- the code was send to Carl Personn, Bob Satori, and ninja doom
+
+??-7-98
+- added splitscreen : render split screen and nothing else
+- fixed bug of -warp with doom1 or ultimate
+- improved net code : put maxlag to 1 (before 2) this parametre apparently
+  put lag in game who don't have it
+- improved net code : added a wait in the server if it faild one tic it
+  wait it (but no more than one)
+- compile now with allegro 3.0 wip 30may (but i think there is a bug with
+  authentic sb16/32/64)
+- optimize the slopediv function use now a 64 bit div more precise
+  maybe it can change the plays of lmps ???
+
+24-7-98
+- change split sreen, now is a cvar, put it in the menu for start a
+  spitscreen game
+
+25-7-98
+- added litle support for the secondary player in the netcode but need more
+  improvement : must know what is there player number (there is no protocol
+  to assign player number)
+
+- fixed switch problem in ultimate doom : i don't know why in the other port
+  it work because this bug is the fault of gamemode = retail not handled !
+  (now, i have seen in dosdoom this bug have been fixed from with the
+  same methode) this bug is from linuxdoom
+
+26-7-98
+- map command now work in network
+- gravity cvar added
+- now put a momz when damage (still to work)
+
+3-8-98
+- with fab implement cv_skin and support skin in network
+
+4-8-98
+- find a bug in bcd he don't use the track 0 but he allocate 1 track and he
+  use the track[1] insteed track[0], i have allocate 1 more track and the
+  track 0 still unused (too bad for memory :( )
+
+8-8-98
+- with fab added scripting in the s_skin resource (buged)
+
+9-8-98
+- debug skipting of skin, support face in status bar for skin
+- added function for add a sound at runtime
+- added support of sound for skin using preview addition
+- fixed problem with starting "doom3 -warp 1 -deathmatch"
+  this problem is due to the generalized spawn function
+
+10-8-98
+- generalize the rancking drawing (now is the same function for in game and
+  intermission)
+- begin team play support work but the team name are missing
+
+11 to 13-8-98
+- continued team play created wi_teamstatdraw for shows of the tema stats
+  created HU_CreateTeamFragTbl this function is called for compute the team
+  frags
+- added teamdamage get damage only when this cvar is 1
+- use teamdamage under cooperative to don't take damage
+  to understand the condition used you must use this condition :
+
+  the mobj a shoot on mobj b : the mobj b DON'T take damage IF :
+	damage < 1000		 // a telefrag take 10k damage
+    AND a != b			 // you can hit yourself
+    AND cv_teamdamage == false	 // teamdamage is desabled
+    AND (
+     (	  cv_teamplay == true	 // in teamplay
+      AND deathmatch  == true	 // only in deathmatch
+      AND team(a) == team(b)	 // you save the guys only for the same team
+     )
+     OR
+     (	  deathmatch == false	 // cooperative
+      AND type(a) == player	 // a and b is players
+      AND type(b) == player
+     )
+
+  now using "De Morgan" formule you translate it in
+
+  the mobj b take damage IF :
+
+	damage > 1000		 // a telefrag take 10k damage
+    OR	a == b			 // you can hit yourself
+    OR	cv_teamdamage == true	 // teamdamage is desabled
+    OR	(
+     (	  cv_teamplay == false	 // in teamplay
+      OR  deathmatch  == false	 // only in deathmatch
+      OR  team(a) != team(b)	 // you save the guys only for the same team
+     )
+     AND
+     (	  deathmatch == true	 // cooperative
+      OR  type(a) != player	 // a and b is players
+      OR  type(b) != player
+     )
+
+21-8-98
+
+- the come back of the netupdate this function poll the timer and if the time
+  has incresed since the last call it create a tic.
+  This fix probably the lack of controls in svga
+
+22-8-98
+
+- no more individual rancking in teamplay
+- no more blood when the guy no take damage
+- no more red screen when the player don't take damage
+- fixed all related team stuffs. Now change the team_names tables at runtime
+  when teamplay change
+- fixed a little bug in dehacked load it is just since we have changed
+  sound_sfx table.
+- change some malloc in z_malloc, added memfree command
+  but memfree use available_physical_pages from dpmi and this change at
+  runtime because page is allocate only when used and when we malloc our
+  z_zone he don't steel the pages, therefore i have added a memset for use
+  the pages. And now free phisical memory change only at change level
+  i think it is caused by the midi convertion.
+
+23-8-98
+
+- youhou, angleturn client prediction work, with lmps...
+- load a deh when it is put in the -file list
+
+xx-8-98
+
+- relase of 1.25
+
+6-9-98
+
+- fixed problem when restarting a new game after starting a nightmaer game
+  monster no more respawn in normal skills.
+- push all command line paramater begin by '+' on the console buffer
+
+12-9-98
+
+- fixed bug in the display of frag in intermition in teamskin
+- fixed bug no more crach when error "fail to allocate 29Mb"
+
+13-9-98
+
+- implemented fraglimit
+
+11-11-98
+
+Damned ! I have lost my 1.26 beta 4 modification i have redo what i have lost
+from the beta 3 archive, ok now it is a log of what i remember have changed
+I hope don't forget anything.
+
+- added exitlevel command (server ability)
+- added bind command
+- improve network with supposed nettic
+- added possible value for cvar
+- fixed map7 bug when the 2 last babyspider die at same time (original 1.9 bug)
+
+stop here for beta 4
+here is new for beta 5
+
+- changed menu handling mutch more usable and very easy to change
+  it handle cvar automaticely and mutch more !!!
+- put fix for some Fab bugs (2 sided texture)
+- improve more network client send only nack and server don't send to much
+  data i think it reduice dramaticaly the bandwidth needed
+- fixed fraglimit
+
+13-11-98
+
+- fixed -left and right with the new protocol
+
+14 15-11-98
+
+- 2 Days to find the fucking Fab Bug ! texture cache can't be freeed without
+  a total flush of the cache
+
+20-11-98
+
+- make the join with Fab version. Very hard task ! i have put the makecol15
+  from windows version because using makecol15 from allegro add 150kb to the exe
+- put maxvalue 4 to gamma.
+- added vid_ticrate cvar
+
+22-11-98
+
+- fixed final pic shows in doom1 and bunny scroll
+- 5 miniute to fix the damn bug from fab with there flatcache problem
+  but i suppose this in not fixed at all is just a quik fix because i am bored
+  to see damn f**ed flat !
+- outch 1 line added and you can take a screenshot pressing the key that you
+  want. What a wonderfull world. Ok nice added screenshot command is
+  recommanded to bind it.
+
+23-11-98
+
+- fixed deathmatch cvar don't work in network (spwan player problem)
+  the solution is : use the map command to start the game !
+  it this occation i have clean lot of stuff in d_main and d_clisrv init code
+
+24-11-98
+
+- added load command and make it work in network
+- added skill parameter in the map command
+
+26-11-98
+- added save command and cleaned the way that it work in network no more
+  use ticcmd to send save game (original doom 1.9)
+
+29-11-98
+
+- put cv_Unsigned for lot of variable and fixed little problem with fraglimit
+- fixed "got unknow netcmd 109" when change player config while game not
+  started it was because the lmp execution execute the last textcmd and the
+  demoversion is not the same
+- fixed console display with the new system of "map" pushing using warp
+  and netgame
+
+1-12-98
+
+- raaa i am tired to clean the code... It make me sick, i have found some bug
+  using tha map command in demos, network and console. The biggest is the
+  engine parameter is not set like in a single player game. secondary there
+  was demoplayback=false in g_initnew (the map command execution). and thirdly
+  netgame was put true when playback demos !
+  My first fix is to put a g_stopdemo in the map command and in load level
+  this fix to most part of problem (eatch time before calling g_initnew).
+- clean the way that doom lunch the game, now g_newgame sets all parameter to
+  normal and then push deathmatch and map on the command buffer.
+
+2-12-98
+
+- fixed little problem with console_toggle_off when playing old demos
+- fixed viewz of the first frame
+- try to fix te clientprediction code, i have rewrite it and found one cause
+  of non function and i see it will not be so easy :(
+
+3-12-98
+- clientpreditcion work but still need more work
+
+4-12-98
+- added timedemo console command, and change timedemo no more leave program
+  just print the result at the console
+
+5-12-98
+- some note here to don't forget to put in what's new because fab no more
+  update there log.
+    - transparent texture.
+    - mutltipatch can be put in 2 sided line
+    - load texture at runtime
+- change the pause handling no more use the ticcmd to send it. Now the ticcmd
+  is much cleaner i have 1 bits more for player command.
+- Do r_loadtexture only one time (no more at eatch loadlevel). It is called
+  when adding wad at runtime if it detect texture changes. If no texture
+  change it only flush the texture cache. Also there was a little bug
+  because R_GenerateTexture don't check if the texture is not allready loaded
+  i have put a test in R_Precache level. Also i have reput the precache flat.
+- fixed little bug in P_AddWadFile when searching the firstmap
+
+6-12-98
+- added sayteam command
+
+8-12-98
+- i have removed the viewz==1 at the first frame. I still don't know for what
+  this hack is...
+- got the client prediction running i stop here for the moment still to fix :
+  - we hear all the sound twice because spirit and player spawn the sound
+  - the hack bit of fab to permit the player walk in air is modified by the
+    spirit, this cause some "consistancy failure". Stupidely removing this
+    spirit ability will miss predict player movement !
+  - remove localtic in the ticcmd_t
+  - aparentely there is a "consistancy failure" sometime when the client use
+    a weapon (plasma) i don't know what it is but i need more information on
+    this
+  other bug not related to spirit:
+  - the usage of firstmap level cause reload of the firstlevel in a wad using
+    map or addwad command
+  - passing deathmatch 2 to deathmatch 1 don't respaw the weapons
+  - due to change of map command in lmp deathmatch cvar is put to 0 to lattely
+
+9-12-98
+
+- respawn weapons when passing to deathmatch 2 to deathmatch 1
+- fixed sound play of spirit
+- fab remind my to fix the frame synchronisation TODO
+
+18-12-98
+- finely fixed the synchronisation problem in network, i was caused by a
+  spupid wait a new tic before do a GetPacket() !
+
+19-12-98
+- now use explisitely the "max" for bounded cvar
+  with this we can insert a other special stuff between, very usefull since
+  the menu use the value 1 for the index for the maxcursor.
+  All this stuff to unlimit mousesens cvar ! b”rk
+- put 1000 for fraglimit max
+- put specific name to eatch deathmatch type and allow only 0,1,2,3
+  i think 3 is already used to respawn item and don't remove weapons
+- give keycard when changing deathmatch from 0 to anything
+
+xx-12-98
+- release it as 1.27 beta 1
+
+28-12-98 : Boris Bored at the Party 98
+- fixed menu sigsegv with sound playing in the menu
+
+xx-12-98
+- release it as 1.27 beta 2
+
+18-1-99 : End of exams
+
+- working on heretic and hexen source
+
+24-1-99
+
+- put the code from fab's one, for the blood splat and bullet hole.
+
+26-1-99
+
+- fixed load game when there is demo playing back.
+
+27-1-99
+- fixed deathmatch value for old lmps
+
+2-2-99
+
+- first step for "join in game", for the moment when a new node is detected
+  the server incresse the session number, and go to the D_ArbitrateNetStart.
+  Client receive a server packet with a newsetion, this cause a call to
+  D_ArbitrateNetStart, with this little modification it permit to synchronize
+  all computer to have the same playeringame vector. But this cause many
+  problem :
+    - when returning to the game, player have changed there consoleplayer
+      number, exept the server.
+    - the new player don't have a "incarnation" in this game, all computer
+      must spawn a new players at the same place.
+    - the new player don't have the game in memory, it will kicked out with
+      consystancy problems.
+  This note is not realy to be read, it is for my a way to undertand what i do
+  I propose to me this solution :
+    don't do a real new synchronisation, just redo it for the new player
+    the first problem will be fixed with this, the second will be fixed
+    easly by doing a spawn at the end of the function. The third problem
+    will not be fixed, since we have't a file copy feature. I will do a
+    little hack someting like a variable newplkayerwaiting=true, and checked
+    at intermision, to prevent the new player to do p_setuplevel...
+
+12-2-99
+
+- i remind one stuff of the lost beta4 implemented :
+  the loadconfig, saveconfig, and changeconfig
+- i have document all the change, but fab i a little lazy and don't whant to
+  correct my bad english, to bad :(...
+
+26-2-99
+
+- debug a little bit the "join in game" code : before call d_arbitratenetstart
+  increment doomcom->numnode it is nomal we have a new node. Also put acceptnew
+  node always true. It work a little, but hang on the server side with a
+  consistancy falure. Normal i don't have spwaned new player for the node ...
+- ok fixed a little more stuffs, now it work since the server don't move, if he
+  do "map xxxxx" at the console it work and both can play in the new level
+  exept a little problem when the joined player die and respawn, it do a
+  consistancy failure... should work for that...
+- fixed some stuff for fab the splitscreen player did't have there proper
+  localangle and localaiming, and fab don't understand this stuff :P
+- added support for textcmd for the splitscreen player it use TEXTCMD2 the same of
+  TEXTCMD but the server add 1 to the playernumber (it use the particulariti that
+  the second player is the first player +1)
+
+27-2-99
+
+- finaly fixed config of player2 (register name2, color2, skin2 cvar)
+- made a new status type for the menu : IT_DISABLE it will show the patch
+  in gray and unusable, i use it for the multiplayermenu to desable
+  the setup of the player 2
+- fixed some more stuff put " between string in exec call because ':' and '\' are
+  separator
+- and finaly impove splitscreen support
+
+1-3-99
+- improve splitscreen support
+
+3-3-99
+- convert aiming to be a angle_t, work fine and it is much cleaner
+- splitscreen aiming is now automatic no need for a special case
+
+5-3-99
+- change the way that ack packet work, better duplication detection
+- fix the damned config of the splitscreen
+- begin the savegame compression (save only the differance)
+
+6-3-99
+- finish savegame modification, but need more work maybe just zip it....
+- save only usefull field of mobj, i have learn that save game save also
+  static mobj, that not a good idea but i haven't change that
+- save game save also taget and tracer pointer with a little trick...
+- reenabled the loadskin in addfile command work well....
+- now you can use -connect witout parameter it will use broadcast packet
+  and autodetect the server in the neighbourhood
+
+8-3-99
+
+- begin file transfer protocol (ftp :))
+
+9-3-99
+
+- fixed some stuff about splitscreen : cl_maketic is no more a table of
+  player but a table of node, new table : playerpernode
+- added cv_notinnet flag, to don't permit change of this variable in netgame
+
+10-3-99
+- fixed player name don't save when leaving menu
+- now the leave procedure is reliable with a timout of 5 sec
+- fixed some free call in djgpp/i_sound.c (don't free not allowed memory)
+- added support for joystick from allegro 3.11 see djgpp/i_system.c
+
+11-3-99
+- fixed some problem in the protocol caused by too much textcommand in a packet
+  can happen when double splitscreen or just because there is buch of extracommands
+  is't realy a fix just detect it better and reduisse the probablility that happens
+
+14-3-99
+- fixed -file getting parameters begining by '+'
+- finaly fix the textcmds overhead problem put textcmds in futur tic if this happen
+  and when is no more place (32*255 byte received in on tic=8Kb*35/sec=280Kb/s ) quit
+  with i_error
+- do a join with fab, this include win32 midi player and the new little
+  window at begining, and some other stuff
+- we have discover a differance between optimization and non-optimized code with VC5
+  but anyway it is fixed and is not the fault of VC5
+
+15-3-99
+- fixed the spawn of coop player when more than 4, who play in coop with
+  4 players ? Anyway this bug appear quickely if someone forget to put -deathmatch
+
+18-3-99
+- fixed the fix of 15-3-99
+- found a strange think : sometime when stated from a fullscreen dos, legacy don't
+  detect any video mode. Why ? anyway : put it in the doc as "know bug"
+
+19-3-99
+- finaly fixed the textcmd stuff, now is deleted only when acknoledged
+
+20-3-99
+- fixed a little bug in new savegame code
+- splitscreen player have now there sound played
+
+21-3-99
+-  begin next and preview weapons
+
+22-3-99
+- fixed and finish next and preview weapons
+
+23-3-99
+- fixed some splitscreen issues
+- show key in the statusbar overlay don't forget to add "k" in the overlayxxx
+
+25-3-99
+- implement recursive search for wad files
+
+26-3-99
+- added fastmonsters cvar
+- added file name sent and loaded at runtime if not found in network
+
+27-3-99
+- fixed "+" pushing issues
+- now demo can be recorded by only one computer
+
+30-3-99
+- i lost my wall journey to try to inderstand why demo get out of sync
+and especially it get out of sync differantely using vcc and gcc with
+the same source file !!!
+- finaly using printf __file__,__line__ in #define all have disapear
+  damned i don't understand anything all MUST be explicable....
+  I will assume that Vcc don't rebuild all when i say rebuild all :(
+  but i am not sure.... a case for F.Mulder and D.Skully  :)
+- i have remove my #define with the __file__ and the other stuff and the
+  lmp out of sync reappear, now i'am sure vcc is bugger to hell, must get
+  VC 6.0 or get the 5.0 service pack... :(
+- well finily i have change p_random and m_random to returning a byte
+  then vcc no more generate buged code, fine but how many bug like this
+  one vcc have generated, i will probably use more pgcc to test first :)
+
+3-4-99
+- installed vc6.0, but haven't compiled because afxxxx.h not found, must ask
+  to fab
+- make the dependency for the dos version using gcc -MMD
+- finaly found why lmp 1.9 get out of sync, stupid if(!fastparm) transformed in
+  if(fastparm) (switching to cvar :()
+
+4-4-99
+- have compiled the join with Bell kin on my brother slackware 3.5 
+  (egcs 1.0.3), it work but i have sigsegv in map01 :(
+
+5-4-99
+- finaly installed mfc and now it compild under vc6.0, but i am not at end of 
+  deboging now with vc6 the demo get out of synch directely !! damned
+  i will try to don't flame MS VC maybe is our fault (ambiguity in c language)
+  Anyway for now compiling with debug release it work fine.
+- first test with cross platform network test : IT WORK ! until the server 
+  (linux) hang with a sigsegv :( 
+- with gdb i have seen that the fault come from vquadloop (this is a label 
+  in tmap.s) must check this....
+- well 4 hours latter after a real finding what wrong with vc6 i found it
+  here it is : when i do p_pspr.c,p_gunshot() line 607 :
+    angle += (P_Random()-P_Random())<<18; /* original 1.9 doom code */
+  the compiler do : /* i see the desassemble code */
+    rnd1=P_Random();
+    rnd2=P_Random();
+    angle += (rnd1<<15-rnd1+rnd2)<<18;
+    /* in short : the compiler have use the first call for the negative value */
+    /* in debug mode it use the seconde one for negative value */
+
+  Well i have fixed this putting :
+        angle += (P_Random()<<18);
+        angle -= (P_Random()<<18);
+  it work fine, but i don't remember if i am wrong or if the compiler have 
+  wrong but i will check....
+- to fix the problem of the demoplayback out of synch if when record we go 
+  in the menu :
+  the problem is cause by paused variable : this one is set by extradataticker
+  ce tic est ecrit dans la demo puis executer puis la demo est pauser
+  puit on va pas ticker le jeux tant que paused=true de nouveux pour le metter
+  a false on passe par writedemoticcmd qui ne l'ecrit pas (paused=false)
+  mais il va etre executer et la demo est a present ecrit a nouveau
+
+6-4-99
+- found why it crash under linux : the doom2.wad have been corupted by the 
+  transfer (i suppose a bug of tcp/ip stack of MS-windoz)
+- forget about yesterday demo problem (french stuff (BP very tired))
+  it is a doom 1.9 original bug caused by menuactive variable that don't 
+  enable p_ticket to tic the game but it continue to record tics
+  the solution is not to don't write tic because we have extra tics pushed
+  at eatch cvar change in the menu, we must record in pause mode, maybe 
+  when replaying the demo we can run fast the pause ones. (will cause some
+  little user interfase problem (chat text comming too fast) but is far from 
+  the actual problem.
+- added pause command
+- push the pause command when menu is enabled
+- demo continue to record while paused=true but when playing back demo 
+  when pause it will run tics until pause go false 
+
+7-4-99
+- little note about vc problem : it is not the vc fault, the problem there
+  because the evaluation order in not define in the ansi-c therefore
+  gcc and vcc have just do what he want...
+- fixed +respawnmonster 1, map command set this to 0 if !nightmare
+- fixed canot save spaced savegame
+- fixed seconde wipe after a demo played
+- readded code to fix the multiplayer menu quit don't change the name
+- now it is splitscreen change function that set secondarydisplayplayer
+  using playeringame[1], this allow to set secondarydisplayplayer after 
+  a splitscreen savegame
+- fixed no more binding during chat
+- fixed load splitscreen saved game
+- fixed some load saved game don't unpause 
+- added COM_CheckParm 
+- use it to change a little the map command :
+    map <mapname[.wad]> [-skill <1..5>] [-monsters <0\1>]
+- added timelimit cvar and remove leveltimerinmin
+- remove respawnparm since there is respawnmonsters cvar
+- with all this change there is no more game parameters in servercfg packet
+
+8-4-99
+- fixed some stuff from yesterday (BP tired at 3am :))
+- begin water physics
+
+9-4-99
+- continue water physics
+- do some stuff for the chasecam
+
+10-4-99
+- use con_keymap for the chat
+- fix the default key for next and prev weapons
+- more chasecam stuffs
+  added cam_height,cam_dist, cam_speed to configure camera
+  added new mobj flag : MF_NOCLIPTHING to allow camera wolk on thinks
+  TODO : create a path when player change sector this path will 
+         be used to find a path to use for camera to join up the player
+         when camera is blocked
+- added playdemospeed to change the speed of the playback of the demo
+  (very funy)
+- fixed problem of splitscreen that the multiplayer variable is false
+  this fix also demoplayback of splitscreen demos
+- now "-notime" can be used on the server side to exclude timecheck for 
+  all client
+
+11-4-99
+- fix pause with load games
+- added check of heap malloc in the linux vresion
+- added check of data field in I_FreeSfx (the sound is not sure to be 
+  loaded) 
+  Anyway Fab have remobe the lock of sound in dos version this will cause
+  a sigsegv under OS/2 i will probably lock the wall heap in OS/2.... :(
+
+12-4-99
+- added a clipaiming to the r_setupframe to use allow playback of a 3dfx 
+  demo under sofware rendering
+- added ylookup1 and ylookup2 to precalulate ylookup in splitscreen
+- fixed crosshair display in 3dfx
+
+13-4-99
+- fixed cls usage in hwr_main (remove -1)
+- fixed the full autoaim, maybe there is some more autoaim problem
+- fixed floor and ceilling puff position (line side problem)
+* little note about client prediction :
+  add x and y offset (spirit.x-position.x) too all missile spawned from player
+  and use dead reconning algorithme for all other mobj (pos=pos(t)+(t-oldt)*mom)

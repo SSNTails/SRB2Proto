@@ -1,0 +1,16 @@
+11-03-99
+
+I decided to start a log of my progress here so others could catch on to what I was doing.
+
+After tireless hours of constant fiddling with the Z checking trying to get the Z damage
+code to work, exhausted, I scrolled down a bit more and found a large commented area
+explaining all the new variables! After I knew this, I was able to implement a simple
+Z damage code with only TWO LINES OF CODE! I AM ECSTATIC!! YES!
+
+11-04-99
+
+Beefed up the Techno Hill Zone Textures today. Started on the backside running animation
+of Sonic. StroggOnMeth added a ton of new stuff to the damage code, and I had to tidy it up.
+Turns out that his JUSTJUMP Mobj didn't work, so I used JUSTHITFLOOR and everything's
+dandy now. Spring also works, too, but have yet to give Sonic a spring animation and
+play a spring sound.

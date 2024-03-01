@@ -1,0 +1,334 @@
+
+ ---------------------
+ D O O M   L E G A C Y
+ ---------------------
+ S K I N S   S P E C S
+ ----------------------------------------------------------------------------
+			       Written by: Denis Fabrice (jdemouli@ulb.ac.be)
+						     Last updated 25-Aug-1998
+
+--------
+CONTENTS
+--------
+
+[0] First note
+[1] Overview
+[2] Implementation
+[3] Example
+[4] Technical blurb
+    [4-1] Skins and sprites in pwad.
+    [4-2] Same resource name on different pwads.
+[5] Tools
+
+
+--------------
+[0] FIRST NOTE
+--------------
+
+  If you have problems creating Skins wads for Doom Legacy,
+  and can't find the answer to your questions in this documentation
+
+  mail to: jdemouli@ulb.ac.be
+
+
+
+------------
+[1] OVERVIEW
+------------
+
+Let's first have an overview of what defines a Skin:
+
+  S_SKIN:
+  -------
+  Each skin in a pwad is identified by a 'skin marker': this is
+  a resource by the name 'S_SKIN'. The resource contains data in
+  the form of a text file, which describes what is replaced by
+  the skin, and gives the name of the skin.
+
+  Skin sprites:
+  -------------
+  A skin is basically a sprite replacement for the player avatar.
+  ALL the frames of the player sprite must be replaced : this
+  includes the normal run, attack, hurt sequences, as well as the
+  'normal' death, and the 'explode' death sequences.
+
+  Skin face:
+  ----------
+  Though the status bar face is viewable only by the player who
+  uses the skin, it may be replaced in order to be consistent
+  with the player character appearance. As soon as we ran some
+  tests with a 'Leprechaun' skin, and saw the marine's head in
+  the status bar.. we added support for replacing the status bar
+  face. Like the sprites, _ALL_ the face graphics need to be
+  replaced, if some are not defined, the game will quit.
+
+  Skin sounds:
+  ------------
+  To make it more fun, a skin can have a set of up to 10 sounds
+  replaced, these are called the 'skin sounds'. Skin sounds are
+  replacements of a set of the original Doom sounds, which are
+  given out only by the skin that defines them. All the sounds
+  need not be replaced.
+
+
+------------------
+[2] IMPLEMENTATION
+------------------
+
+Now on to implementations:
+
+
+  S_SKIN resource format:
+  -----------------------
+
+  The content of S_SKIN is just a simple ASCII text file.
+
+  If you put more than one skin into a wad file, there are effectively
+  multiple resources of the same 'S_SKIN' name. If this is a problem
+  you can add any characters after the 'S_SKIN' letters, so that
+  your wad editor doesn't complain. Example: S_SKIN1, S_SKIN2, ...
+  Legacy will search only for the first 6 letters.
+
+  Format of the text file:
+
+   // comments start with '//'
+
+   name = <skin name>	     <- give the name of your skin max 16 chars
+                                NO SPACES!
+
+   sprite = XXXX	     <- identify the sprites to use for this skin
+				4 characters, optional.
+
+   face   = XXX 	     <- identify the status bar face graphics to
+				use for this skin. MUST be 3 characters
+
+   dsouch   = dsXXXXXX	     <- replace one of the 10 customisable sounds
+   dsplpain =			with a new sound. The new sound name MUST
+   dspdiehi =			start with letters 'DS'
+   dsoof    =
+   dsslop   =
+   dspunch  =
+   dsradio  =
+   dspldeth =
+   dsjump   =
+   dsouch   =
+
+
+
+-----------
+[3] EXAMPLE
+-----------
+
+An example is better than 1000 words, so here we go.
+
+Here's a sample of a text file that you could have into the 'S_SKIN'
+resource:
+
+----------------------------------
+
+// Terminator skin by xxx mail me yyy@myhouse.com
+name = terminator
+sprite = TERM
+face = TER
+dsouch =   dstmouch
+dsplpain=dstmpain
+dsslop	 = dstmexpl
+
+----------------------------------
+
+As you see each line looks like: <property> = <value>
+
+Let's study each line one by one:
+
+// Terminator skin by xxx mail me yyy@myhouse.com
+
+    This is just a comment line. Comments start with '//'.
+    Use comments to put author information. The comments
+    are not displayed anywhere into the game, but they may
+    be useful if someone hacks your wad, he/she'll know
+    where it comes from and who did it.
+
+
+name = terminator
+
+    This tells that the skin name is 'terminator'.
+
+    The skin name is displayed in the multiplayer->setup menu.
+
+    It is used by the 'skin' command, in the console. You would
+    type 'skin terminator' at the console to change the skin
+    manually, of course it's easier to use the multiplayer menu.
+
+    The skin name must be UNIQUE : if there are two skins in
+    a wad with the same name, whatever different may be the
+    graphics, only the first skin will be used.
+
+    The skin name is also displayed in the TEAMPLAY Rankings,
+    when using 'teamskins'. Since each team is identified by
+    a skin in 'teamskin' mode, the rankings would show like this:
+
+		    107   LEPRECHAUNS TEAM
+		     98   TERMINATOR TEAM
+
+    As you see, the name of the skin is used as the name of the
+    team.
+
+    If you don't specify the name of the skin, it receives a
+    name like 'SKIN 1', 'SKIN 2', etc.. not fun.
+
+    ATTENTION: the name can't have spaces in it... for example
+    a name like 'blues brothers' will make Legacy quit with
+    a message like "unknown 'brothers' keyword". We should fix
+    that later.
+
+
+sprite = TERM
+
+    Tells the name of the sprite to use for the skin. Sprites in
+    Doom uses only 4 letters, the original player graphics sprite
+    is 'PLAY'. The line above tells Legacy to look for TERMA1
+    instead of PLAYA1, TERMA2A8 instead of PLAYA2A8 etc...
+
+    It is not needed to rename the player sprites like this.
+    It is usually simpler to put all the sprites _JUST AFTER_
+    the S_SKIN resource. Example:
+
+    S_SKIN
+    TERMA1
+    TERMA2A8
+    TERMA3A7
+    TERMA4A6
+
+    etc...
+
+    Note that if you put the sprites just after S_SKIN, the sprite
+    name doesn't matter, Legacy looks for the first sprite name,
+    and continue to collect all the frames with the same sprite
+    name, until the name has changed, or the end of the wadfile.
+
+    You will want to rename the skin sprites only if your wad
+    editor requests that all resources have a _unique_ name.
+
+    Since you can use any name for the sprites, even without
+    using the 'sprite = xxxx' statement, you will probably need
+    this only if you really can't get the sprites ordered just
+    after the S_SKIN resource.
+
+    Note: _ALL_ the frames of the player sprites must be replaced.
+
+
+face = TER
+
+    All the status bar face graphics resources in Doom wad have
+    the name start with 'STF' : STFST01, STFGOD0, STFDEAD, etc...
+
+    This lines simply tells _3 LETTERS_ to use in place of 'STF'.
+
+    So in this example Legacy will look for 'TERGOD0' instead of
+    'STFGOD0', 'TERST01' instead of 'STFST01', etc...
+
+    Attention : the STPB0-STPB3 resources are no more used.
+
+		the STFB1,STFB2,STFB3 resources of the original
+		Doom are no more used. Doom Legacy only uses
+		STFB0, and remaps the green color to the color
+		of the player, just like for the sprites.
+
+    Note 1: contrary to the sprites renaming, you MUST use this
+	    line in order to change the status bar face graphics.
+
+    Note 2: remember you must replace _ALL_ the status bar face
+	    graphics, that is: provide a replacement for all
+	    the resources that start with 'STF'.
+
+
+
+dsouch =   dstmouch
+dsplpain=dstmpain
+dsslop	 = dstmexpl
+
+    These lines tells new sounds to use for that skin in particular,
+    in place of the game's original sounds.
+
+    Up to 10 sounds can be replaced, the sounds are related to the
+    player actions:
+
+    DSOOF
+    DSNOWAY
+    DSPLPAIN
+    DSPLDETH
+    DSPDIEHI
+    DSSLOP
+    DSPUNCH
+    DSRADIO
+    DSJUMP     <- jump sound			  (Doom Legacy sound)
+    DSOUCH     <- hurt sound when hitting ceiling (Doom Legacy sound)
+
+    For each sound to replace, use a line like:
+
+      <original sound resource name> = <new sound resource name>
+
+    Any of the 10 sounds can be replaced, or all.
+
+    The sounds that are not replaced will sound just like the original.
+
+    Note: the replacement sounds doesn't have to be new sounds, you can
+	  use any sound from the game. For example, if you create an
+	  imp skin, you could replace the player sounds with the imp
+	  sounds.
+
+
+-------------------
+[4] TECHNICAL BLURB
+-------------------
+
+
+ [4-1] Skins and sprites in pwad
+ -------------------------------
+   If you have a wad with skins _AND_ other sprite replacements,
+   make sure you use S_START, S_END sprite section markers so
+   that the skin sprites are not replacing the default player
+   sprites, in case you use 'PLAY' for the skin sprites. If the
+   PLAYxxxx skin sprites are _outside_ of the sprite section
+   markers, they will not be mistaken as the default player
+   sprites.
+
+
+ [4-2] Same resource name on different pwads
+ -------------------------------------------
+   To make it clear : Legacy will add skins _WAD PER WAD_. Which
+   means it doesn't bother at all if there are resources with the
+   same name in different pwads.
+
+   In fact, Legacy doesn't even bother if you put several markers
+   with the same name in a pwad (multiple 'S_SKIN' for example).
+
+   We added support for 'S_SKINxx' where xx can be any character,
+   just because some wad utilities don't like multiple resources
+   of the same name.
+
+   You could for example use the same sprite name for several
+   skins into _one_ pwad, since they are delimited by skin
+   markers (S_SKIN).
+
+
+
+---------
+[5] TOOLS
+---------
+
+That's it. Creating skins is very easy, provided you have the tools.
+
+We recommend NWT 'New Wad Tools' version 1.3, by Denis M”ller. This
+program allows to insert new resources, rename it, insert raw data
+into resources (which is how we insert text files into Doom wad
+resources).
+
+Another common wad utility is 'WinTex' version 4.0, by Olivier Montanuy.
+This is similar to NWT, but it will run under Windows only.
+
+If you have questions regarding the WAD tools in particular, please
+consult the Doom editing newsgroups, or ask questions on the Doom
+Legacy forum (http://www.frag.com/doomlegacy).
+
+Have fun!

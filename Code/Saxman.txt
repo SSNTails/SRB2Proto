@@ -1,0 +1,26 @@
+-----------------
+SAXMAN - Log File
+-----------------
+
+02/13/2000
+
+- <doomdef.h>    * Tic rate changed to 120fps
+- <info.c>       * Changed all animation durations to match at 35fps
+- <m_menu.c>     * White strings replace gfx
+- <w_wad.h>      * Max wads increased to 256
+
+
+02/16/2000
+
+- <doomdef.h>    * Set max player name size to 24
+- <g_input.c>    * Deleted weapon keys
+- <m_menu.c>     * Deleted weapon keys
+                 * Changed episode menu with level names with white strings in
+                   commercial game
+
+
+02/17/2000
+
+- <f_finale.c>   * Changed text speed to slower amount
+- <g_game.c>     * Changed move and turn speeds
+- <p_mobj.c>     * Changed friction and stop speed for normal rate at 120fps

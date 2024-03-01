@@ -1,0 +1,320 @@
+
+ DooM LEGACY
+ Release v1.25, August 1998.
+
+ Last Updated: 25-Aug-1998.
+
+ Original game & sources by: Id Software.
+ Additions (c)1998 by: Denis Fabrice & Boris Pereira
+
+ Doom LEGACY web site: HTTP://www.frag.com/doomlegacy
+		 mail: legacy@frag.com
+
+
+ -----------------------------------------------------------------------
+ LEGACY SPECS FOR EDITING
+ -----------------------------------------------------------------------
+
+ If you have any special request or question concerning editing
+ with DOOM LEGACY, just mail us.
+
+
+
+ --------
+ CONTENTS
+ --------
+
+ [1] Introduction
+     [1-1] Future plans
+
+ [2] Sprites/flats in a pwad
+     [2-1] Using SPRITES in a pwad
+     [2-2] Compatibility with older patches
+     [2-3] Using FLATS in a pwad
+
+ [3] DOOM3.WAD resources
+     [3-1] Patch resources
+     [3-2] Pic resources
+
+ [4] Sound
+ [5] Music
+
+
+ ----------------
+ [1] INTRODUCTION
+ ----------------
+
+ Legacy is more and more heading towards new editing possibilities.
+ We took time before starting thinking of adding linedefs, new object
+ types, ect, because we prefer to have a good strong base, before adding
+ new editing features.
+
+ With the console, better network, and overal improved compatibility with
+ the existing Doom wads, we feel that Legacy has reached the maturity
+ for extending the engine. That's what we could call the end of 'phase 1'..
+
+
+ [1-1]: Future plans
+ ===================
+
+     Adding new editing features will be a lot of work, especially because
+     editing tools will be needed. For example, to add the water in the
+     existing maps, will need a simple editor to view a map, and edit
+     sector/linedefs/things properties.
+
+     We could use the existing map editors, but there is a limit to it.
+     We will cooperate with other ports as much as we can and use common
+     thing types, sector types ect.
+
+     We will possibly create NEW resources, associated with maps. Those
+     resources will contain the additional information used by Legacy,
+     and will be ignored by the original Doom and ports that don't support
+     it. Thus, it will not interfere with the thing/linedefs numbers
+     chosen by other ports.
+
+     NEW: As of 25-Aug-1998, we can now tell you that we have an editor
+          in progress. It will rock :) the interface already does.
+
+
+ ---------------------------
+ [2] SPRITES/FLATS IN A PWAD
+ ---------------------------
+
+     Replacing the sprites graphics in Doom has always been difficult.
+     Only 1% of the existing maps for Doom and Doom2 use new sprite
+     graphics : because Doom didn't support sprites replacements direc-
+     tly in a pwad, you had to create a 3mb wad with ALL the original
+     sprites of Doom, and replacing the ones you wanted. For distri-
+     bution of your creation, you had to create a batch installation
+     file, and use programs like Deutex or Nwt to put all the missing
+     sprites in the pwad before the end-user could play with it.
+
+     Personally, if I had sprites in pwad directly supported in the
+     original Doom, I'd have already created a lot of maps with new
+     sprites graphics : how many times I wanted to draw some specific
+     sprites to fit in a map's theme..
+
+     Sprites and flats in pwad is now the 'standard' of Doom Legacy,
+     there is no command line options, so have fun with it!
+
+     SPRITES and FLATS in pwad _ARE_ supported by the 'addfile' console
+     command (loading pwad at run time). 
+
+     Soon TEXTURES will be supported at run-time by the 'map' command.
+
+
+
+ [2-1]: Using SPRITES in a pwad
+ ==============================
+
+     It is not need anymore to append the missing sprites in a pwad
+     (using deutex or nwt).
+
+  >> You need only 'S_END' (or SS_END) added after the last sprite
+     in your pwad.
+
+  >> S_START (or SS_START) is not obligatory, but is advised : to
+     clearly separate sprites from skin sprites, and other sections
+     that might redefine the same sprite, but for other uses.
+
+     The best is to put S_START and S_END.
+
+     All sprite resources found in pwad, will replace those loaded
+     before, just like with any other resources. Thus, sprites in
+     pwad replace the original sprites of Doom, since the original
+     game wad is always the first one.
+
+  >> If you put S_END, but not S_START, sprites will be searched
+     from the beginning of the pwad, up to the S_END.
+
+     We could get rid of S_END, but the loading of sprites would
+     be less efficient.
+
+  !> Another reason for section markers (S_START, S_END) : sprites
+     resources are recognised by their 4 first letters. For example
+     player sprites start with 'PLAY'. Suppose you replace the
+     'PLAYPAL' resource in a pwad, and use sprites in it, if you
+     don't put the S_START, and 'PLAYPAL' is BEFORE the sprites,
+     it will be taken as a sprite since it starts with 'PLAY'.
+     Solution: always put S_START/S_END, or put 'PLAYPAL' resource
+     AFTER S_END.
+
+     This is a reason why section markers are still useful.
+
+  >> Even better: you can replace only some frames of a sprite in
+     a pwad: example is replacing PUNGA0, but not PUNGB0, ..
+     this DOES NOT work using sprite renaming with dehacked. So
+     I really encourage you now to use sprites in pwad directly
+     instead of dehacked sprite renaming. This is useful for the
+     rocket for example, where you want to replace only the
+     missile or only the explosion.
+
+
+
+ [2-2]: Compatibility with older patches
+ =======================================
+
+     For direct support of existing patches, SS_START is considered
+     as 'S_START', and 'SS_END' will be considered as S_END.
+
+     Also, for support of the (very old) dmadds pwads, empty sprite
+     resources of 8bytes length are ignored (for dmadds, it meant
+     use the original sprite of Doom)
+
+     List of patches I have tested that fully worked:
+
+      QUEST, CHOOKS, BUNNY3D, TOONS, SIMPSONS, ALIENSTC, ANUBIS,
+      STARWARS, DOLL, CRINGE, D2XGOLD, DFRIFLE, ect..
+
+     Several ones used dehacked to change the weapons, so I converted
+     the old .deh to the latest format simply loading and saving it
+     under Dehacked3.0, then added it with -dehacked command line.
+     It all worked fine.
+
+
+
+ [2-3]: Using FLATS in a pwad
+ ============================
+
+     Flats in a pwad already worked with the original Doom, you had
+     to put a 'F_END' after the last flat. However, it wasted
+     memory because the engine took all resources from the F_START
+     of the original game wad, up to the F_END in your pwad, as
+     flats.
+
+  >> Section markers are not needed at all for the FLATS. You can
+     get rid of the F_END in a pwad, because only those flats
+     used in the current map are loaded. Since FLAT names are
+     8 chars, they are uniquely identified in the wad files, and
+     they don't need section markers.
+
+  >> You might want to add a F_END after the last flat, for ports
+     that don't support this, and for the original Doom games.
+
+     Flats loading is now different : it supports any number of new
+     flats (using new names), and it only animates those animated
+     flats that are used in a level. YES, this is a feature, because
+     soon you will be able to define as many animated flat sequences
+     as you will.
+
+
+
+ -----------------------
+ [3] DOOM3.WAD RESOURCES
+ -----------------------
+
+ Don't fear to use custom graphics to replace Legacy's ones, other ports
+ will simply ignore these resources, so you can create a wadfile with
+ new status bar overlay icons for example, that will work with the
+ original Doom.
+
+
+
+ [3-1]: Patch resources
+ ======================
+
+  RANKINGS : the graphic displayed at the top of the deathmatch
+	     rankings (while in a net-game).
+
+  RSKY1
+  RSKY2
+  RSKY3 : the sky graphics are now 256x240, not 256x128.
+
+	  that's because of the freelook : you are able to look
+	  higher, thus seeing a part of the sky you couldn't see
+	  in the original Doom.
+
+	  Using a taller graphic is better than scaling up the
+	  original skies, it looks better. However for compatibility,
+	  Legacy scales up the SKY textures if it finds that they
+	  are the 'old' small size 256x128.
+
+	  Use the LUMPY utility provided in this archive to create
+	  patches for the sky. See the provided SKY2403.PCX for
+	  an example.
+
+		   The bottom 40 lines are under the horizon and not
+		   normally seen. The lines 100 to 199 are the ones
+		   you see while looking straight ahead. The top lines
+		   0-99 are the lines of sky you see when looking up.
+
+	  To convert the sky:
+
+	  LUMPY sky2403.pcx -width 256 -heigth 240
+
+	  Then use NWT or DEUTEX to insert the raw file into the
+	  RSKY resources.
+
+	     Example: with NWT place the cursor on RSKY1, and use
+		      the 'import raw to pwad' key, enter 'rsky1.raw'
+		      and then 'newsky.wad' as destination wad.
+
+	  Note: if like me, you love Deluxe Paint, you'll have to use
+	  the 'old' DP instead of DPA, to be able to edit graphics
+	  taller than 320x200.
+
+
+ [3-2]: Pic resources
+ ====================
+
+ You must use lumpy to create pic_t resources, see LUMPY.TXT for more
+ about using lumpy. pic_t resources are used for the following in
+ Doom Legacy:
+
+  CONSBACK - console back picture, 320x200, when 'con_backpic' is true
+					    (the console variable)
+	     also used as the loading picture
+
+	     MUST BE 200 lines high, can be any width (default is 320)
+
+  CBLEFT   - console left border, used with translucent console background
+	     MUST BE 200 lines high, any width (default is 8)
+
+  CBRIGHT  - console rigth border, used with translucent console background
+	     MUST BE 200 lines high, any width (default is 8)
+
+
+ Status Bar Overlay icons (all 16x16 pixels):
+
+  SBOHEALT - health (default shows a red cross)
+  SBOFRAGS - frags (default shows a skull)
+  SBOARMOR - armor (default shows a green armor)
+
+  SBOAMMO1 - pistol ammo
+  SBOAMMO2 - shotgun ammo
+  SBOAMMO3 - chaingun ammo
+  SBOAMMO4 - rocket ammo
+  SBOAMMO5 - plasma ammo
+  SBOAMMO6 - bfg ammo
+  SBOAMMO8 - super shotgun ammo
+
+
+
+ ---------
+ [4] SOUND
+ ---------
+
+ We have not added sound features right now. Well, to be honest
+ the sound quality is now much better. This is due partly to:
+
+     - the fantastic Allegro library by Shawn Hargreaves, we use
+       its sound routines,
+     - some rework by Boris, to set the volume with much more
+       precision at a hardware level instead of software.
+
+ Well, at least on a SB16 you will hear the difference, using the
+ original Doom, the sounds are 'muffled'.
+
+
+
+ ---------
+ [5] MUSIC
+ ---------
+
+ Doom LEGACY supports direct playing of midi files. It's not
+ necessary to convert them to MUS. This is not really a feature,
+ except there may be some MIDs that doesn't sound well with MUS.
+
+ If you wanna play, just insert a .MID file as a raw resource with
+ NWT, in place of any D_xxxx mus resource. Doom LEGACY will recognize
+ the MID.

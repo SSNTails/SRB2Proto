@@ -1,0 +1,364 @@
+=====================================================================
+faB log of changes on DOOM LEGACY, was discontinued from release
+v1.25 of Doom Legacy, until December 1998, after two months of
+quick and dirty coding a win32 port and a 3Dfx accelerated version.
+---------------------------------------------------------------------
+THE DOOM LEGACY PROJECT		           Contact: <legacy@frag.com>
+                                                 <bpereira@ulb.ac.be>
+=====================================================================
+
+Project:  DOOM Legacy
+Web site:  http://www.frag.com/doomlegacy
+Log author: Denis Fabrice
+
+
+----------------
+from October to December 1998,
+ worked mainly on the 3Dfx accelerated version
+----------------
+
+about 6 weeks ago (Sep98):
+==========================
+ - started getting grips with VisualC++
+ - started DirectDraw..
+ - I don't remember..
+
+about 5 weeks ago (Oct98):
+==========================
+ - downloaded glide3 API, read the doc, run the examples, did some
+   quick 'modify' the examples and see what it does.
+
+about 4 weeks ago (Oct98):
+==========================
+ - started a workspace in VisualC++ with my test programs for Glide.
+   test1: displays a simple rotating cube with colour gradients
+   test2: displays the same, with another cube, and add a z buffer
+   test3: finally tested the texture mapping, yipee! downloaded a
+	  simple 256x256 XOR pattern as a texture. Just do for x,
+	  for y, and for each pixel colour is x XOR y. Nice little
+	  pattern :)
+
+
+about 3 weeks ago (Oct98):
+==========================
+ - started displaying level as dots, used some matrices which didn't
+   work, after some unhappy coding, finally used the transformations
+   of Doom, all I want is see the level on my screen. It works.
+
+about 2 weeks ago (Oct98):
+==========================
+ - drawing the level as lines, crash, 2d clipping of Banshee card
+   stops about 2050.0f to the right out of the display, of course
+   this is total lame, should clip to the frustum. Well, grDrawPoint
+   never crash, but with grDrawLine it does... grr..
+
+about a week ago (Nov98):
+=========================
+ - bought a wonderful book called 'Procedural Elements for Computer
+   Graphics', David F. Rogers, WCB/McGraw-Hill
+
+ - working on the frustum clipping, using Liang-Barsky algorithm,
+   optimised for 90deg left-right top-bottom fov, still use the
+   z near clipping with nice little clipZ routine from Carl's
+   warp project. Had big problems, thought the clipping found in
+   the book 'Procedural Elements for Computer Graphics' didn't
+   work, was very happy when some days later I found out I had
+   a stupid error with precedence of operators and a cast.. ouch.
+   Without the book's algorithm I don't think I would have a nice
+   frustum clipping until some long time ahead. I'm not a math
+   head, I have about half the math knowledge of the basic school
+   maths because I did half of the school as 'artistic' courses,
+   where there are basically no maths. Still, I'm pretty happy
+   with what I have accomplished : wall polygons are created from
+   segs of subsectors, are converted into polygons, polygons are
+   clipped to the view frustum, and then split in triangles that
+   are rendered.
+
+   There is still drawing out of the screen: the frustum's 90deg
+   left-right fov is projected to the screen width, but then the
+   top-bottom fov goes beyond the top and bottom of the screen.
+   Simple solution : I may simply scale each Y (updown) coord of
+   the polys with a scale, before entering the frustum clipping,
+   the 'crunching' back the up-down 90deg fov to the screen height
+   and everything will look normal, since I scaled the y coords
+   up before 'crucnhing' them smaller with the projection, that
+   is , so that the up-down frustum just fit in the screen height.
+   The scale is probably a factor like 320/200, screen width div
+   screen height. I'll see that later.
+
+   Now I want to play with the floors. The upper/lower walls are
+   not done, but it's easy, just two special cases of the actual
+   wall rendering, where the top/bottom coords are different.
+
+this week (Nov98):
+==================
+ - I started the floors, I take the coords of the base of the segs
+   that are supposed to enclose the subsectors. Deception here:
+   I finally found out that segs are made only for linedefs parts
+   and that subsectors, although defining convex spaces, only
+   define the wall parts, since the floors are just filled in-between
+   the walls, Doom doesn't need convex subsectors where no part
+   of linedef is to be drawn.
+
+   Solutions: I thought splitting the concave sectors (well there are
+   often concave) in convex polygons, and use them to render the
+   floor. This is really bad, I'm sure it involves a lot of overdraw
+   and well, John Carmack says for the U64 version they did per-
+   subsector convex polygons for the floor/ceiling and he calls that
+   'The Right Thing'.
+
+   I decided to try Carmack's 'Right Thing'! :) The BSP doesn't hold
+   the information for the convex floor/ceil polygons, so I found out
+   that I had to go through the BSP, and add subsectors where they
+   miss, and also recursively split a convex polygon with each BSP
+   partition line, so that I get the right convex polygons for each
+   subsector leaf. I have to check when Doom BSP has skipped a sub-
+   sector where they were no segs, I have to add one with 0 segs, but
+   the convex polygon I have at this stage. The software renderer
+   will ignore subsectors with 0 segs. I will add a polygon pointer
+   to each subsector that will be used by the 3dfx planes renderer.
+   Also, where subsectors contained enough segs to outline the convex
+   polygon, they were put in no special order, so with the method
+   I explain, I get convex polygon with vertices defined in clockwise
+   order (started as anti-clockwise , but had many problems with the
+   BSP partition lines orientation).
+
+14-Nov-98:
+==========
+
+   I am _VERY_ lucky, that I started some months ago a map editor
+   that I never finished, as I write today, I have been able to test
+   my method of subdividing a convex polygon using the BSP stored in
+   wads, and debugging all the output, step by step to the map view
+   of my 'editor'. Without it, I think I would not have done the
+   floors correctly until a minimum of one month more.
+
+15-Nov-98:
+==========
+
+   Got the thing working. I start with a convex poly the size of the
+   min/max boundaries of the entire map. The poly is a simple rectangle.
+   With each BSP node, the poly is split in two other convex polygons,
+   one front of the partition line, one to the back, the RenderBSPNode
+   then calls hilmself recursively for the front side with the front
+   poly, and then the backside with the back poly. The front or back
+   poly is then split again with each node, until we fall into a leaf
+   of Doom's BSP, a subsector.
+
+   Actually the convex polygon I get is most often larger than the
+   subsector, because it encloses some 'void' space out of the sub-
+   sector, so I have to clip the convex poly with each seg of the
+   subsector to get the final convex poly. TO do today..
+
+   Another problem I just found, is with some maps using the trick
+   of deep water, where linedfes have each side point to the same
+   sector. It results into a 'broken' BSP, at some point, you would
+   get a subsector, but instead, you get a node, that splits the
+   convex poly, but it is useless, the poly is already pf the sub-
+   sector size, however it seems the BSP compiler added it because
+   it thought the subsector was not convex, because one of the
+   segs did not point to the same sector...
+
+   I had to fix, so for now, if a split can't be made, that is, the
+   BSP partition line is _OUT_ of the convex poly, and doesn't split
+   it, then I return the frontpoly as the poly, and backpoly is NULL.
+
+   Maybe the maps with this effect won't display properly where the
+   effect is, but thanks to the BSP recursion, the other parts of
+   the map must be displayed properly, as long as the BSP partition
+   line does not use one pf the 'deep water' subsector segs.
+
+   01:24:08
+
+   Subsector final convex polygon is now 'cut' with the subsector
+   segs, so that the 'void' space, behind the segs is cut out.
+   There's still a problem sometimes with 2 points at the same
+   place..
+
+
+02/Dec/98 22:40
+===============
+
+yesterday I sent the very alpha to James Toyski who recently bought
+a voodoo2 card.
+
+wow! I added the sprites! those in the view, not the psprites,
+though psprites should be even simpler! actually the code was
+ready since I did the menus, I just made coords for sprite
+billboards like walls, translate/rotate/project/clip then
+nice baby baby w_cachepatchnum() and draw the thing!
+
+now it feels much more complete :)
+
+phew.. thanks that Boris restored the CheckHeap every level..
+I always make problems with it! 
+
+
+
+??-1-1999:
+==========
+
+* finished implementing the exception handler from the GameDeveloper magazine article
+  of January 1999. May come very handy to find bugs, especially with glide taking the
+  screen or DirectDraw in a win16lock().
+  crashes are logged to errorlog.txt with very useful info
+  you can do debug->step into and type the cs:eip from errorlog.txt in the registers
+  window, right like that, and you see where it crashed, or using the addresses seen
+  in the stack frame, you can find what code called the buggy function..
+
+9 Jan 1999:
+===========
+
+* started translation of tmap.s to Intel syntax for compiling with NASM.
+  Finally had the idea of disassembling the tmap.obj compiled previously from the DOS port,
+  using NDISASM, so that the trnaslation from AT&T's syntax is less trouble.
+  Thought about using MASM, but NASM supports both DJGPP's AOUT and WIN32 COFF object files,
+  thus maintaining a single source file for both DJGPP DOS and WIN32 versions.
+  Also, NASM supports MMX instructions.
+* command.c, command.h : fixed mousesens,mlooksens being limited (these are exceptions),
+  adding a CV_NOCLAMP flag
+* m_menu.c, command.c : added cv_clampvalue so if such cvars are changed at the menu, they are clamped
+  but they can bet set any value manually at the console
+* added -nomouse checkparm in mouse startup code (useful for debug with -win, leave the mouse free)
+* last win32 versions would start the mouse capture each time the use_mouse is set..
+  which caused an "can not acquire mouse" error (now does startup mouse only once)
+* added nomouse and nojoystick in Doom Legacy Launcher
+* launcher : added Init3dControls, comctl32.lib in link options.. James Toyski couldn't run the
+  program, I don't know if it will work with this change
+
+10 Jan 1999
+===========
+* win_snd.c : eventually found it wasn't a bug of my code, that I couldn't make the sound coop with
+  WinAmp : of course WinAmp itself had to be configured to use DirectSound.
+  Launcher : added 'cooperative sound' option, non-cooperative has a better quality but stop any other
+  applications sound while Legacy is running, if cooperative is checked, Legacy sounds are mixed with
+  other DSound app's in the background! Note we use either priority or exclusive mode, not the normal
+  mode because 1) we want performance (choose our pirmay buffer format), 2) we want control over the
+  main sound volume
+* win_snd.c : fixed a bug with panning, didn't set it correctly
+  implemented updatesoundparams, stopsound, now better
+  Still repeating sound problem, mostly with the 'gun' shot sound, why is that?
+
+11 Jan 1999
+===========
+* join with Boris code, seems to run fine, bug to fix: save game, load game..
+
+12 Jan 1999:
+============
+* win_snd.c : implemented DirectSound hassles of creating Duplicates of secondary buffers when more than
+              one instance of a particular sound is played at the same time. Sound should be fine now.
+              (note for posterity: coded after drinking wine, and just one bug quickly fixed, not bad! :)
+
+17 Jan 1999:
+============
+* r_segs.c, p_map.c, r_splats.h : started to do 'blood splats' effects, a patch_t is drawn on top of
+            a wall, at any position, with translucency or any other mode. It's beginning to work..
+* m_misc.c : fixed WritePCXFile to set the right value for 'color' picture, now shows right in
+             PaintShopPro
+* m_menu.c, g_input.c, g_game.c : added gamecontrols for secondary splitscreen player, added menu
+            Setup Multiplayer for secondary player, with option to go to setup controls, for player 2.
+            Still to do : save player 2 controls, set mouse/joystick devices for either player,
+                do the splitscreen different view modes..
+* tmap.nas : restored the R_DrawShadeColumn_8, will be used for damage effects on walls with the
+             r_splats code.
+* r_splats.h : added drawmodes : translucent/opaque/shaded, tried some shade patches for gunshot,
+             and added code for missile explosions, draw a bigger damage splat.. starts to look good!
+
+20 Jan 1999:
+============
+
+* p_mobj.c : added P_SpawnBloodSplats(), calls P_SpawnBlood(), and then randomly spawns some
+             bloodsplats in a 180deg angle around the damage direction, from the damage point
+             at a distance proportional to the damage level.. gory!
+             Needs a set of blood splat sprites, and a blood colormap (so shade instead of
+             translucency is used, but with a red 'tint').
+             Should add yellow/green shades as well for barons o'hell etc blood color.
+
+24 Jan 1999:
+============
+
+* r_splats.c : splats code in its own module, drawn some damage shading pics for the gun shots splats
+  tmap.nas :  converted the one and only old edge rasterizer I coded long ago, it is used to rasterize
+              the edges of the floor/ceiling splats, after that one of the span drawer routines is
+              called for each scan line covered by the floor splat
+              After some quick and dirty coding (during a network 'party' weekend.. so no serious code)
+              finally got the floor splats to show, still to do:
+              - clip the floor splats inside the subsectors, split the floor splats between subsectors
+                that are covered?
+              - find the right texture offset, the texture of the splat does not repeat, and a faster
+                span drawer is used (using a advancetable)
+
+
+=== 26/01/99 23:59 ==================================================
+
+*       changed the log appearance from now on
+*       cleaned up some stuff.. (so I can put something in the log :)
+
+TO DO
+
+floor splats : clip the floor spans to the screen properly
+floor splats : find the correct texture offsets so that the non-repeating span drawer
+               (advancetable) can be used instead of the regular Doom one
+wall splats : don't overlay splats that are at about the exact same (x,y) position ?
+            : fix splats that cover different segs, cut into several pieces ?
+            : draw splats on bottom and upper walls, what doesn't work ?
+
+=== 30/01/99 19:52 ==================================================
+
+*       'flat' splats have the right texture offsets
+
+- make a rasterizer for flat splats, with subpixel precision, texture start and end coords are not needed
+  clip span start x & end x to screen
+- blood splats join together to form larger splats, they don't stack on each other at the same place
+- flat splats use the span drawer with advance table and no wrap which is faster
+- make span drawer with shade mode in asm
+
+=== 02/03/99 21:35 ==================================================
+
+*       included Carl's changes for WINNT4 compatibility
+
+=== 07/03/99 20:40 ==================================================
+
+*       finally made the midi stream playback during the weekend!
+
+=== 08/03/99 20:40 ==================================================
+
+*       replaced midiOutReset() with midi pause, midiOutReset() is too slow
+*       fixed crash with I_Error() called in midistream callback
+*       put PAUSE key back in the win32 version
+*       do the midiOutReset() on exit, but not while in game
+
+=== 12/03/99 00:42 ==================================================
+
+*       added CD music using MCI
+
+=== 14/03/99 20:48 ==================================================
+
+*       key repeat for more friendly Menus & Console input
+*       start in windowed mode
+
+=== 16/03/99 01:22 ==================================================
+
+*       mode 0 is now windowed mode for console startup, always available
+*       if no DirectDraw modes found, stay in windowed mode
+*       does no more fail on setting mode 320x200 if it is not available
+
+=== 16/03/99 21:35 ==================================================
+
+*       started joystick input
+
+=== 18/03/99 00:28 ==================================================
+
+*       standard joystick support (up to 10 buttons, 2 axes)
+*       analog movement with analog joysticks, more playable!
+
+- support mouse wheel, joystick slider, hat
+
+=== 23/03/99 23:09 ==================================================
+
+*       fixed DirectInput for WindowsNT, now uses Poll() only if
+        available ( better than just compiling away in DirectX3 mode )
+
+=== 26/03/99 00:40 ==================================================
+
+*       working on launcher multiplayer section client/server sheets

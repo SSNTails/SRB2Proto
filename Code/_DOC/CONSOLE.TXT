@@ -1,0 +1,1163 @@
+
+ DooM LEGACY
+ Release v1.25, August 1998.
+
+ Last Updated: 25-Aug-1998.
+
+ Original game & sources by: Id Software.
+ Additions (c)1998 by: Denis Fabrice & Boris Pereira
+
+ Doom LEGACY web site: HTTP://www.frag.com/doomlegacy
+	      mail to: legacy@frag.com
+
+
+ -----------------------------------------------------------------------
+ CONSOLE DOCUMENTATION
+ -----------------------------------------------------------------------
+
+ Make sure you read this! You will discover a lot of goodies available
+ in Legacy! Be a doom 'power-user' ! Skip to section 2, and browse
+ through the list of commands if you're in a hurry!
+
+
+
+ --------
+ CONTENTS
+ --------
+
+ [0] What's new?
+
+ [1] Console basics
+     [1-1] Console usage
+     [1-2] Console input
+     [1-3] Commands and variables
+     [1-4] Config.cfg file
+     [1-5] Autoexec.cfg file
+     [1-6] Script files
+
+ [2] Commands and Variables
+     [2-1] Basic script commands
+     [2-2] Console setup
+     [2-3] Player setup
+     [2-4] Game controls
+     [2-5] Game options
+     [2-6] Video
+     [2-7] Multiplayer
+     [2-8] Demos
+     [2-9] Miscellaneous
+     [2-10] Sound
+     [2-11] Unfinished
+
+
+ IMPORTANT NETWORK NOTE:
+
+     Unless specified otherwise, all commands are working in multiplayer.
+     If a command does not seem to work in multiplayer, it is a *bug*, not
+     an unfinished feature :), so please mail us!
+
+
+
+ ---------------
+ [0] What's new?
+ ---------------
+
+ Changes from 1.25 to 1.27
+ =========================
+
+    - section [2-7] : 'sayteam',
+    - section [2-4] : 'bind'
+    - section [2-9] : 'screenshot','vid_ticrate',
+		      'saveconfig','loadconfig','changeconfig'
+    - section [2-5] : 'save','load','exitlevel'
+    - section [2-11]: updated 'map'
+    - section [2-8] : 'timedemo'
+
+
+ Changes from 1.24 to 1.25
+ =========================
+
+    - section [2-5] : 'viewheight'
+    - section [2-7] : 'skin','teamplay','teamdamage','frags','teamfrags'
+    - section [2-9] : 'memfree','help'
+    - section [2-11]: 'addfile'
+
+
+ Changes from 1.22 to 1.24
+ =========================
+
+    - section [2-10] : 'cd', 'cd_update', 'cd_volume'.
+    - section [2-11] : 'map' command now works in multiplayer, only the
+		       server can change it (note: make sure everybody
+		       use the same maps).
+    - section [2-7]  : 'gravity' command.
+
+ ------------------
+ [1] Console basics
+ ------------------
+
+
+ [1-1]: Console usage
+ ====================
+
+ With Doom Legacy's console, you will be able to change a lot of
+ parameters from the game, and customise the game to your preferences.
+
+ The console is simply a command prompt, where you can enter commands
+ and change the value of game variables.
+
+ Since the first console we know of was from IdSoftware's game 'Quake',
+ we have been inspired by this console, and have tried to use the same
+ functionality for the Quake-Doom fans.
+
+ To bring the console, press the '`' tilde key. You can set the console
+ key at the Setup Controls menu. To exit the console, either press again
+ the console key, or press ESC. ESC will bring the menu, and shut the
+ console.
+
+ The console displays all messages from the game. You can go back in
+ the messages with key 'PAGE UP', and go down with the key 'PAGE DOWN'.
+ Press the key 'HOME' to jump to the oldest message in the console text
+ buffer, and key 'END' to jump to the last output message (the most
+ recent).
+
+ The last lines of the console text buffer are displayed at the top
+ of the screen, when the console is off. That is, you can see 5 lines
+ of messages instead of only 1 in the original Doom. You can change
+ the duration of display of the messages with the console variable
+ 'con_hudtime', see the commands section for more.
+
+
+
+ [1-2]: Console input
+ ====================
+
+ While the console is on, you can type any key to enter a command.
+
+ Press 'BACKSPACE' to delete the last character. Press 'ENTER' to
+ execute the command.
+
+ For convenience, you have an history of the last 32 commands entered.
+ Press 'UP ARROW' to go back in the commands history, 'DOWN ARROW' to
+ go forward.
+
+ Another very useful key is the 'TAB' key : it completes the command
+ or variable name that has not been fully entered.
+
+ This is a very good way to check for the existing commands : just
+ enter any letter, then press 'TAB' several times to see what commands
+ are available.
+
+ Example: the variables to customize the console itself usually start
+ with 'con_', thus typing 'con' and pressing the 'TAB' key several times
+ will display the following console variables : 'con_height', 'con_speed',
+ 'con_hudtime', 'con_backpic'...
+
+ You can also press 'SHIFT-TAB', which will complete the command line,
+ but in reverse order.
+
+
+
+ [1-3]: Commands and Variables
+ =============================
+
+ Basically, a command does not have a value, and is not saved to the
+ configuration file. A variable always have an associated value, for
+ example the variable 'name' holds your name as a player.
+
+ Entering a command without any parameters, will usually tell you
+ the command syntax.
+
+ Example: entering 'map' will show:
+
+ map <mapname[.wad]> : warp to map, load external map
+
+
+ Entering a variable without any parameter, will tell you the current
+ value of the variable.
+
+ Example: entering 'name' will show:
+
+ "name" is "gi joe"
+
+
+ When a parameter has blanks in it, use "" around it.
+
+ Example: to enter your name as 'dj fab' type:
+
+ name "dj fab"
+
+
+ Most variables that are either true or false use '0' as false, and
+ any other value which is not zero is true.
+
+
+
+ [1-4]: Configuration file
+ =========================
+
+ Most variables are automatically saved to the default configuration
+ file 'config.cfg'.
+
+ Like in the original Doom, the -config parameter will set explicitly
+ the configuration file to use. Example:
+
+ doom3 -config fab.cfg
+
+ Thus, you can have default settings for different persons, using
+ different configuration files.
+
+ While the configuration file supports any command, and is executed
+ like a script, you should not edit it, because it is always overwritten
+ when the game exits.
+
+
+
+ [1-5]: Autoexec.cfg file
+ ========================
+
+ The autoexec.cfg file is a text 'script' file which is automatically
+ executed at the game startup, if it is found.
+
+ You can edit the autoexec.cfg file to set the values of those variables
+ that are not automatically saved to 'config.cfg'. You can also add
+ commands that will be executed one after another, just like a script.
+
+ Comments starts with '//'.
+
+ Each line of the autoexec.cfg file is like a line that you would have
+ typed at the console.
+
+ Here's some examples:
+
+ This sample 'autoexec.cfg' will warp you to map 01 as soon as the
+ game is loaded:
+
+ ----------autoexec.cfg example 1-----------------
+ // start always with map1, without waiting at the menu
+ map map01
+ echo "welcome to map 01"   //useless comment
+ -------------------------------------------------
+
+ Another example, here we set the variables that are not saved to the
+ config.cfg, because they are not considered like 'standard' parameters:
+
+ ----------autoexec.cfg example 2-----------------
+ // set my preferred weird game mode
+ bloodtime 5   // blood lasts 5 seconds
+ solidcorpse 1
+ turbo 150
+ map map07
+ echo "bigjim's weird mode active"
+ -------------------------------------------------
+
+ In the last example, each time you start the game, it will set the
+ variables like 'bloodtime' that are not normally saved to config.cfg.
+ Just look at config.cfg to know which variables are saved.
+
+
+ [1-6]: Script files
+ ===================
+
+ The config.cfg, and autoexec.cfg are script files. It means they
+ contain commands and variables that are executed in sequence.
+
+ You can create any number of script files, and execute them
+ with the 'EXEC' command.
+
+ For example, to start a script named 'blood.cfg' just enter
+
+ exec blood.cfg
+
+
+
+ --------------------------
+ [2] Commands and variables
+ --------------------------
+
+ Please note that the most common options are changeable at the menus,
+ and will set the corresponding variables. You will need to use the
+ console only if you want to customise the game more to your needs.
+
+
+
+ [2-1] Basic script commands
+ ===========================
+
+ Here are the basic commands for script execution, they have the same
+ usage and functionality as in the game 'Quake'.
+
+ You can use ; to separate several commands in the same line.
+
+
+ alias <aliasname> <command>
+      When you will type 'aliasname', it will do like if you had
+      entered 'command'. Let's better have an example: :)
+
+      alias silence "soundvolume 0;music volume 0"
+
+      Further, when you will type 'silence', it will execute the
+      corresponding command. In this example, we have given two
+      commands as one, inside " ", and using the ; as a separator
+      for commands.
+
+
+ echo <"text to output">
+      Just echoes text to the console. Like 'print' in Basic :)
+
+
+ exec <script file name>
+      Execute a script file. A script file is just a text file
+      containing a sequence of commands or variables. Script files
+      usually have an '.cfg' extension.
+
+      Example:
+
+      exec autoexec.cfg
+
+      will execute all the commands in autoexec.cfg
+
+
+ cls
+      Just clear the console text buffer.
+
+
+ wait [<frames>]
+      Wait a given amount of time. The unit is per 35th of second.
+
+      Example: this will wait 5 seconds, then display 'ok!'
+
+      wait 175;echo "ok!"
+
+      WARNING: when the wait command is executed, all the following
+      commands are delayed until wait has finished. Eg: if you enter
+      'wait 126000' (35 * 60seconds * 60 minutes), you will have
+      to wait one hour before other commands can be excuted!!!
+
+
+
+ [2-2] Console setup
+ ===================
+
+ con_backpic <0|1>
+      1 : use a console background picture, like in Quake. The background
+	  is opaque, thus it doesn't slowdown the display because the
+	  part of the view under the console is not drawn.
+      0 : use translucency for the console background : this one looks
+	  much better, somewhat like a LCD translucent screen. The
+	  drawback is that it is slower than the first method.
+
+
+ con_size <0-100>
+      Set how many %percent% of the total screen height the console
+      will use. eg: con_size 50 (the default), will use half the
+      screen height for displaying the console.
+
+
+ con_speed <1-???>
+      Set the speed at which the console comes down or moves out of
+      the screen, when you press the console toggle key. The number
+      is given as screen lines.
+
+
+ con_hudtime <0-???>
+      Set the number of seconds that the messages stay on the top
+      of the screen. They are 5 message lines that scroll as soon
+      as new messages arrive. eg: con_hudtime 5, which is the
+      default, will make the messages stay for 5 seconds before
+      disappearing. Set this to 0, and you will never see any
+      messages out of the console (hud means heads-up messages).
+
+
+ showmessages <0-2>
+      This is like in the Options Menu, with one more setting:
+
+      '0' means never show any messages on the screen, '1' means
+      always show the messages, which is the default.
+
+      There is one more setting, '2' that can only be entered at
+      the console, it will show all messages except most of the
+      'picked up ...' style messages. Useful if you are tired of
+      the 'picked up ammo', 'picked up health bonus', ect. messages.
+
+
+
+ [2-3] Player setup
+ ==================
+
+ name <your name>
+      Enter your name as a player, for network games. Your name will
+      be seen when you send a message (chat key), and is displayed
+      in the deathmatch rankings. Use "" if the name contains spaces,
+      eg: name "dj fabbe"
+
+      The name can be entered in the Multiplayer menu.
+
+
+ color <0-10>
+      Choose your color, for multiplayer games.
+
+      The color can be entered in the Multiplayer menu.
+
+
+ chatmacro <0-9> <"your chat message">
+      This very useful command allows to change the chat messages at
+      any time during the game. They are saved to the config too!
+
+      You can now quickly setup some circumstance messages at the
+      start of a game.
+
+      Press the chat key, then ALT plus a number key from 0 to 9 to
+      send one of the chat messages. Well, just like it has always
+      been for Doom.
+
+
+
+ [2-4] Game controls
+ ===================
+
+ use_mouse <0|1>
+      Setting 'use_mouse' to '0' will disable the mouse. The next time
+      you start the game, the mouse won't be detected.
+
+      Set 'use_mouse' to '1' to search for a mouse, and activate it.
+
+
+ use_joystick <0-5>
+      Enable joystick support with any value other than '0'.
+      '0' will disable the joystick.
+
+      The value will choose the joystick type:
+
+      Set one of these values for 'use_joystick'
+	0 : no joystick
+	1 : 4 buttons joystick (gamepad)
+	2 : Normal Joystick (analogic)
+	3 : 6 buttons joystick
+	4 : Wingman Extreme (Logitech) and compatible
+	5 : CH Flightstick PRO and compatible
+
+      The last two joystick types support 4 more buttons through the
+      'hat' up/down/left/right positions.
+
+      Go to the Setup Controls menu, to set the joystick buttons to
+      game controls (just press enter on a control, then push any
+      joystick button).
+
+
+ invertmouse <0|1>
+      Just like in the Options menu
+
+      Set invertmouse to 1 to inverse the mouse y (up and down) axis.
+      This is for freelook only, you will look up, when moving the mouse
+      down (backward), and look down when moving mouse forward.
+
+
+ autorun <0|1>
+      Just like in the Options menu
+
+      Set this to 1, to lock the 'run' key. You will always be running,
+      without the need of pushing a key.
+
+
+ alwaysmlook <0|1>
+      Just like in the Options menu
+
+      You can use the 'freelook' (ability to look up and down) in two
+      modes : permanent or temporary.
+
+      Setting 'alwaysmlook' to '1' will set the freelook permanent.
+
+      When 'alwaysmlook' is '0', you will need to keep the 'freelook'
+      key while moving the mouse up and down. When releasing the key,
+      the view will always re-center. This is useful if you keep
+      firing rockets at your feets.
+
+
+ mousesens <0-???>
+      The Options menu allows a range of 0-39 values.
+
+      If you are one of those people that used to change the mouse
+      sensitivity in the game config because you felt it was not enough,
+      you can now set it at the console to any value you like!
+
+
+ mlooksens <0-???>
+      The Options menu allows a range of 0-39 values.
+
+      Same note as the mousesens value.
+
+
+ crosshair <0-3>
+      Just like in the Options menu.
+
+      Choose whether to use a crosshair (1-3), or not (0). The values
+      are 1,2,3 for white cross, green angle, and red point.
+
+
+ originalweaponswitch <0|1>
+      Choose whether to use the original weapon change method (1), or
+      the new Preferred Weapons Order (0), see 'weaponpref' for more.
+
+      With the original weapon switch, whenever you walk on a weapon,
+      it will switch to that weapon, even if it is not as powerful
+      as the one you are carrying. That can be sometimes very
+      annoying, especially in fast deathmatches.
+
+
+ weaponpref <"014576328">
+      The Preferred Weapons Order (tm) :)
+
+      This works only if you have set 'originalweaponswitch' to '0'.
+
+      You give a priority to each of the weapons, with a number digit
+      from '0' to '9'. Several weapons can have the same priority.
+      When you pickup a weapon that you don't already have, you
+      will switch to that weapon ONLY AND ONLY IF that weapon's priority
+      is greater that the one you are carrying. If you already had the
+      weapon, you will pickup the ammo as usual, without changing
+      weapon.
+      The numbers are priority values, for each of the weapons, in
+      the following order:
+
+      Fist, Gun, Shotgun, Chaingun, Rocket launcher, Plasma, BFG,
+       Chainsaw, Super Shotgun.
+
+      Thus 'weaponpref "014576328"' means that the super shotgun has
+      the highest priority (8), while the fist is lowest priority (0).
+      After the double shotgun, in decreasing priority you have the
+      rocket launcher (7), plasma gun (6), chaingun (5), shotgun (4),
+      BFG (3), chainsaw (2), gun  (1).
+
+      Let's have another interesting example :
+
+      'weaponpref 333333333'
+
+      Since all weapons have the same priority in this last example,
+      you will in fact NEVER change weapon automatically, because
+      no weapon has a priority higher than any other one. You might
+      consider this as the 'manual' weapon change.
+
+
+ autoaim <0|1>
+      Just like in the Options menu.
+
+      The original Doom used autoaiming for up and down, and a very
+      little aim adjustment on left and right.
+
+      Now that you can shoot up and down with the freelook, you can
+      play like a 'pro' and set autoaim off (0).
+
+      Note that the autoaim has been enhanced : if you are not
+      aiming at something right in front of you, you will be able
+      to shoot at any angle with the freelook. If something is to
+      be aimed just in front of you, then the autoaim will adjust
+      your shots like in the original Doom.
+
+      This means that you can to some extent, predict a target's
+      path, and shoot ahead, while in autoaim mode.
+
+
+      NETWORK NOTE: in a multiplayer game, the SERVER can force
+      the autoaim off for all players with the command 'allowautoaim',
+      use with caution (don't get your friends angry :) And remember:
+      you can have more control now with the enhanced Autoaim so it
+      might not be necessary to force everybody to autoaim off.
+
+
+
+ setcontrol <controlname> <keyname> [<2nd keyname>]
+      Using the Setup Controls menu will be much simpler!
+
+      This command associates a key/joystick/mouse button, to a
+      game control (forward, fire, use ...).
+
+      The second keyname is optional. You can set it, and have
+      two keys attached to one game control. eg: have 'ARROW UP'
+      and 'MOUSE2' for 'forward'.
+
+      When a key does not have a name, it uses a name of the
+      form 'KEYxxx' where xxx is the key code.
+
+      To know the name of the keys/joystick/mouse buttons, look
+      for them at the Setup Controls menu.
+
+      The control names are "forward","backward","strafe",
+      "straferight","strafeleft","speed","turnleft","turnright",
+      "fire","use","lookup","lookdown","centerview","mouseaiming",
+      "weapon1","weapon2", ... "weapon8","talkkey","scores",
+      "jump","console".
+
+      Note: some key names have spaces in it, use the "" around.
+
+      Example:
+
+      setcontrol forward "keypad 7" "up arrow"
+
+      The following will use the windows95 'menu' key to toggle the
+      console:
+
+      setcontrol console menu
+
+
+ overlay <"fhma"> : status bar overlay
+      Choose which information to show when in full screen mode.
+      Each letter represent a type of information that will be shown.
+
+      'f' : show frags (only in deathmatch)
+      'h' : show health
+      'm' : show armor
+      'a' : show current weapon ammo
+
+      The default is 'fhma' which show all kind of information
+      on the status bar overlay.
+
+      Note that the ammo icon displays a graphics of the current
+      weapon's type of ammo, so that if you play with 'playersprites'
+      off, you know what weapon you have ready.
+
+      We're still not happy with the statusbar overlay : there should
+      (and will) be more arrangements of the overlay icons, to suit
+      different people's likes (eg: not everyone might want the frags
+      displayed on the top right..) Plus we will add other useful
+      information like the keys, owned weapons..
+
+ bind <keyname> <"command">
+      You can bind a key to a command.
+
+      Eatch time you push the key, the command will be pushed in the
+      command buffer.
+
+      Exemple : bind s screenshot
+		eatch time you push the 's' key there will take a screenshot.
+
+ [2-5] Game options
+ ==================
+
+ viewheight <16-56>
+      Set the height of the view (the height of the eyes above the floor).
+      The normal value for the Doom marine is 41.
+      We have limited the range into acceptable values, to
+      prevent cheating.
+
+
+ turbo <10-400> : set turbo speed
+      This is like the original -turbo game parameter, you can now set
+      it anytime you want during the game.
+
+
+ respawnitem <0|1>
+      Choose whether items respawn or not.
+      'respawnitem 0' is like old deathmatch, it is set 'true'
+      automatically when in Deathmatch 2
+
+      NOTE: it is considered cheating to allow respawning of items
+	    when in single player mode ! :)
+
+
+ respawnitemtime <0-???>
+      Set the respawn item time in secondes. The time between th moment
+      you pickup the item, and the moment it reappears.
+
+      The default is 30 seconds, from the original Doom.
+
+
+ respawnmonsters <0|1>
+      Choose if monsters can respawn.
+      'respawnmonsters 1' is like the -respawn command-line option of
+      the original Doom.
+
+
+ respawnmonsterstime <0-???>
+      Choose the time of respawn for the monsters, in seconds.
+
+      The default is 12, from the original Doom.
+
+ save <slote_number> <"description">
+      Save the game in the slote_number slote. And put description in
+      for the name.
+
+ load <slote_number>
+      Load the game in the slote_number slote.
+
+ exitlevel
+      Exit the level and go to the intermision screen.
+
+ [2-6] Video
+ ===========
+
+ vid_nummodes
+      Tells how many different video modes are available.
+
+
+ vid_modelist
+      List all available video modes, like they are shown in the
+      Video Options menu. Each video mode has an associated number,
+      so you can set it with the following command...
+
+
+ vid_mode <mode number>
+      Set the given video mode. Give one of the numbers displayed
+      by the 'vid_modelist' command.
+
+
+ vid_modeinfo [<mode number>]
+      Shows information about the current video mode (no parameters),
+      or the given video mode number.
+
+
+ playersprites <0|1>
+      Choose wheter to show the player weapon sprites (1), which is
+      the default, or not to draw it (0).
+
+      When 'playersprites' is '0', you can aim simply because your
+      shots always go to the center of the screen, and the current
+      weapon type is shown in the status bar, or by the ammo icon
+      of the status bar overlay.
+
+      Don't laugh! Sometimes I like to play with playersprites off.
+
+
+ usegamma <0-4>
+      Choose the gamma level (brightness). Just like in the Options
+      menu.
+
+
+ viewsize <3-11>
+      Choose the size of the view window.
+      '3' is the smallest view window.
+      '10' is the normal full view window, with the status bar.
+      '11' is the full screen mode, without status bar.
+
+
+
+
+ [2-7] Multiplayer
+ =================
+
+ skin <skinname>
+      Change your skin, provided skins are loaded (adding skins wads
+      after the -file on the command line). The skin name is the one
+      shown on the multiplayer->setup menu. The default marine skin
+      name is 'marine'. Of course, it's easier to use the multiplayer
+      setup menu.
+
+
+ teamplay <0|1|2>
+      You can change the deathmatch mode while in a multiplayer game.
+
+      0 : no teams, usual deathmatch
+
+      1 : teamplay, using color to identify teams, players of the
+	  same color will be in the same team, the team name will
+	  be like 'red team' or 'yellow team'
+
+      2 : teamskin, using skins to identify teams, players who use
+	  the same skin will be in the same team, the team name will
+	  show as 'leprechaun team' or 'terminator team', according
+	  to the name of the skin
+
+
+ teamdamage <0|1>
+      Decide whether people of the same team can hurt themselves or
+      not. Note that the armor is always damaged.
+
+      NOTE! teamdamage works for cooperative! So you can now have
+      a cooperative mode where your partners don't get damage.
+
+      0 : damage is off, players of the same team can't kill each
+	  other, you'll know of this because blood won't show, and
+	  the player who is hit won't see his screen go red
+
+      1 : damage is on, like in original Doom cooperative, players
+	  of the same team can hurt, and kill each other. If they
+	  kill members of the same team, they fill score a negative
+	  frag.
+
+
+ frags
+      Shows the frags table, like in the original Doom intermission.
+      It shows the frags count for each player, against each other
+      player.
+
+
+ teamfrags
+      Just like 'frags', but for teams, so it shows the frags count
+      for each team, against each other team.
+
+
+ gravity <0.0 ... ???>
+      Changes the gravity, only the server changes it, for all the players.
+
+      Note : this value is a 'float' type, for example 0.5 is half the normal
+	     gravity.
+      Note2: you can't walk/move while in mid air.
+
+      The default gravity is '1'.
+
+ getplayernum
+      This command tells the number, node and name of the present
+      players. You can then use the number for the 'kick' command,
+      instead of the player name, if a player has a complicated
+      name or long one to type! :)
+
+
+ kick <"playername"|playernum>
+      One of the rare pleasure of being a server : kick out somebody
+      from your game!! The 'kicked' person will be brought back to the
+      title screen.
+
+      You can give either the name (using "" if it contains spaces),
+      or a player number from the 'getplayernum' command.
+
+      NOTE: this will work only for the server of the game, see legacy
+      documentation for more about who is the server.
+
+
+ allowjump <0|1>
+      Choose whether jump is allowed or not. For those of you who
+      comes from planet 'NoJump' or have a limited sensory system
+      and couldn't survive a jump in the 3rd axis of our world,
+      you can disable the jump in single player too.
+
+      Only the server can set this variable.
+
+      NOTE: not saved automatically, put it in autoexec.cfg
+
+
+ allowautoaim <0|1>
+      Disable autoaiming for all players... make sure everyone is ok
+      before getting your friends angry.
+
+      Only the server can set this variable.
+
+      NOTE: not saved automatically, put it in autoexec.cfg
+
+
+ say <message>
+      Send a message to all players. It is recorded with demos.
+
+
+ sayto <"playername"|playernum> <message>
+      Send a message to one player.
+
+ sayteam <message>
+      Send a message only for your team.
+
+
+ [2-8] Demos
+ ===========
+
+ NOTE: 'playdemo' command doesn't seem to work very well, sometimes
+       the demos don't playback properly. In such case, until we
+       fix it, use the -playdemo command line parm. It usually seem
+       to work better.
+
+       When we will have found that damn bug, we will add the
+       'record' command.
+
+
+ playdemo <demoname[.lmp]>
+      You can now play a demo at any time during the game:
+
+      playdemo demo3
+
+      This will start the internal game demo 'demo3'.
+
+      If an internal resource by the same name is not found, it
+      will add '.lmp' and search for an external demo of the
+      same name.
+
+      You may add '.lmp' to ask explicitly for an external demo,
+      example:
+
+      playdemo cave001.lmp
+
+      Will start an external demo, of file name 'cave001.lmp',
+      that you would have started with the -playdemo parameter
+      in the original Doom.
+
+
+ stopdemo
+      Stops right away the current playing demo. Very useful.
+
+ timedemo <demoname[.lmp]>
+      Play a demo like playdemo but run at fast as he can, rendering all
+      frames. It is used to measure the speed of the engine.
+      At the and of the demo it will show :
+	gametics : the numbers of frame rendered.
+	realtics : number of tics (1/35 second) taken to render all the
+		   frames
+	seconde : the time take to render all frames.
+	avg fps : average frame per seconde. (gametic/seconde)
+
+ [2-9] Miscellaneous
+ ===================
+
+ memfree
+      Show the amount of heap, virtual and physical types of memory
+      available. The heap is the memory allocated for the game, and
+      you can change it using the '-mb' command line parameter
+      (see legacy.txt)
+
+
+ help
+      Show a list of all the console commands and variables. This
+      should also give help on each command.. later.
+
+
+ version
+      Show the game version and last date of compilation.
+
+
+ quit
+      Just quits the game, without confirmation.
+
+      Beavis: "- hey Butthead, why does Legacy always exits as soon as
+	       it has finished loading ??"
+      Butthead: "- because I have put 'quit' in your autoexec.cfg..
+		 uh.. uh ehehehe.. uh !!"
+
+ screenshot
+      Take a screenshot like the F1 key in devparm mode.
+
+ vid_ticrate <0|1>
+
+      Show a graph of the framerate per time base.
+      It is very usefull to know what part of a level is more slow in
+      framerate value.
+
+ saveconfig <filename[.cfg]>
+ 
+      Save the current config in the specified file. This is allway do when
+      you exit Legacy.
+
+ loadconfig <filename[.cfg]>
+ 
+      Load a config file like at the begining of legacy.
+      For the pro : this is a simple exec command with ".cfg" default.
+
+ changeconfig <filename[.cfg]>
+
+      Do a 'savegame currentconfigfilename' then a 'loadconfig filename'.
+
+
+ The following commands might be helpful when you are playing a
+ 'dehacked' game, and the cheat codes have been changed, damn! :)
+
+
+ noclip
+      Like the cheat code 'idclip'.
+
+
+ god
+      God mode. Just like 'iddad'.
+
+
+ gimme [health] [ammo] [weapons] [armor] [keys]
+       [chainsaw] [shotgun] [chaingun] [supershotgun] [rocket] [plasma]
+       [bfg]
+       [berserk]
+
+      Each of the paramater is optional, just add anything you want to
+      be added. This is a cheat '…-la-carte' : for those like me that
+      likes to cheat 'half'. You can ask only for one weapon, or
+      just 100% health, or just an item..
+
+      NOTE: this was added as a last minute, the other items need to
+      be added (goggles, invuln., invisibility...)
+
+
+
+ [2-10] Sound
+ ============
+
+ soundvolume <0-31>
+      Just like in the Sounds menu.
+
+
+ musicvolume <0-31>
+      Just like in the Sounds menu.
+
+
+ cd_volume <0-31>
+      Just like in the Sounds menu.
+
+
+ snd_channels <0-???>
+      Choose how many sound channels will be used. Usually you will
+      set a value from 8 to 16, which is plenty enough.
+
+
+ precachesound <0|1>
+      Set it to 1 (true), so that all the sounds are loaded at the
+      game startup. If 0, it will load the sounds while in the game,
+      only when they are needed.
+
+
+ stereoreverse <0|1>
+      Set 'stereoreverse' to '1' to swap the stereo, if you hear the
+      the sound of fireballs coming from the left, output from the
+      speaker to the right...
+
+
+ cd <on|off|remap|reset|play <track>|loop <track>|info|stop|resume|open>
+      The CD Audio music is available only when the MSCDEX driver
+      version 2.0 or later is found.
+
+      NOTE! Always do a 'cd reset' when you have changed the cd in the
+	    drive, else it will say 'cd not ready'.
+
+      Here's a description of the cd commands:
+
+      cd on : enable cd music, game will use cd music.
+
+      cd off : disable cd music, if you don't want to hear the cd music.
+
+      cd open : open cd door.
+
+      cd reset : reset the cd driver, check for a new cd. Do this if you
+		 have changed the cd, to make the new cd's tracks available.
+
+      cd info : display the list of tracks, with time per track, and total
+		time. The track being played is printed in white.
+
+      cd play <track> : play a cd track, at the end, go to next track.
+
+      cd loop <track> : loop a cd track, at the end, restart it.
+
+      cd stop : stop/pause cd audio, use 'cd resume' to continue.
+		If you really want the cd drive to stop 'turning', use
+		'cd off'.
+
+      cd resume : continue playing after a 'cd stop'
+
+      cd remap : remap cd tracks. Normally, the game uses the map number
+		 as the track number, for Doom1, it takes (episode*9)+
+		 map number as track number.
+
+		 This command is useful to adapt your favorite cd music
+		 to Doom's levels, let's have an example:
+
+		 cd remap 5 3 1 4 2
+
+		 This remaps cd tracks as follows:
+
+		 1 becomes 5,
+		 2 becomes 3,
+		 3 becomes 1,
+		 4 becomes 4 (does not change),
+		 5 becomes 2.
+
+		 So, at map 1, it will play track 5, because track 1 was
+		 remapped to track 5.
+
+		 If you have a great music which is track 8 and you want
+		 it at map 3 and 6 :
+
+		 cd remap 1 2 8 4 5 8 ...
+
+			      ^     ^ tracks 3 and 6 become 8
+
+		 TIP A: this is very useful, if you have a cd with 'data'
+			tracks, a pc cd-rom game with some audio tracks,
+			usually the first track is a data track, that won't
+			play. Use remap to skip the first track like this:
+
+			cd remap 2 3 4 5 6 7 8 9 2 3 4 5 6 7 ..
+
+			So track 1 is never used.
+
+		 TIP B: you can do some aliases for your favorites CD's,
+			and save it to autoexec.cfg, example :
+
+			alias fsol cd remap 4 5 2 9 3
+
+			so you can just type 'fsol' to get your favorite
+			track list.
+
+
+ cd_update <0|1>
+      By default, cd Update is enabled. If you feel some serious
+      slowdown while the cd is playing, set cd_update to 0. The cd
+      will no more move to the next track, neither loop the current
+      track automatically. Another solution is to get the latest
+      version of your cd driver (a better one).
+
+
+
+ [2-11] Unfinished
+ =================
+
+ These commands are mostly functional, but not finished, they are left
+ as 'beta-test'.
+
+ addfile <wadfile.WAD>
+      This command loads wads at run time.
+
+      Once wad files are loaded, use the 'map' command to play
+      maps from it.
+
+      It will give some info about sprites/musics/sounds that
+      were replaced.
+
+      NOTE: the loading of external maps was added as a last
+      minute, and is very promising. We have to add a command
+      to remove a wad from the active wads, and support sounds,
+      sprite and textures in a wad file loaded at run time.
+
+      Note to wad authors: it will be possible to put any number of
+      maps in a wad file, using any resource name instead of the
+      'MAPxx' and simply typing 'map START' for example. Actually
+      it will need to edit the wad file, and rename the 'MAPxx'
+      markers.
+
+
+ map <mapname | wadfile.WAD> [<skill>]
+      To play an original map of Doom1, enter a mapname of the
+      form ExMy where x is the episode and y the map number
+      eg: 'map E2M3'.
+
+      For Doom2, enter a map name of the form MAPxx where xx is
+      the map number from 01 to 32.
+
+      The command can also run external maps, it will load
+      new flat textures, sprites, sounds, but _not_ wall textures.
+
+      Example: 'map waterlab.wad'
+
+      It can also change the skill value from 0 to 4. From baby to
+      Nightmare.
+
+
+ solidcorpse <0|1>
+
+      The sneak preview option of Legacy v1.12 became a console
+      command, but is still not finished.
+
+      Note that this option works for solo play too.
+
+      Setting solidcorpse other than 0, makes the dead corpses
+      (monsters/marines) solid. The corpses thus stack one on top
+      of another, and you walk over them. Sometimes you can even
+      reach ledges where you couldn't go by climbing on corpses!
+
+      This option is there for fun in deathmatch, and so that
+      you can test easily the new improved height collision method!
+
+      At the time of writing, this feature is not finished, it is
+      not already supported for multiplayer nor demos.
+
+
+ bloodtime <0-???>
+      Choose how many seconds blood will stay on the floor.
+      In the original Doom the blood stayed no more than 1 second.
+      This can be fun for deathmatches, setting 'bloodtime' to '60',
+      for example, will make the blood drops stay 1 minute on the
+      floor before disappearing. Useful for tracking down your preys :)
+
+      NOTE: this command is not supported for multiplayer, basically
+	    it works, but the other machines won't hear of it.
+
+      NOTE2: this command has a particularity : it doesn't 'mess'
+	    existing demos, so you can change this while playing
+	    back an old demo!

@@ -1,0 +1,12 @@
+# Microsoft Developer Studio Generated Dependency File, included by fabdoom.mak
+
+.\win32\winlgcy.rc : \
+	".\win32\valve.ico"\
+	
+
+!IF  "$(CFG)" == "fabdoom - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fabdoom - Win32 Debug"
+
+!ENDIF 
+

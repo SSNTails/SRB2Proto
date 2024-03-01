@@ -1,0 +1,309 @@
+
+ DooM LEGACY
+ Release v1.22, May 1998.
+
+ Last Updated: 15-July-1998.
+
+ Original game & sources by: Id Software.
+ Additions (c)1998 by: Denis Fabrice & Boris Pereira
+
+ Doom LEGACY web site: HTTP://www.frag.com/doomlegacy
+		 mail: legacy@frag.com
+
+
+ -----------------------------------------------------------------------
+ F.A.Q.
+ -----------------------------------------------------------------------
+
+
+ If you have any trouble with Doom LEGACY, you might find a solution
+ here.
+
+ If you find a solution to a problem that was not listed here,
+ please tell us so that we can update the FAQ and help other people!
+
+ Mail your hardware/software problems to:
+
+ legacy@frag.com subject: FAQ
+
+
+ --------
+ CONTENTS
+ --------
+
+ [0] Miscellaneous
+ [1] Mouse/Joystick
+ [2] Video
+ [3] Sound
+ [4] Network
+ [5] Doomatic
+ [6] Troubleshooting
+
+
+ -----------------
+ [0] MISCELLANEOUS
+ -----------------
+
+ * I have the error : "Error: W_GetNumForName: STBAR not found!"
+   What is it ?
+
+   You have a old version of Doom. Just upgrade your version to 1.9.
+   You can find patch to upgrade from the id software site.
+
+ * under win95 or OS/2, I don't have enough memory. How can i handle with ?
+
+   Tell win95 to put more dpmi memory for your dos box.
+   Or use the -mb option.
+
+
+
+ ------------------
+ [1] MOUSE/JOYSTICK
+ ------------------
+
+ * My mouse/joystick does not work in Doom LEGACY.
+
+   First, check that the mouse/joystick is activated : go at the
+   console and type either 'use_mouse' or 'use_joystick'.
+
+   If it tells '0' than the mouse/joystick is not used, set the
+   variable to 1. eg: 'use_mouse 1'.
+
+   For the joystick, different values will support different
+   types of joystick, check the console documentation for the
+   command 'use_joystick' for more.
+
+   Even if the mouse or joystick is activated, you have to
+   set up the contols into the Setup Controls menu. That is:
+   tell what use you will make of the mouse/joystick buttons.
+
+
+ ---------
+ [2] VIDEO
+ ---------
+
+
+ * Where are the other video modes ? I have only '320x200' in the
+   Video Modes menu.
+
+   Doom LEGACY adds new video modes only if a VESA2 (or better) driver
+   is present. The VESA2 driver is a standard of 'talking' between a
+   program and the huge amount of different graphics cards
+   available today.
+
+   If you don't have a VESA2 driver, you can download UNIVBE, or
+   SMART DISPLAY DOCTOR from
+
+   http://www.scitechsoft.com
+
+   or if you have an S3 based card, you can download the free
+   software called 'S3VBE'.
+
+   http://www.s3.com/bbs/shrware/s3vbe318.zip
+
+
+ * The game doesn't restore the video mode I have chosen the last time
+   I played Doom Legacy.
+
+   The current video mode has to be made the 'default' so that it is
+   saved to the config : press the key 'D' on the Video Options menu
+   to set the current video mode the default.
+
+
+ ---------
+ [3] SOUND
+ ---------
+
+ + I can't have CD audio music, why ?
+
+   Make sure that the MSCDEX driver version 2.0 or later is loaded.
+   If it says 'MSCDEX version xxx' at game startup, and you still
+   don't hear the cd music, then probably your card doesn't respond
+   when Legacy tries to set the cd volume. If so, make sure your sound
+   card's mixer have the cd volume set up so that you can hear something.
+
+ + When the CD plays, the game is very 'jerky'. It doesn't do that when
+   I type 'cd off' in the console.
+
+   You have an old/bad cd driver, that can take up to a second to
+   respond to cd driver commands. Either get the latest version of
+   your driver, or turn cd update off. Check 'cd_udpate' in the
+   console documentation for more.
+
+ * How can I *ALWAYS* disable the sounds or music of the game ?
+
+   Edit the sound.cfg file and set digicard/midicard to 0 (none)
+
+
+ * My sterero sound is reversed, how can I set it the right way ?
+
+   Change the console variable 'stereoreverse' to either 1 or 0.
+   Or, you can edit the sound.cfg file, and set the 'flip_pan' variable.
+
+
+ * The sounds are too 'slow', or 'low-pitched'
+
+   It seems to be a problem of the auto-detection of some 8bit sound
+   cards. You will have to set manually the 'sb_freq' value in the
+   sound.cfg file to a lower value : 11906, 16129.
+
+
+ * Music does not seem to work with General Midi.
+
+   The sound driver that Doom LEGACY uses doesn't seem to support
+   General Midi through the MPU port. You'll have to use the midi
+   of your sound card.
+
+
+ * Doom LEGACY doesn't play any sound/music, but I have a sound blaster
+   genuine/compatible card.
+
+   If you have a genuine or compatible SoundBlaster card, it is very
+   important that you set the BLASTER environment variable.
+
+   If you are playing under DOS, and never installed your sound card
+   under DOS, run the setup of your sound card for DOS.
+
+   Check if the BLASTER variable was set: type 'SET' under dos
+   (or DOSbox)
+
+   Do you see something like 'BLASTER=A220 I5 D1 ...' ?
+
+   Yes? If you don't hear sounds/music, then tweak the settings in the
+   sound.cfg file until you get something, first try changing the
+   type of the sound card, it is not always properly detected.
+
+   No? You have to set this variable in order that your sound card is
+   detected. Run the setup that was shipped with your sound card, and
+   make sure you run the setup for DOS too, it will usually add a
+   line of the type 'SET BLASTER=... ...' in the autoexec.bat file.
+
+
+ * How can I have better midi music on my 8bit sound card ?
+
+   Use the DIGMID driver, it is supported in Doom Legacy.
+
+   What the hell is this ? Well, the Gravis Ultrasound uses digital
+   samples to play midi music. On a simple 8bit card, you can use digital
+   samples too, which will sound usually better than what is output
+   by the poor fm synthesis chip of 8bit cards.
+
+   You will need to get a Gravis Ultrasound patch set, you can find
+   several ones for free on internet, it consists of a bunch of '.pat'
+   files which are the digital samples to play the midi instruments
+   (eg: piano, conga, guitar, ect.).
+
+   Check the Allegro homepage for some links to GUS patches:
+   http://www.talula.demon.co.uk/allegro/
+
+   Now to activate the DIGMID driver:
+
+   Set the 'midi_card' value to 8 (DIGMID) in the sound.cfg file.
+   Make sure you leave the 'digi_voices' blank, or set it to a low
+   value, because the midi music will use digital voices.
+   At the end of the sound.cfg file, set the 'patches' value
+   to the path, where you have installed a Gravis Ultrasound midi
+   patch set. eg: patches = d:\music\midipat\
+
+
+
+ -----------
+ [4] NETWORK
+ -----------
+
+ * How can I run Legacy over the modem ?
+
+   Doom LEGACY is still compatible with the old network interface like
+   IPXSETUP and SERSETUP. But some new programs who replace SERSETUP
+   don't support big enough packet sizes (the bigger is 512 byte),
+   unfortunately these programs won't work with Legacy. These programs
+   would need to be updated by their authors, to support larger packets.
+
+   You can still play with SERSETUP, but of course it won't allow
+   more than 2 players.
+
+ * Where can I find Internet servers ?
+ 
+   For the moment there is no public servers. Here is only a beta of what
+   we are trying to do.
+
+ * Under Win98 it tell my : "No tcp/ip driver detected". Why ?
+ 
+   Unfortunatly the library we use don't support winsock 2.0. We hope the
+   next version of this library will support Winsock 2.0. Anyway the
+   incoming Win32 version will support all version of winsock.
+
+ * When I start Doom Legacy with -server or -connect it say :
+    "BinToPort: Address already in use (EADDRINUSE)"
+    
+   It appears only when Doom Legacy crashes or when you leave with ctrl-break.
+   use -udpport 12345 (or any other free slot) on both sides (client and server)
+   
+ * Do you use the tcp protocol ?
+ 
+   No, we use the udp protocol which is faster, but don't worry udp is a part of
+   the internet protocol.
+
+
+
+ ------------
+ [5] DOOMATIC
+ ------------
+
+ * What is Doomatic ?
+
+   DOOMATIC is a deathmatch launcher written by Fab & Boris. It was
+   written long ago before the sources release. We made it for Doom2
+   mainly, and we tried to put in it all the features that we always
+   wanted in a deathmatch launcher.
+
+   DOOMATIC replaces IPXSETUP, but is still compatible with the
+   original Doom games, and you can even use it with most of the
+   other Doom ports.
+
+   DOOMATIC was made to simplify the nightmare of setting up
+   Doom deathmatches, especially when you play with external maps,
+   dehacked patches, and other Doom exes..
+
+   It's key feature is the automatic copying of all wad, patches and
+   exes through the network, to all the players that join together
+   into a game.
+
+   Check DOOMATIC.TXT for more.
+
+
+ * When I change my name in Doomatic, it doesn't change in Legacy, Why ?
+
+   Simply because Doomatic was made before Legacy, it doesn't send
+   the name to Legacy, it justs records it into demos, for use with
+   'LMPMAST', another utility that we made before Legacy.
+
+   In other words, Doomatic's name is only useful to see the name of
+   who's joining your game.
+
+
+ * When I change my color in Doomatic, it doesn't change in Legacy. Why ?
+
+   Again, because Doomatic was not made especially for Legacy, Legacy
+   won't use the color in Doomatic, but the color you have set in the
+   Multiplayer menu.
+
+   With the original Doom games, Doomatic allow you to choose what color
+   you will have (IPXSETUP used to give you always the same color).
+
+   NOTE: Legacy will consider the player color in Doomatic for a
+	 *SINGLE SPECIAL CASE* : the green player of Doomatic is
+	 considered by Legacy to be the SERVER.
+
+	 (yes this is a hack, we will add an -server command-line
+	  parameter or something later)
+
+ -------------------
+ [6] Troubleshooting
+ -------------------
+
+ * I have the error : "Error: W_GetNumForName: STBAR not found!"
+   What is it ?
+
+   You have a old version of Doom. Just upgrade your version to 1.9.
+   You can find patch to upgrade from the id software site.

@@ -1,0 +1,126 @@
+Note:
+important:All sources must be LF format, no CR and DOS EOF(^Z)
+
+all changes to platform independent code
+are marked with "199xxxxx by Kin"
+(or use "diff -w -B" to compare)
+
+about unix makefile:
+makefile is for pmake
+Makefile is for make
+so the case must be reserved
+
+compiler:
+RedHat must use "egcs" for -mpentium,
+but "gcc" in Slackware 3.5 is already "egcs"
+
+The Makefile* and #include are dirty, sorry.
+
+CD music module is dummy now, 1. I have no music CD, 2. I hate music.
+
+Use I_RegisterSong(music->name) with musserver, musserver will search
+cmdline of doom for wad files, no modification is necessary
+
+read() in a pipe will not always fill the whole
+buffer, in Linux, read will only get 4096 bytes at once, now I use
+sfx->data to store the sfx id, it's really a good idea.
+
+There are 3 types of sound: SNDINTR, non-SNDINTR(define nothing),
+SNDSERV, only SNDSERV is used by 1.28.
+
+legacy uses I_StopCD() to pause cd playing, but xdoom uses CD_pause,
+and CD_stop is to stop whole track.
+
+I_ShutdownGraphics() in xdoom will just unhook the shared memory
+doom needn't to know sound data length, sfxinfo_t only have pointers
+to sound data, but not length, it is the job of sound module,
+I_GetSfx(legacy) or getsfx(xdoom) will remember this, in dos legacy,
+the sound data length is stored within sound data, in xdoom, it's
+stored in a separate array lengths[](internal sound).
+
+in Got_NameAndcolor(d_netcmd.c), there is a segment fault, why?
+gcc will "optimize" some array into "const array", and ...
+
+The code segment is read only, but it is not protected in djgpp,
+so I removed the .text in tmap.s, the asm code is in data segment now.
+The music lump loading/unloading is unnecessary with musserver,
+but it is still there to minimize the possible bugs, check s_sound.c
+
+old style "-net 1 ooxx" is unusable, why?
+some transparent stuff in icarus and eternal III
+is now solid black since 1.27(1.25 is OK), why?
+
+idea:
+use XResizeWindow(display,window,w,h),
+XMoveWindow(display,window,x,y)...
+
+minor problem:
+eliminate -lnsl in Slackware(3.5)
+and RH(5.2)
+
+log:(if some weekends are not listed, I was playing doom)
+19990110-19990111:
+added VID_X11 in v_video.c, MUSSERV in s_sound.c, i_sound.h
+now I use "-res" to control resolution, vid.bpp is always 1 for now
+#include <time.h> in cd_ioctl.c should be sys/time.h in RH 5.2.
+check the SFX, where is the length?
+
+19990116:
+SFX length(s) is in lengths[](SNDINTR/non SNDINTR internal sound)
+Let Legacy use xdoom style sound.
+.align 5 -> .align 1
+
+19990117:
+All code successfully "compiled"
+convert all sources into LF format,
+and 'Makefile'...
+
+19990123:
+Yes! My code works without SFX, the SFX value range is incorrect.
+.code -> .data
+
+19990124-19990125:
+Yes! SFX works, shift vol to 4bits, memcpy in Got_NameAndcolor(d_netcmd.c)
+will cause a seg fault writing "readonly" play_names.
+
+19990126:
+Yes, gcc sucks... it incorrectly thinking that player_names is untouched,
+changed it into an 2d array, or you can put a dummy function with memcpy,
+but not 'for(ooxx) player_names[ooxx][ii] = 0;' why!?
+
+19990130:
+added xdoom990125 new event handling, now process mouse in I_StartTic(),
+sleep if event queue is empty.
+
+19990201-19990203:
+testing new code with 1.25, for moving to new legacy code.
+SNDSERV is working!
+
+19990205:
+reset in VoxWare 3 drivers(and many others) are broken,
+all further ioctl on this FD will fail, don't reset /dev/dsp.
+1.25 finished.
+
+19990220-19990221:
+1.28 is running.
+
+19990222-19990223:
+making i_video_ggi.c with 1.28, use -res to specify screen resolution,
+only 256 colors are supported.
+
+19990226:
+bug in d_clisrv.c if(VERSION!=....) are fixed,
+client-server TCP/IP link is usable.
+
+19990301:
+support VID_SetMode() in i_video_ggi.c, with 8/15 bits.
+
+19990307:
+oops, don't forget G_CheckDemoStatus() in I_Quit()...
+
+19990308:
+buffersize fixed(vid.bpp), 15 bits is runable, but ....
+
+19990312-19990315:
+some keys added,
+now svgalib ggi crash with icarus menu lump, why?

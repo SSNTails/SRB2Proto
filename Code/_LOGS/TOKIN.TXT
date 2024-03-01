@@ -1,0 +1,9 @@
+- added a check in I_ZoneBase to check if malloc is OK
+- the program should check to see if musserv and llsndsrv is not in "."
+  because root don't have "." in there path
+- sendto function under linux return "connection refuse" if there is no
+  server at this address (i have just ignored this error)
+- the can be recursive error (especialy in network since Q_Netgame try
+  to close the connection ) when closing with I_Error, you should implement
+  a recursive error detetion like in DOS or WIN32 version
+- now use vid_mode is in vid_s struct

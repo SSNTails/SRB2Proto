@@ -1,0 +1,31 @@
+R_PointToAngle2(actorx, actory, looktowardx, looktowardy)
+
+Status bar and heads up: St_Stuff.c
+Player Damage:           P_Inter.c
+Special Sectors:         P_Spec.c
+
+                                 Updates
+
+General
+
+12-25-99 Will be using player->armortype to hold shield status
+         0- No Shield
+         1- Standard One-Hit Shield
+
+P_Inter.c
+
+12-25-99 Shield Handling Added, One-Hit
+         Instant death value added (9999)
+         Commented out unused variables to prevent warnings
+
+St_Stuff.c
+
+12-25-99 Fixed always have "1 ring" when not dead
+
+P_Spec.c
+
+12-25-99 Instant death in bottomless pit
+
+P_User.c
+
+12-25-99 Thock also works from jump key and does not repeat

@@ -1,0 +1,1661 @@
+=======================================================================
+faB log of changes on DOOM LEGACY, since the Linux doom sources release
+(23-Dec-1997) until the release of Legacy v1.20 (continued next file).
+-----------------------------------------------------------------------
+THE DOOM LEGACY PROJECT		             Contact: <legacy@frag.com>
+                                                   <bpereira@ulb.ac.be>
+=======================================================================
+
+Project:  DOOM Legacy
+Web site:  http://www.frag.com/doomlegacy
+Log author: Denis Fabrice
+
+
+
+Fri 26-12-1997: "First overview"
+===============
+
+
+*   Downloaded 'DOSDOOM' by Chi Hoang, compiled, runnable under Win95,
+    crash under true DOS.
+
+    No sound, no network, keyboard config doesnt work.
+
+    REAL slow! -devparm shows 2 to 3 tics per frame on a P166MMX !
+
+*   Corrected bugs in IdentifyVersion(), FindResponseFile();
+    Now runs under DOS.
+
+*   Added nice titlebar like original Doom, compile only with 'PC_DOS'
+    defined (uses conio.h).
+
+*   PC_DOS define : enable DOS/textmode specific stuff.
+
+*   asm_defs.h : defines all the stuff needed so that asm routines
+    know about vars and structs defined in C code.
+
+*   tmap.S : converted the x86 code to AT&T syntax for GAS, NASM could
+    be used but AT&T syntax is much better imho.
+
+    R_DrawColumn, R_DrawSpan restored.
+
+    Should be optimised for Pentium in the future.
+
+*   USEASM define : compile with ASM routines instead of C ones.
+
+    Actually, USEASM means i386/Pentium machine code.
+
+*   Compiled with ASM routines, runs the first time, but it's still
+    very slow... there's a lot of cpu time lost somewhere else than
+    drawing the screen.
+
+
+
+Sat 27-12-1997: - "Boris and Fab in search of the lost frame"
+===============
+
+
+*   tmap.S : FixedDiv2, FixedMul : translated to AT&T.
+
+    After some profiling with 'gprof', we've noticed that FixedDiv
+    and FixedMul where used a lot. We've restored the ASM ones.
+
+    A lot of cpu time freed, but still a minimum of two tics/frame...
+
+*   i_system.c : we've restored a TimerISR interrupt for counting the
+    gametics, like it was in the original doom.
+
+    I_GetTime was not supposed to count the tics itself, but just
+    return it.
+
+    I_TimerISR()
+    I_StartupTimer()
+    I_ShutdownTimer()
+    I_SetTimer0()
+
+    Result: IT S FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAST !!!
+
+    Problem: we have to call the old Timer int., but not at the same
+    speed that our new TimerISR... but we didn't find a clean way to
+    call the old interrupt from the new TimerISR.
+
+    So, the old timer interrupt is called faster than 18.2/sec.
+    Maybe we'll have to code an IRQ wrapper in ASM like in Allegro3.0
+
+
+
+Sun 28-12-1997: - "Boris works alone"
+===============
+
+*   d_main.c  : no 'HOME' environment variable under DOS, now uses
+    'DOOMWADDIR' for development.
+
+*   tmap.S : removed use of %ebp in FixedDiv2 and FixedMul.
+
+*   wi_stuff.c : line 1660 : object "WIOBJ" lump not found, should
+    be used only with 'french' version, we'll have to check why the
+    french version is active? Replaced by "WIOSTI" for now.
+
+*   Network restored. Seems to work fine!
+
+*   m_misc.c : M_SaveDefaults, M_LoadDefaults : now handles conversion
+    of scancodes/ascii when reading/writing the config file.
+
+*   Downloaded 'dosdoom2' by Chi Hoang.
+
+    He goes so fast that we don't have the time to tell him the problem
+    with 'I_GetTime'... we'll do a release of our port soon and we'll
+    send him a mail. This guy got us started on dos doom sources.
+
+
+Mon 29-12-1997: - "Doom2 in 320x400 looks weird!"
+===============
+
+*   i_video.c : arranged the keyhandler from DosDoom, which didn't
+    PostEvent fast enough. Didn't respond when typing fast on the
+    keyboard.
+
+*   MULTIPLE VESA resolutions : added code to handle bank/switching
+    and setting of VESA modes.
+
+    - 320x400 runs 35fps on my P166mmx,
+ 640x480 needs 2 tics per frame, which is SLOW !
+ (duke nukem runs at least 20fps 640x480 on my old P75...)
+
+    - works only in full screen, crashes when Statusbar displayed,
+ still lots of positioning/resizing to check out.
+
+    - visplane 'top' and 'bottom' tables used byte for y-clipping
+ coordinates, so of course it didn't support more than 255
+ lines.
+
+    - r_defs.h : visplane 'top' and 'bottom' tables changed to 'short',
+
+ r_planes.c
+ r_segs.c   : some compares used '0xff' changed to '0xffff'.
+
+ This is the main stuff you have to change if you want to support
+ multiple resolutions.
+
+    - asm_defs.h : SCREENWIDTH must be changed to test different
+ resolutions.
+
+    - aspect ratio is not good for 320x400 and so...
+
+    NOTE ! These modifications will not be in the 'clean' source code
+    until it runs ok with status bar.
+
+*   ALLEGRO3.0 : we'll definitely use a lot of code from this GREAT
+    library by Shawn Hargreaves.
+
+    We'll use the sound code from Allegro3 for sound support, like
+    DosDoom2 does.
+
+
+Tue 30-12-1997: - "Preparing the release for our doom dos port"
+===============
+
+*   Boris succesfully added the sound support with Allegro3.
+    (as DosDoom2 does)
+
+*   A lot of work to cleanup our release:
+
+    DJGPPDOS/     contains the source code specific to DOS/W95.
+	     i_xxxx.c
+    LINUX/	     contains the source code specific to LINUX.
+	     i_xxxx.c
+
+    Implementation-specific code in the main directory has to be
+    enclosed by #ifdef PC_DOS or #ifdef LINUX, or such.
+
+    Linux code was removed from the DJGPPDOS/ implementation.
+
+*   makefile : somewhat improved to support ASM routines with -DUSEASM,
+	  added support for PGCC like Allegro3 makefile
+
+
+Wed 31-12-97: - "Fixed that timer stuff!"
+=============
+
+*   DJGPPDOS/i_irq.c     : new timer routines, plus ticcount
+	i_irq.h
+	irqwrap.S   : asm wrapper for the irq handler
+
+	i_system.c  : removed our dirty timer code, I_GetTime
+		      now returns ticcount.
+
+    The timer handler is now fixed, but then the Allegro sound doesnt
+    work anymore, got to fix that.
+
+
+Thu 01-01-1998: - "
+===============
+
+*   3:49 - Our doom version succesfully started with 5 players, but
+    then it crashes after some seconds...
+
+    We used DOOMATIC (which replaces Ipxsetup) to launch the game with
+    5 net nodes. We used a map with 6 dmstarts.
+
+
+*   Yeehaa! erreur ridicule avec le define ST_Y sans parentheses...
+    Je peux enfin resizer en 320x240 !!! La status bar n'est pas affich‚e
+    en entier.
+
+*   Le makefile ne marche toujours pas et ca m'enerve!
+
+*   Tests transparence avec TINTTAB, super cool.
+
+*   Dor‚navant il faut ajouter -file tinttab.wad avec un lump 'TINTTAB'.
+
+*   Dans G_Initnew(), ajout‚ du code pour activer le flag
+    'partial invisibility' pour certains objets qui doivent ˆtre affich‚s
+en transparence.
+
+*   Removed 7 messages from the Quitgame messages. These messages
+    are just coarse and boring. I have not found these messages in the
+    commercial versions of Doom1,Doom2,Doom95(FinalDoom),UltimateDoom,TNT,
+    Plutonia. So I have fucked them out!
+
+
+*   Implemented the following routines like in Allegro:
+
+  I_AddExitFunc()
+  I_RemoveExitFunc()
+  I_StartupSystem()
+  I_ShutdownSystem()
+
+    Now only the stuff that has been 'initted' is shutdown at the end.
+
+    I_StartupSystem is executed in i_main.c BEFORE ANYTHING ELSE, it
+    sets up the signal handler to trap exceptions, page faults and such.
+
+    Reworked a little the I_Error() and I_Quit() routines so that they
+    do a SystemShutdown().
+
+    Wow ! Now all the error messages are displayed, and the program
+    'crashes' cleanly to dos, restoring all interrupts, video mode,
+    timer...
+
+*   Meanwhile, I have discovered a 'bug' in the sound code of Allegro,
+    when new sounds are activated on all the channels at the same time
+    (eg: waking up a lot of monsters in a room), it does a 'crack' in
+    the sound. However it's not a serious problem: it's very very short.
+    After that the sounds plays together on the eight channels without
+    problem.
+
+
+    Boris log 3-1-98:
+    =================
+
+-   Mouse sensitivity : peut prendre les val de 1 a 20 (avant 5 a 15)
+-   idclev : now work
+-   added control sub-menu in option menu
+
+    Boris log 4-1-98:
+    =================
+
+-   added run lock key !!!
+-   no more hit enter if wad added only if one is missing
+-   finish control menu
+
+
+    Thu 08-01-98: "putting my nose into DosDoom latest release..."
+    =============
+
+*   Mmmh, thanx to dosdoom, I have finally fixed the psprites being drawn
+    too small, and not at the center of the view.
+
+    When I implemented multiple-resolutions, I started to convert all
+    320 / 200 constants into screenwidth / screenheight dynamic variables.
+
+    Now fixed. However I'm not happy, there shouldn't be any 320/200
+    constants in the code. There must be a clever way to do it: by using
+    an aspect-ratio stuff... for later.
+
+
+    Sun 11-01-98: "profiling is not so easy..."
+    =============
+
+*   Added VBE2.0 liner frame buffer + old vesa1 bank switching,
+    uses Allegro for LFB, and my old routine for Vesa1 because Allegro
+    'set_gfx_modes' a larger screen in Vesa1 than requested.
+
+    If VESA2 is not found, VESA1 is used, with bank switching if hires.
+
+*   We have started to work with P5PROF, a cool bunch of macros to
+    read the counters of the Pentium like: numbers of cycles, numbers of
+    cache misses... after hours trying to get it work... we are a little
+    deceived because it always returns very different values.
+
+*   I want to profile the stuff with GCC GPROF... crash at InitLightTables
+    but not in normal optimised mode. I think there's plenty of badly
+    allocated buffers and dirty stuff that need to be cleanly done.
+    I think our version is actually the most stable under DOS. But it
+    should NEVER crash!
+
+*   i_sound.c : raw2SAMPLE() now reads the frequency of the sample from
+	   the DSXXXXXX rawdata header. Most samples are 11025 freq,
+	   but some are 22050. Now the double shotgun sounds ok!
+
+*   g_game.c : G_DoPlayDemo() now uses ExtractFileBase from w_wad.c
+    w_wad.h	: made ExtractFileBase() global.
+
+    Now demos can theorically be played with a path specification,
+eg: -playdemo mydemos\cooldemo
+
+    It didn't work before because the demo is loaded by W_AddFile(), which
+    extract the file base name with ExtractFileBase(), because lumpnames
+    have max. 8 chars. So eg: mydemos\cooldemo became 'cooldemo'.
+
+    G_DoPlayDemo() now searches for the file base name.
+
+*   g_game.c : G_DoPlayDemo() : added compatibility for Doom2 v1.9 demos:
+    since MAXPLAYERS has changed, the header of the demos is different,
+    so now it assumes there's max. 4 players when demoversion is v1.9.
+
+    Playing back v1.9 demos now works! I Playback a lot of demos and they
+    play perfectly till the end!
+
+    This version seems to be 100% Doom2 v1.9 compatible!
+
+    It's great to look at deathmatch demos in 640x480 !!
+
+*   i_sound.c : tried to make the I_ShutdownSound() cleaner, because the
+    program exits from time to time with a General Protection Fault.
+    Now I ask Allegro itself to release the voices before quitting.
+    I'm still unsure if that fixes the GPF problem.
+
+*   dstrings.c : I found the bug! There was missing quotes in the quit
+	    messages table. What a shame! It crashed sometimes
+	    because the quit message was too long or something. fixed!
+
+
+
+    Fri 16-01-98: "bored trying to speed up the asm, so I fixed some
+    =============  demo stuff..."
+
+*   Added a gcc_asm.doc to help people who are new to DJGPP and want to
+    use asm code, without the hassle of inline asm. It's not a full-featured
+    document, but it certainly helps if you wonder about the stack, and
+    passing arguments from C code to ASM code.
+
+*   vid_copy.S : screen blit routine in asm, after some profiling I have
+	    discovered that:
+
+  1) DJGPP memcpy() is as fast as ASM rep/movsl
+  2) Copy into VESA2 LFB is 4 times faster than to 0xa0000 !!!
+
+    Anyway, the screen blit is a very small percentage of the frame rate...
+    R_DrawColumn eats the most.
+
+    I'll keep the asm routine for convenience, because it can copy from
+    different width bitmaps, so you don't need to use multiple memcpy().
+
+*   g_game.c : now calls ST_changeDemoView() when pressing F12 while viewing
+	  a demo. This redraws the statusbar for the 'viewing' player.
+    st_stuff.c : load facebacks (STFBx) for all players, and display the
+	    right faceback (the player color) on the statusbar when
+	   changing the view.
+
+*   s_sound.c, d_main.c, p_inter.c : replaced some consoleplayer by
+	  displayplayer so that the sounds are heard from the display
+	  viewpoint.
+
+
+    Tue 28-01-98:
+    =============
+
+*   Yeehaa!! Changing the video mode while the game runs now works!
+    There's a lot of cleanup to do, and some details like resetting
+    the colormap, but technically it runs in all VESA2 LFB modes +
+    the basic mode 13h !
+
+*   We have discovered a great optimisation for the rendering of wall
+    segments, based on the fact that 'packets' of columns share the
+    same scale and/or start texture address... we'll have to wait the
+    end of the exams to create an asm routine which draws multiple
+    columns at the same time: the trick is that sequential writes
+    in the horizontal axis are faster because the Pentium has Write
+    Buffers of 64bit length so successive writes to the same location
+    are faster.
+
+
+    Fri 30-01-98: "phew! examinations are finished, back to the code!"
+    =============
+
+*   Vid-mode change on the fly now sets the palette, and sets the right
+    coords for the status bar widgets, the status bar is also fully
+    redrawn.
+
+
+
+    Sat 31-01-98: "today on the menu... choose yer resolution"
+    =============
+
+*   tmap.S : replaced cdq in FixedDiv2 by two simple instructions that
+	allow the next 2 ones to pair, while cdq doesnt.
+
+
+*   m_menu.c : made the video menu. It displays all the VESA2 LFB
+	  resolutions, starting with 320x200 standard VGA.
+	  Like in Quake, each resolution is displayed only once,
+	  and the VESA2 linear frame buffer is always used for
+	  the reolution, except for 320x200 which stays in the
+	  standard mode VGA.
+
+	  Video test mode, set default mode, and aspect ratio is
+	  still not working...
+
+
+    Mon 02-02-98: "yeeehaaa! now I can play super-fast 320x400!"
+    =============
+
+*   r_main.c : R_SetViewSize now calculates the right projection and
+	  yslope, I have also added an 'projectiony'. The aspect
+	  ratio is now correct in all resolutions! Yipee!
+	  Maybe I'm not so bad at maths after all?!...
+
+*   We've tried changing vid modes while playing network: it works of
+    course, but there's a small slowdown since the machine sends less
+    packets when it is occupied setting the new mode... should fix that
+    later...
+
+
+    Tue 03-02-98: "320x400 is definitely working, sprites ok and all!"
+    =============
+
+*   r_main.c : aspect ratio and positioning of psprites is now correct.
+	  I have looked at Dosdoom4.6: it doesn't draw the psprites
+	  like the original Doom2, eg: with statusbar it scales down
+	  the sprites, but it should do it only when reducing the
+	  window. With statusbar there's no scaling except for the
+	  aspect ratio... details I know...
+
+
+    Wed 04-02-98: "Web design is fun...but takes too much time!"
+    =============
+
+*   Our Doom project will probably be called 'DOOM LEGACY'. Prepared
+    the page on our site, for the release to come... took me a lot of
+    time. Put some big graphics, and made the page background black...
+    big fat American style... I must admit that it looks good however.
+
+*   am_map.c : fixed a bug with the recalc of the automap after a vid
+	  mode change.
+
+
+    Thu 05-02-98:
+    =============
+
+*   hu_stuff.c, hu_lib.c : added functions to update the coords of the
+	   heads-up widgets after a screen size change.
+
+*   v_video.c, m_menu.c :V_DrawScaledPatch now scales the patches for
+	   the titlepic and menu to the screen size.
+
+*   v_video.c : moved WriteText and other graphics routines to v_video,
+	   for a more general use.
+
+*   hu_stuff.c : added the Deathmatch Rankings!
+
+
+    Fri 06-02-98: "Freelook is ridiculously simple!"
+    =============
+
+*   m_menu.c : added M_DrawTextBox to draw a box under the messages,
+	  because sometimes the text is difficult to read with all
+	  the stuff drawn behind.
+
+*   m_menu.c : re-ordered the main menu like Quake one : singleplayer,
+	  multiplayer, options, help, quit.
+
+	  Created the lumps for SINGLE, MULTI, and SETUPMULTI.
+
+	  Singleplayer lead to: newgame,load,save,endgame.
+	  Multiplayer will allow the player to enter its name
+	  and color. The name will be displayed in the deathmatch
+	  rankings and saved into demos along with player colors.
+
+*   w_wad.c : created a W_ReadLumpHeader which reads only a part of a
+	 lump, so R_InitSpriteLumps reads only the header of the
+	 sprites. However it is not really faster... after that
+	 I found that it was R_GenerateLookup which takes time...
+
+*   Looking at Heretic, I suddenly noticed that the perspective didn't
+    change even one pixel when looking up/down. Now that I think of it
+    it seems evident. In fact it looks like the perspective change, but
+    it's just a 'optical illusion' !
+
+    Just a quick hack at r_main.c, and I was looking down in map01!
+
+    Freelook will be for the first release!!!
+
+*   g_game.c, r_main.c, r_things.c : added the freelook!
+	 Like DukeNukem, freelook is a momentary or toggelable.
+	 Invert mouse for the freelook is also done, but have to
+	 put it in the menu.
+
+	 I had to create another 'centerypsp' to center the
+	 psprites right, because they moved along with the view
+	 (look up, gun was going up...)
+
+	 It looks good, but I'll have to find the best values
+	 for the freelook so that it doesnt make people sick!!
+	 (the perspective is wrong when looking up or down...)
+
+*   v_video.c, m_menu.c : M_DrawTextBox now fills the inner of the box
+	 with a flat used as pattern, it looks better than just a
+	 a plain color. V_DrawFlatFill() does the job.
+
+
+    Sat 07-02-98: "now I can do something of the windows keys!..."
+    =============
+
+*   Changed a lot of stuff for the keyboard : I wanted to attach
+    commands to keys, each game command (fire,use...) could be
+    triggered by one or more keys. Once keys are mapped to commands
+    (game controls), you don't need bother with mouse/joy/keyboard
+    anymore since joystick and mouse buttons are treated as 'virtual'
+    keys, which can trigger game controls too.
+
+    Clearly, this means you can attach any action to a joystick button
+    or mousebutton.
+
+    g_input.c : now handles the game inputs (key/mouse/joy), and remaps
+	   events to game controls.
+
+    m_menu.c : the controls menu has been rewritten, now it accepts
+	  keys, mousebuttons and joybuttons as inputs for any
+	  game control. Maximum two inputs are accepted for each
+	  game control, like Quake 'customise controls' menu.
+
+    g_game.c : G_Responder() now asks g_input to remap an event to
+	  a game control. G_Buildticcmd now tests the game controls
+	  instead of gamekeys so eg:strafe left can be done with
+	  a mousebutton... (I know someone who does this!)
+
+	  Plus added support for 'lookup' 'lookdown' 'centerview'
+	  and 'mouse aiming' game controls.
+
+	  For simplicity, the speedlock ('runmode') and locking
+	  of the mouselook will be moved as menu options: TO DO.
+
+    i_system.c : rewritten the kb handler to distinguish between keypad
+	    keys and extended non-keypad keys. eg:uparrow is not
+	    the same as keypad 8. If someone moves with the keypad
+	    he/she can use the cursor keys for something else
+	    (eg:sidestep left/right)
+
+	    The ASCIINames (scantoascii) table has been reworked.
+
+	    Added support of the win95 keys: leftwin, rightwin, menu.
+
+    Hmmm.. took me all the day!
+
+    Still to do: save the new controls config (two keys max per control),
+    add menu options for speedlock and aiminglock.
+
+
+    Sun 08-02-98:
+    =============
+
+*   m_menu.c : fixed a bug with 'messageToPrint' messages displayed by
+	  the menu, sometimes a text line was missing.
+
+*   m_menu.c : Customise Controls: added Backspace to clear the keys
+	  for a control,
+	  unknow keys are now displayed as 'KEYxxx' with the key
+	  number (so you effectively see if multiples 'UNKNOWN'
+	  keys are different),
+	  fixed Escape now Cancels, does not change the key,
+	  Escape in the menu now returns to the Options menu.
+
+
+    Mon 09-02-98:
+    =============
+
+*   m_misc.c, g_input.c : added temporary hack : saves the controls menu
+	  two-keys-per-game-control in the default cfg, but if they
+	  are not found when loading, the old 'key_xxx' values are
+	  converted to the new game control key codes. This is to
+	  simplify the use of our first release for the people,
+	  they don't need to bother with the new controls, they'll
+	  be converted automatically from old key_xxxx setup keys.
+
+	  We'll have to do a new SETUP, for later...
+
+*   st_stuff.c, wi_stuff.c : now uses player's translation tables so
+	  that the facebacks in statusbar and intermission screens
+	  display the right colors, whatever new player colors we
+	  add, and whatever number of players.
+
+	  Before it was not good, because it loaded a 'STPBx' patch
+	  for EACH player, which means that for 16 players you
+	  would need 16 patches named 'STPB0' to 'STPB15' !
+
+*   wi_stuff.c : commented out the use of a 'WIOBJ' patch, that was used
+	  only with the french version, and special conditions...
+	  looks weird, since "WIOSTI" patch does the same.
+
+
+*   m_menu.c : added the multiplayer setup, choose your color and enter
+	  your name, with an animated 'marine' to display the
+	  chosen color.
+
+
+    Tue 10-02-98: "still finishing touches for the 1st release..."
+    =============
+
+*   m_menu.c : completely redo the Options menu, text was too big, and
+	  I needed space for mouselook,always run and such...
+	  now uses the HU font, and includes the following:
+
+	  mouselook toggle,
+	  always run toggle,
+	  invert mouse toggle,
+
+	  screen brightness has been added, this is like the
+		 old Doom2 'F11' gamma key, just moved in the menu.
+
+	  created new 'slider' graphics, to draw smaller 'thermos'
+	  by the side of the options, like Quake, instead of a big
+	  thermo under the option.
+
+	  It's getting better and better! It's great to play with
+	  mlook as default, and always run.. what a release for
+	  my poor little fingers...
+
+*   m_menu.c : added mouselook sensitivity, which IS NOT THE SAME as
+	  mouse y sensitivity. Mmmmh... maybe a mouse y sensitivity
+	  would be useful for people who uses the mouse to move
+	  backward and forward... I'll have to think about it.
+
+*   r_main.c, r_plane.c : added a yslopetab[] which is the original
+	  yslope[] with slopes for the full view possible when
+	  mouselookin' (one half above and one half below the
+	  original viewheight), so that we don't need to recalc
+	  the yslopes each frame for the mouselook.
+
+	  Now we just make 'yslope' point somewhere in 'yslopetab'.
+	  Doom is already slow enough! This frees hundreds divisions
+	  per frame.
+
+
+*   v_video.c, m_menu.c : menu now calls V_DrawFadeScreen(), which
+	  fades down the screen, so that the menu is more readable.
+
+
+
+    Wed 11-02-98: "having fun while testing multiplayer features..."
+    =============
+
+*   g_input.c, g_game.c : added the double-clicking inputs for both
+	  joystick and mouse. To set it up in the menu, set the
+	  mouse button two times, the second time it becomes a
+	  double click.
+
+	  I'm not happy with it, there are 'collisions' between
+	  inputs attached to the same control : one input is
+	  being tested and sets the control to true or false,
+	  then the second input. At the end, the first input
+	  does not act... to fix. Later.
+
+*   It's one week and a half that we are working me and Boris at my
+    home, and we planned to release the first version of our project.
+
+    So here it is, I think that it's already very good. And anyway,
+    the setup controls works perfect if you don't do stupid assigns
+    (like two mousebuttons for the same control).
+
+*   I think that we did not receive enough 'recognition' for the great
+    dmatch launcher 'DOomatic'. Five persons or so told us that they
+    liked it and it's all. How can people use DM or other crap launchers
+    when we do a great launcher like Doomatic?? Strange world.
+
+    Anyway, I hope that we'll have a little feedback with our doom
+    project.. Ciao.
+
+
+************************** FIRST RELEASE ******************************
+*		      DATE: 12-02-98 TIME: 04:25:39 (wow!)		 *
+***********************************************************************
+
+
+    Thu 12-02-98:
+    =============
+
+*   Found a small bug just after the release! keynamestr too short in
+    G_KeynumToString() ... fixed.
+
+*   v_video.c : V_DrawTiltView(), just for fun, I wanted to tilt the
+	   view like in DukeNukem, when the marine dies. It looks
+	   good. I may leave it, but there will be a toggle in
+	   the menu 'Tilt view On/Off'.
+
+*   r_sky.c, r_plane.c : r_plane now uses pspriteyscale to render the
+	   sky, so now the sky is scaled with the correct aspect
+	   ratio. There's still a problem with mouselook : the
+	   sky texture should be 256 lines high instead of 128.
+
+*   r_sky.c, screen.c : I have finally understand that skytexturemid
+	   is an offset into the texture, and it is totally
+	   independent of screen size. R_RecalcSky() is useless.
+
+	   skytexturemid is initialised to the y coordinate of
+	   the line of the sky texture, which is displayed at
+	   the horizon (the line at the center of the view).
+
+	   When you look up and down, the horizon moves too,
+	   so the sky texture should be tall enough...
+
+*   tmap.s : made a quick cutn paste of the R_DrawColumn, modified
+	it so it can draw columns taller than 128 pixels (upto
+	256 in fact). Because of the 256 wrap, the routine could
+	be optimised further (to do). Added skycolfunc in r_main.c
+	Tested a sky of heretic (which is 256x200)... there's
+	some problems with centering... but now I go to bed!
+
+
+    Fri 13-02-98: "wow! we've already got a good feedback!"
+    =============
+
+*   Yipee! Now we finally receive a little feedback for our efforts,
+    we've received around 20 mails, and for one time they're interes-
+    ting bug reports, so they're useful.
+
+    Now Doomatic also receives a good feedback, I suppose because the
+    people think that they need Doomatic for 8 player DM. It's not
+    obliged but then since there's no other launcher ready for 8 player
+    we've shipped Doomatic with Doom LEGACY.
+
+    A funny issue, is that we didn't dare call our 'mod' DOOM 3...
+    but it seems that most of the people call our mod DOOM 3 !!!
+
+    Well.. they choose! So I think the name is now DOOM 3 : LEGACY.
+
+    However, got some bug reports, and Doomatic was not the good rel-
+    ease, so I'll try to fix a maximum of small bugs before we update
+    the site tomorrow, since we have to update Doomatic , so that it
+    works with 8 players, I'll update Doom LEGACY at the same time.
+
+
+*   Bug report 1: g_game.c : now the mlook sensitivity is the same
+	     whatever the screen height.
+
+
+*   r_sky.c, tmap.S : damned! the problem with centering of the sky,
+		 was because I left out a 0x7f mask in the new
+		 skycolfunc drawer routine! Just removed it and
+		 the sky is right!
+
+*   doom3.wad : RSKY1,RSKY2,RSKY3 : since there is mouselook now, I had
+	   to create taller sky textures (256x240 each) instead
+	   of the original 256x128. I have worked all night
+	   trying to keep the original skys looking good.
+
+	   Since NWT (NewWadTools) didn't accept a picture larger
+	   than 320x200 I had to create my own little proggy to
+	   pack a picture into a patch_t resource. It's called
+	   'lumpy'.
+
+*   i_system.c : as suggested, tried to fix the exit sound, I_WaitVBL
+	    doesnt wait!! Tried to change it, does the same...
+
+
+    Sat 14-02-98: "updated release1 on the site"
+    =============
+
+*   While replying to the mail at university, other mails where
+    arriving every five minutes or so!! That was very useful since
+    I have had a lot of feedback and a lot of bug to fix!
+
+    We've received Saturday night some 25 mails. Not bad at all!
+
+    The most reported is of course the freelook aiming which doesnt
+    fire in the 'look' direction...
+
+*   g_input.c, g_game.c, m_menu.c : reworked the g_input method, Boris
+	   was right, there was a way much more simple.
+
+	   Now it is possible to go backward and 'use' at the same
+	   time, as someone asked by mail..
+
+	   Fixed the setup controls : when there's already two
+	   keys, if you enter a new one, it replaces the two
+	   precedent, instead of just erasing the two precedent
+	   keys.
+
+*   m_misc.c : Load and Save defaults is now much cleaner, and much
+	  simpler, however, it is no more directly compatible with
+	  Doom2, each time you switch between doom2 and doom3, you
+	  loose your controls config. Not a big issue.
+
+
+    Sun 15-02-98: "fixing the most reported and ridiculous bugs"
+    =============
+
+*   made a votes.txt with a list of the most wanted features, asked
+    by mail: at the top: tcp/ip, shoot up/down, open GL !!!
+
+*   m_menu.c : used "RROCK17", not found in Doom1, as a background
+	  for boxes. Now uses borderpatchname.
+
+*   p_mobj.c : P_SpawnPlayerMissile : found how to fire missiles in
+	  the mouse aiming direction. It works!
+
+	  I'll have to add an 'autoaim' toggle to the menu,
+	  it will be added in the player_t struct.
+
+	  ticcmds will need an autoaim bit, and also an
+	  aiming value. So demos record and playback the
+	  freelook, and so the network just works!
+
+	  For network, each player need to know the other's
+	  autoaim toggle, plus other's aiming value.
+
+	  Mouse aiming needs to be done for gun,shotgun,dblshotgun,
+	  and also for BFG invisible rays.
+
+	  Will have to check the rocket explosion, it seems that
+	  it kills monsters below, even when the rocket explodes
+	  a lot above the monsters on the ceiling.
+
+	  Gun shots will have to be shown when fire in the ground
+	  or ceiling. Also, fixing the gun puffs not shown on
+	  bottom or upper texture would be nice...
+
+	  Lots of work for tomorrow! Now to bed!
+
+
+    Mon 16-02-98: "hmmm.. have we found a bug in network?"
+    =============
+
+*   s_sound.c : it seems a hack in the sound code used M_Random()
+	  whereas it should something else because I have
+	  found that M_Random is deterministic for the
+	  consistancy checking in some occasions, and the rest
+	  of the code only uses P_Random().
+
+
+	  M_Random() is used once per tic at ST_Ticker() and
+	  more than once per tic by WI_Ticker()...
+
+	  Anyway, it seems clear to me that M_Random() shouldn't
+	  have been used in s_sound.c, and it comes possibly from
+	  the unix sound hacks.
+
+	  Now s_sound uses rndindex without modifying it,
+	  (using M_Random() increment rndindex).
+
+	  LET S HOPE ITS THE BUG WHICH CAUSED CONSISTANCY FAILURES
+	  IN MORE 4 PLAYERS NETWORK!!!
+
+
+
+    Tue 17-02-98: "wow! I cleaned a bug without knowing what I was doing"
+    =============
+
+*   g_game.c, p_user.c, p_mobj.c : can shoot up or down, works in
+	  network, and works in demoz (for missile weapons)!
+
+*   s_sound.c : removed the use of M_Random() in a linux hack to vary
+	   the sound sfx picthes. Hope it was the consistancy
+	   failure bug of the network...
+
+*   p_pspr.c : shoot up or down done for bullet weapons. There's still
+	works to do coz the puffs dont show on bottom and upper
+	textures.
+
+*   Wow! It's very hard to aim with no auto aiming! What a mess!
+
+*   i_system.c : I_Quit : made it G_CheckDemoStatus when demorecording
+	  because when you quit with F10 while recording a demo,
+	  it didn't save the demo. 'q' sould be used to end a
+	  demo, but then why not the standard Doom exit key 'F10' ?
+
+
+
+    Wed 18-02-98: "I wanna see Puffs everywhere!"
+    =============
+
+*   m_map.c : PTR_ShootTraverse() : did the clip of the shoots on the
+	 ceiling and floor, was as simple as I dreamed last
+	 night! Just a triangle stuff... I'm no math dude but I'm
+	 learning a lot from the sources!
+
+*   m_map.c : same : I nearly fixed the problems with Puffs not being
+	 drawn on bottom walls where front & backsector use the
+	 sky flat. This was originally because you cant shoot on
+	 sky hack walls. Now it tests also if the ceiling heights
+	 are different (always diff for sky hack walls) so now you
+	 can shoot at the outer wall in the outdoor at map01.
+
+	 Still, I've found a place in a pit, in a Danzig map, where
+	 the puffs are not shown... hmm...
+
+*   m_misc.c : shamelessly added an detailLevel = 0 after M_loaddefaults
+	  because someone couldn't get the game running, having
+	  detailevel set to 1 in his default.cfg...
+
+
+    Thu 18-02-98: "Lost some 8 hours on a MOTHERFUCKER BUG!!!"
+    =============
+
+*   I'm disgusted, 8 hours lost just because that BT_AUTOAIM in
+    d_event.h was 6 instead of 64... why did that 4 disappear???
+
+*   m_menu.c : added Autoaim on/off, Crosshair Off/Cross/Angle/Point
+	  in the Options menu.
+
+*   p_mobj.c, p_pspr.c : now also shoots up and down with AUTOAIM
+		    when there's nothing to aim at.
+
+*   d_main.c, i_system.c : setvbuf now changes stderr to filebuffer
+		      mode, so that we get all the errormessages
+		      flushed at the end, and have them all
+		      displayed. Somewhat cleaner now.
+
+*   g_game.c : 'q' while recording a demo now I_Quit() instead of
+	  I_Error(), thus returning a return code 0. That's why
+	  Doomatic didnt call lmpmast : the return code was -1
+	  by I_Error().
+
+*   hu_stuff.c, wi_stuff.c : fixed a bug with 'french' used as a
+	   boolean, but it is an enum. Should have tested 'language'.
+	   Now talk uses english keymap.
+
+*   v_video.c, screen.c, m_menu.c : fixed the scaled graphics not
+	   at the right place because they were centered like
+	   the scaled menu.
+
+*   hu_stuff.c : now draw the crosshair scaled. Can see it better.
+
+*   Joined readme.txt and legacy.doc in a more complete legacy.doc.
+
+*   d_main.c : added a nice blue titlebar for 'Doom LEGACY'.
+
+
+    Sat 21-02-98: "Started to work on the transparent water!!"
+    =============
+
+*   Started to work on a real engine feature: transparent water !
+
+    The water efectively looks like it 'cut' the sector into two
+    parts : the underwater part and the out-of-water part. In fact
+    it needs only one value per sector: the height of the water!
+
+    This single value is sufficient to know where to draw the
+    water surface, the clipping is just nearly automatic with
+    floorclip and maybe a new waterclip. Visplanes are created
+    for the water surface, and all the water visplanes are
+    drawn after the non-water visplanes, using a 'shading' texture.
+
+    The water texture looks like it uses transparency, but in fact
+    it's just a grey-shaded texture where each pixel tells which
+    light colormap of Doom to use. eg: it just makes colors brighter
+    or darker, and looks like ripples over the surface.
+
+*   r_plane.c, r_bsp.c, r_segs.c mainly. This is done. There's still
+    problems with 'underwater' sectors, which are displayed as out
+    of the water because currently I use the floorclip to clip the
+    water visplanes.
+
+*   About the water texture: the colormaps indexed by texels of the
+    water animated texture, could at the same time remap the colors
+    to 'more blue' colors. Then its like transparency between the
+    background picture, and a single color: the tint of the water.
+
+    Since on one side, the color is constant (water color), it
+    doesnt need as much precalculated data as transparency, no need
+    for a 64k tinttab here, and the shading is done at the same
+    time, which is not true for translucency!!!
+
+    Sun 22-02-98: "I need a change,.. water is getting boring"
+    =============
+
+*   Yes, water starts to bore me to death: the bigger problem is
+    probably not enough colors in Doom palette to have great
+    colors for the water. I've looked for highcolor but...if I
+    do it just like DosDoom, it'll be a better shading and more
+    colours mapped for the water.
+
+    However, I'll not go to highcolor until it's really MUCH
+    better. eg: using highcolor textures, but then it needs a
+    lot of artist's work. So for now, I'll try to find a clean
+    solution for the water, try to find the best 8bit colors.
+
+*   Another problem with water is that it looks 'unreal' : the
+    stuff under the water should be deformed because of the
+    refraction or something... I'm trying to understand how
+    AlienBreed3d on Amiga does this... the water in it looks
+    so great! That's because the underwater part moves with the
+    ripples... I'll do this later, I'm bored for now.
+
+*   Added jump, as a quick-hack : still needs to find a bit in
+    ticcmd so that it work in multiplayer.
+
+    Added a sound when the player avatar jumps, and another sound
+    if the player avatar touches the ceiling (ouch!).
+
+*   Added height checks... now the player can walk under flying
+    monsters.
+
+*   Added thing on top of another thing checks. You can now stand
+    on barrels, pillars ... every MF_SOLID  object in fact.
+
+    Problem: when a sector rise, actors that are at different
+    height sometimes are pushed on the ground, and so becomes
+    attached. While they move in the air, they dont get attached
+    because they now when they collide with the height checks...
+
+    eg: if a player stands on a barrel, and then the sector under
+   moves up, the player and the barrel have their z coord
+   on the sector floor, so they get attached... in fact
+   the player should move up with the barrel...
+
+*   p_user.c : PlayerDeath Think view follows the attacker now
+  also moves the pitch of the view.
+
+*   p_inter.c : P_KillMobj : barrels remember if they were killed
+by a player, so that the originator of the barrel explosion
+gets the frags for all players who dies from the barrel
+explosion. This information is passed from barrel to barrel!!!
+
+*   Wow! Started a quick-hack test of external camera view...
+it kicks ass!!! It looks good! Surprising how the levels
+look more '3d' from the exterior of the marine's eyes!!!
+
+    With demos it especially great! For now I use the 'c' key
+    to switch the camera view on/off.
+
+    There will be a lot of work to get the camera move right,
+    and that the camera always find a position inside the
+    level, and not outside sectors, neither in other non-connected
+    sectors...
+
+
+    Wed 25-02-98: "Wow! I got that water working! Looks great!"
+    =============
+
+*   Got a superb idea yesterday for the Doom console : it will
+    look like a hi-tech heads up display, that comes from the
+    left, the background will be dark green transparent, and the
+    text over it will be some futuristic style font.
+
+*   r_plane.c : ok, the water works : the underwater part is now
+	   deformed in a sort of refraction... but there's a
+	   problem with the order in which the lines are
+	   changed on the screen, I use a very dirty hack for
+	   now : copy the screen to a temporary buffer from
+	   which I get the lines that are changed by the
+	   water... but this is a waste of time. There is a
+	   solution , it is boooring, and complicates somewhat
+	   the water rendering, anyway, it must be done...
+
+
+    Thu 26-02-98:
+    =============
+
+*   p_user.c, r_main.c, info.c : created a new MT_CHASECAM type,
+    and used an mobj with thinker to move the camera: the advantage
+    is that the collision are checked against the walls, the camera
+    doesn't go through walls no more, and it slides along walls like
+    the marine.
+
+
+
+    Fri 27-02-98:
+    =============
+
+*   p_map.c, p_mobj.c : fixed a little the stand-on-top-of-a-thing...
+      Funny little bit: the blood sometimes stay on the head
+      of the marine because it does not fall through!!!
+
+*   Still 'thing on thing' problems : if the thing under moves, the
+     thing above does not and eventually falls to the ground,
+     not an error, but would be better if the thing above
+     moved with if some special bit is set, would be fun.
+
+
+*   p_mobj.c : P_SpawnMob() now P_CheckPosition() to get mobj->ontopz,
+    and so spawn the mobj on top of existing mobjs!!! Thus as I've
+    tested, multiple objects are stacked one of top another,
+    I've made some pyramids of barrels, and then walked on top
+    of it! Very funny especialy when you fire a rocket at it.
+
+*   g_game.c : G_InitNewFeatures() : mad some other sprites transparent,
+	as people requested : baron,arachno,caco fireballs,
+	blood, eye in symbol, lost soul.
+
+*   i_system.c : the ENDOOM textmode end screen is back.
+
+
+
+    Sat 28-02-98:
+    =============
+
+*   d_main.c, g_game.c, ... : replaced 'fabifabo' by an global variable
+     'demoversion' which is tested for backward compatibility.
+     Fixed the bug that disabled new features after playing back
+     the older demos DEMO1,DEMO2... now G_InitNew() resets the
+     new stuff by default.
+
+*   m_menu.c : keypad arrows can be used to move in the menu.
+
+*   thing on thing : getting tired and crazy with that, so I simplified
+     and for now, if the 'support' thing move , the things over
+     it don't move.
+
+*   m_obj.c, p_map.c : MF_ONGROUND : this flag allows to minimize the
+     z movement checks, for things on solid floor and not moving.
+
+     If this bit is not set, ZMovement is always done, thus
+     a CheckPosition is always done, which consumes time in
+     levels with hundreds of monsters.
+
+     An object which is not on solid floor, eg: an object which
+     stands on another one, is always checked for ZMovement,
+     thus it's MF_ONGROUND bit is not set.
+
+     This is to ensure that if the 'support' thing moves, the
+     thing(s) on it falls to the solid floor when they are no
+     more supported.
+
+*   AAARRARHG! I'm bored to death of a bug in map01 : imps at the
+     platform near the plasma gun blocks the platform because
+     they're stuck in each other as soon as the door is opened...
+
+     This is rare, and due to the new extended thing-on-thing
+     possibilities... the fact is: monsters should not occupy
+     the same space so the map should not be like that. Point.
+
+     Or the monsters stacks, but then they're blocked into the
+     ceiling, same problem.
+
+     FUCK OLE DOOM2 COMPATIBILITY, ITS GETTING ON MY NERVES!!!
+
+
+I FUCK WASTED ALL MY NIGHT ON THIS SHIT THING-ON-THING PROBLEMS!!!
+FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUUUUUUUCK!!
+
+Thank you for listening.
+
+
+*   Added a new cheat 'idfly' to fly around levels using jump key.
+
+
+
+    Sun 29-02-98:  "finishing touches for update 2"
+    =============
+
+*   d_main.c: Fixed detection of Ultimate doom, still : the Utltimate Doom
+Startup should be printed , but then I can't check for wad
+entries when the title string is printed out...
+
+
+
+    Thu 19-03-98:  "At last back to code after 2 weeks of webdesign..."
+    =============
+
+    For the bit of history : after release of Legacy v1.12, I started
+    out to redesign entirely the site, as we were invited at frag.com.
+
+    I took 2weeks to make the new 'Doom LEGACY' web site, which looks
+    quite cool now! Too bad I had to kick out the Leprechauns...
+
+*   p_enemy.c : P_CheckMeleeRange() : quick fix now monsters cant
+    attack you in melee if they're not at the same height. No
+    more imps attacking at MAP01 if you stand at the top of
+    the platform.
+
+*   info.c : corrected the height of most obstacles non-moving things
+    as IdSoftware coders didnt bother since you couldnt walk over.
+    Mostly: pillars,torches,lamps,trees,candellabra,barrels,piles
+    of skulls,poles,twitchingbodys...
+
+
+
+    Fri 20-03-98:  "DOOMWORLD vs Legacy..."
+    =============
+
+    DOOMWORLD has taken some of my words on DosDoom as a news on their
+    site... didnt see the page, not a big issue though.
+
+    Discussed Console addition with Boris. Will be 3 modules for
+    real console like in Quake :
+
+ console.c : handles display of console and console text.
+ command.c : handles execution of commands and scripts.
+	     commands are issued by key bindings, console input,
+	     or even by remote server.
+ consvar.c : console variables, as Quake does allow for QuakeC
+	     to add variables that are editable at the console.
+	     Maybe not necessary, are we going to do some Doom-C ?
+
+*   p_user.c : restored repeated jumping only for IDFLY mode.
+
+
+    Sat 21-03-98:  "Legacy vs Doomworld..."
+    =============
+
+*   console.c, consvar.c, command.c : mainly the console works...
+  I use a simple translucent green background for now, and use
+  the HU FONT for the console font, chars spaced 8 pixels so
+  that it looks like a fixed font. Most messages are now
+  displayed through the console, just hacked hu_stuff.c to
+  do CON_Printf instead of setting some heads up widget.
+
+  Tomorrow: allow console input, draw that console better
+  have it gradually come on the screen instead of just on/off..
+
+
+
+    Sun 22-03-98:  "Adding command execution to the Console"
+    =============
+
+*   console.c : added the responder, input line, ... works great.
+
+*   command.c : lotsa work here, command execution seems to work fine.
+	   "wait;wait;wait" sequences work.
+
+*   m_menu.c : temporary disabled KEY_MINUS coz it disables the
+	  '_' key for the console... m_menu shoudlnt handle
+	  screen resize keys.. to clean up
+
+*   command.c : added vid_nummodes,
+		 vid_describemode,
+		 vid_describemodes,
+		 vid_describecurrentmode,
+		 turbo <10-400>
+
+    -turbo cmdline parm is pushed in the command buffer, and executed
+when the game starts, it works!
+
+*   command.c : added Command completion …-la-4dos
+      eg: type 'vid' then press TAB multiple times, you get all
+       possible commands which start with 'vid'.
+
+
+
+    Sat 11-04-98:  "Back to the serious stuff.."
+    =============
+
+    Too bad, I coded several things these last weeks but didn't update
+    this log. Partly because we didn't release the srcs anymore, but
+    I should have continued.
+
+    These last days I've been testing the 'perspective correction'
+    feature which looks good, but still not enough precise. Also,
+    I've kicked out hu_lib.c, and rewritten hu_stuff.c to do just
+    what was needed. Good cleanup there.
+
+    Some changes to the console print and hu_stuff handle of messages
+    and net chat messages are now print in white colour, which stands
+    out from the rest of the console text, so you don't miss it.
+
+*   i_video.c, vid_vesa.c : now frees screen buffers at exit, useless
+		       I suppose on most systems but who knows..
+
+*   console.c, command.c : lots of cleanup
+
+*   console.c, g_game.c : now CONS_Responder() toggles the console.
+
+*   all *.c, doomdef.h : doomdef.h now includes the main header files.
+
+*   s_sound.c : added a 'stereoreverse' console variable, still not
+    saved to config.
+
+    And now, I really start enjoying that CONS_Printf() ...
+
+*   g_game.c : tell the player name when changing the view with F12
+
+*   p_inter.c : started death messages, 'xx frags yy' fun to code!
+	   and 'xx suicides' (kills himself source==target)
+
+    Sun 12-04-1998:
+    ===============
+
+    Arranged 'specs.txt' to describe all the changes done to the
+    engine with each version of Legacy.
+
+*   info.c : set MF_NOCLIP for MT_PUFF, so it displays right on
+	upper & bottom walls. It was clipped by the collision
+	check code of mobj thinker because on upper/bottom walls
+	the puff thing standed in the middle of 2Sided lines.
+	A puff is not solid anyway, and disappears fast.
+
+
+    Wed 16-04-1998:
+    ===============
+
+*   console.c : like Michael Abrash says in his 'black book',
+ rewrite from scratch instead of adding fixes and fixes..
+ I've started to rewrite the console using a modulo so that
+ the console buffer doesnt have to scroll in memory.
+ Doesn't work. Now bed.
+
+
+
+    Fri 18-04-1998:
+    ===============
+
+*   p_map.c : fixed crusher don't crush and cannot pickup under crush
+	 ceilings (damn test == should have been <= ).
+
+*   hu_stuff.c : fixed chat input wrap around multiple lines
+	 (hu_lib used to do this)
+
+*   wi_stuff.c : quick-fix for scores for the Caveparty..
+
+
+    Tue 21-04-1998:
+    ===============
+
+*   p_inter.c : death messages, basic implementation
+
+*   r_sky.c, g_game.c : call R_SetupSkyDraw to set the right sky
+     column drawer, and scale up the old skies. Looks shit.
+
+
+    Thu 23-04-1998:
+    ===============
+
+*   i_system.c : fixed the ENDOOM screen, text cursor at bottom of
+	    screen, and uses conio puttext instead of memcpy.
+
+*   console.c : added backward sequential command completion, like
+	   4-dos, using shift-tab (was forward only until now).
+
+
+    Fri 24-04-1998:
+    ===============
+
+    Boris made the latest 'join' of our sources, we will keep
+    the new network code of Boris separate so that we have two
+    upcoming versions of Legacy : they will have the same
+    additions but one will include the new net code and will
+    be released as a 'network betatest' version.
+
+*   i_sound.c : use MIDI_AUTODETECT so Allegro checks the midi
+ setting in the sound.cfg file. DIGMID now can be set through
+ the sound.cfg file. The init sound error is printed to
+ stderr and can be seen on exit of the game if an error
+ occured (like not enough digital voices for DIGMID).
+
+*   d_main.c : removed fflush of stderr so all error msgs are printed
+ out on exit. Fflush was to prevent msgs from printing while
+ the game screen was initted, but now they are no such msgs
+ anymore, further debugging can be printed out to the console.
+
+*   m_menu.c : removed trailing spaces from player name when press
+ Enter, so the names looks good in console messages.
+
+*   hu_stuff.c, p_user.c : show dm rankings while in dead view, for
+ deathmatch. P_DeathThink() sets 'playerdeadview' which is
+ checked by hu_stuff.
+
+*   hu_stuff.c : the dm rankings now display the name of the view
+ player in white when looking at a demo, and displays the
+ console player name in white when really playing.
+
+*   m_menu.c : finished the testing mode in video menu, at last.
+
+*   m_menu.c : video modes menu, fixed a bug with going left in
+ the first modes column, cursor would move to a wrong place
+ sometimes.
+
+
+    Sat 25-04-1998:
+    ===============
+
+*   hu_stuff.c, console.c : fixed clearing the hud messages from
+ the view borders when playing in a reduced window. Hu_lib
+ used to do this before I kicked it out :)
+
+*   console.c, r_plane.c, r_things.c : added con_clipviewtop, clips
+ the view when the console is on, so it doesn't draw parts
+ of the view that are hidden by the console.
+
+ added drawing of a background console picture like Quake,
+ doesn't look as good as translucency, but is faster (clips
+ the view), and gives users the chance to customise their
+ console appearance.
+
+ added 'background' console command, to choose between the
+ translucent background or a picture (resource "CONSBACK")
+
+*   w_wad.h : now contains some resource structure definitions as
+ they are found in wad files, added pic_t for flat, non-
+ transparent, rectangular block of picture
+
+
+    Mon 28-04-1998:
+    ===============
+
+*   command.c : added saving the console variables where CV_SAVE flag
+ is set, to config.cfg
+
+*   command.c : finished the exec command : load a file and push
+ it in the command buffer, hard one :)
+
+    m_misc.c : FIL_ReadFile() now appends a zero byte, so that the
+ command execution can do strlen() on the text buffer, like
+ it does on console commands
+
+    d_main.c : push a "exec config.cfg" command to execute the config
+ settings at start of the game!
+
+    Now I have to convert most of the defaults file values to
+    console variables and have them in the config.cfg.
+
+    Problem is: not all values are meant to be changed at the console,
+    like soundcard, ect.. so default.cfg will probably stay.
+
+
+    Tue 28-04-1998:
+    ===============
+
+*   d_netcmd.c : added cvars for player name and color
+
+*   v_video.c,screen.c,d_main.c : added gamma var,
+			     added scr_gamma
+ to check when gamma has changed and request a setpalette.
+
+*   r_main.c,screen.c,m_menu.c,d_main.c : added viewsize var,
+				     added scr_viewsize
+
+*   m_menu.c : added crosshair var
+
+
+    Wed 29-04-1998:
+    ===============
+
+*   hu_stuff.c : added chatmacro command, cvars, save to config
+
+*   m_menu.c : some tweaks to disable console & menu at the same time,
+ should be done better eg: 'routing' keys to either or the two
+
+*   m_menu.c : added invertmouse,autorun,alwaysfreelook vars
+
+*   command.c : wait now takes a value, how many tics to wait,
+	   1 tic default
+
+*   d_main.c : flushes config.cfg for game startup, and executes
+	 autoexec.cfg at start of Doomloop, now can put
+	 ag: map 10 in autoexec.cfg
+
+    Added some other variables for the console
+
+
+    Thu 30-04-1998:
+    ===============
+
+*   Added 5 translucency tables, use the frame upper 16 bits,
+    only 3bits now reserved through FF_TRANSMASK to set the
+    translucency. Advantage: is per frame, not per thing.
+
+*   Made a brighter 50-50 translucency for fireballs, ect. now
+    they look as bright as the original, while still translucent
+
+*   Made the special torches translucency brighter too, used
+    it for flaming barrels and da skulls !
+
+*   When power invisibility is running out, it now toggles between
+    hi trans and med trans instead of toggleing between trans and
+    opaque, only when it is fully finished, the player becomes
+    opaque again.
+
+*   The spectres are really hard to see now!
+
+*   quick-n-dirty add command "bloodtime" .. TO FIX FOR NETWORK.
+
+
+    Sat 02-05-1998:
+    ===============
+
+*   started status bar overlay.
+
+*   solidcorpse var
+
+*   made the startup loading screen in 320x200:
+    - all printf replaced by CONS_Printf, does printf until the
+ console is ready
+    - it feels like it loads faster, of course it's an illusion,
+ but it's better, this is due to the graphics appeal instead
+ of the boring text screen of the game startup, probably.
+    - now maybe we can have the Legacy logo there as background,
+ and restore the original doom title screens after loading ?
+
+
+    Sun 03-05-1998: "we got to release soon.."
+    ===============
+
+*   the loading screen uses the user default video mode, so it can
+    be 640x480 for example, which looks nice!
+
+*   vid_vesa.c : reworked a little the vid commands, I named them
+    just like Quake, but why the hell? I won't go on using always
+    the same command names as Quake where possible, I don't think
+    it's really useful, and then it's getting boring.
+
+    now we have: vid_nummodes,
+	    vid_mode	       (set a mode)
+	    vid_modelist
+	    vid_modeinfo
+
+*   console.c : added con_size var to choose the height of the
+	   console panel in percent, eg 50 = half the screen height
+
+*   Started the HIGHCOLOR mode support ! at about 2:00 morning!
+    when will it be finished ? :)
+
+
+    Mon 04-05-1998: "we have to release soon!"
+    ===============
+
+*   Still on the hicolor stuff.. reorganised r_draw.c, separated
+    r_draw8.c and r_draw16.c, included by r_draw.c
+
+
+    Wed 06-05-1998: "when are we releasing!!!?"
+    ===============
+
+*   test of hicolor : use hicolor colormaps, convert wall & flats at
+   loading time, using gradients in it to see all the colours..
+   whoaaaa!! totally weird but colourful to the least!
+
+    While looking at the setup of sprites/flats/textures for the
+    loading of wad files through console at run time.. I tweaked
+    some other related stuff..
+
+*   s_sound, i_sound : removed precache sounds by default, this will
+   be useful with runtime loaded wads, to flush sounds that are
+   to be replaced, use -precache to precache sounds.
+
+*   r_things : sprites in pwads work!!! I always thought there was
+   some real problem but no!! Just disabled some ridiculous
+   error msgs that used to quit the game, now they just print
+   to the console.
+
+
+    Fri 08-05-1998: "parrallel coding, Boris with his portable"
+    ===============
+
+*   fixed sequential completion for commands and vars.
+
+*   fixed sprites in a pwad, still needs 'S_END' though.. doesnt
+    support old dmadds wads, is it worth it? dehacked sprites
+    renaming was mutual exclusive with dmadds wad support, kicked
+    out dmadds wad support, was it worth it ?
+
+*   made borders for console in translucent mode, not good enough:
+    should look more 'metal', but the code is there.
+
+*   lots of little fixes
+
+
+    Sun 11-05-1998:
+    ===============
+
+*   w_wad.c : added support for dynamic loading of wads
+
+*   g_game.c, p_setup.c ... : the 'map' command can load external
+  maps! it works, basically !
+
+  TODO: load textures, sprites, sounds at run time
+
+  sounds  : just un-cache them so they get loaded again
+  textures: check for TEXTURE1/2 in current wad file,
+	    free the arrays, and recalc them
+  sprites : from the sprite names, check if sprite are
+	    defined in the wad, free arrays, recalc stuff,
+	    uncache, free old sprite graphics
+	    R_GetColumn will reload the new sprites
+
+  TODO: add dir command to list all wads,demos..
+
+  user easy: 'map' command,
+  low level: 'addwad <filename>' add a file to the wad list
+	     'remwad <wadnum>'
+	     'wads' show active wads & numbers
+
+   ??? find something neat :) !!!
+
+
+    Mon 11-05-1998: "aaargh! two months! we gotta release!"
+    ===============
+
+    Working with Boris to finish a release.
+
+
+    Fri 15-05-1998: "still not released!!!"
+    ===============
+
+    I have broken the support of sprites in pwad, flats in pwad, ect
+    with the new dynamic wad loading.. have to fix that for the
+    release.
+
+*   p_setup.c : at last fixed flats in pwad, no need for F_END.
+
+    Sat 16-05-1998: "wahoo! flats in pwads finished"
+    ===============
+
+*   p_setup.c, p_spec.c : ok, flat in pwads works 100%, no need for
+P_START,P_END, accept any number of animated flat sequences
+(will add easily new flat sequences, routine is ready)
+should work with dynamic loaded wads
+
+*   r_data.c, r_things.c : nearly fixed sprites in pwad!! army of
+death dehacked + sprites in pwad (deutex not used), works!!
+
+just some special cases to fix ..
+
+
+    Sun 17-05-1998:
+    ===============
+
+*   vid_vesa.c : night, after work, started removing anti-windowsNT
+	    code : use farpoke instead of direct adressing, ect..
+
+
+    Mon 18-05-1998:
+    ===============
+
+*   Added cheat commands, so that dehacked patches don't prevent me
+   from cheating !
+
+*   st_stuff.c : fixed postion of status bar overlay in weird
+   resolutions 400x300, 512x384.. not perfect.
+
+*   r_things.c : fixed replacing only some frames with sprites in
+   pwad, super-clean only 3 lines of code more !!
+   Now Army of Darkness works perfeclty!!!
+
+   Works with dmadds wad and empty resources  too!
+
+*   Wohooo! Tested several old wads from dmadds to sprite renaming,
+    they all work!
+
+*   Fixed bug in VerifFavoritWeapon switching to  supershotgun in Doom1.
+
+
+    Tue 19-05-1998:
+    ===============
+
+    RELEASE OF LEGACY V1.20 ! AT LAST!
+
+    It was to be release v1.13 but then Boris noted that the second
+    number after the decimal point is for bug-fixes.. so this became
+    the v1.2 release.
+
+    There will probably follow some updates from v1.21 up to v1.29.
+
+    The log is continued in another file, because my preferred
+    Navigator/editor (DOSNAV) likes to cut short too long files
+    in the text editor..
+
+
+***********************************************************************
+End of Doom source code change log (v1.0->v1.20) from 'team Legacy'
+***********************************************************************

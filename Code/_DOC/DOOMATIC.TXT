@@ -1,0 +1,826 @@
+
+  --------------------------------------------------------------------------
+  THIS VERSION OF DOOMATIC SUPPORTS UP TO 32 PLAYERS FOR NEW DOOM PORTS
+	WITH DOOM LEGACY  (the documentation was not updated since)
+  --------------------------------------------------------------------------
+
+
+	       ###    ###   ###   #   #   ###  ##### #	###
+	       #  #  #	 # #   # ##   ## #   #	 #   # #   #
+	       #   # #	 # #   # # # # # #   #	 #   # #
+	       #   # #	 # #   # #  #  # #####	 #   # #
+	       #   # #	 # #   # #     # #   #	 #   # #
+	       #   # #	 # #   # #     # #   #	 #   # #   #
+	       ####   ###   ###  #     # #   #	 #   #	###
+
+
+		   - The Automatic Deathmatch Launcher -
+
+		     Release v1.10 - May 19, 1998
+	      programmed by: Denis Fabrice & Boris Pereira
+
+		    now on Doom LEGACY website
+		    HTTP://www.frag.com/doomlegacy
+
+
+  --------------------------------------------------------------------------
+  send your comments, bug reports, ... to:Boris Pereira (bpereira@ulb.ac.be)
+  --------------------------------------------------------------------------
+
+Except what's new section : Last update: 11-Nov-1997.
+
+ What's New
+ **********
+   1.10 :
+     - check the date for copy the file (copy file if date are differnet)
+     - added local parameter in pref menu
+     - correct bug in sending file
+     - up to 32 maxplayer but the server have a maxplayers attribute
+     - put maxplayer in the menu normal value : 4
+	  put 8 for legacy 1.12 and 32 for legacy 1.20
+   1.02
+     - finish a unfinished feature for copy file
+     - correct bug now the config is a local parmater
+     - boost up file copy to 500 Kb/s
+     - choose a unused socket automaticly
+
+ INTRODUCTION
+ ************
+
+ Let me tell you something : Doomatic is a great utility!
+
+ Before it, we were using DM, and we were playing the same ole boring map
+ nearly all the time. Using PATCHES was a GREAT PAIN in the a#s.
+
+ Worst : it was very difficult to convince other people to join our games
+  because we had to copy the files and install the patches to everybody...
+
+ !!!!  NOW DOOMATIC HAS ARRIVED AND ITS TOTALLY UTTERLY PURE HEAVEN  !!!!
+
+ Now we are playing a lot of different maps, there's never more than five
+ seconds between deathmatches (except for entering our comments into our
+ demos!), and we use several EXE patches in a breeze.
+
+ Even better : we can invite anyone to play with us, even if he/she doesnt
+  have the wad files and patches. We just copy him the DOOMATIC.EXE, and
+  he/she joins our game!
+
+ Well, it should be pretty obvious by now :
+
+
+		  DOOMATIC ...
+
+		  IT's - M A G I C -
+
+		  IT'S - A U T O M A T I C -
+
+		  IT'S - W U N D E R B A R -
+
+		  IT's - M E R V E I L L E U X -
+
+		  IT's - F A N T A S T I C -
+
+		  IT's ... DOOMATIC !
+
+
+  ... but it's only for IPX network by now. We'll add TCP/IP support
+  and/or modem support in the future if we receive enough feedback!
+
+
+ INSTALLATION
+ ************
+
+ Just unpack the Doomatic archive into your DOOM2 directory.
+
+ ( ! Doomatic must be run from the main directory of Doom2 )
+
+ Skip to the 'QUICKSTART' section if you want to try Doomatic immediately.
+
+
+ Quick file description:
+
+
+  DOOMATIC.EXE	- the thing that we're talking about.
+
+  DOOMATIC.CFG	- this is the default Doomatic configuration file. We have
+		  provided a basic configuration file so that you can play
+		  some maps of Doom2 very fast.
+
+		  DOOMATIC will create a default configuration file if the
+		  doomatic.cfg file is not found.
+
+
+  LMPMAST.EXE	- I have written this program waaaaay before Doomatic,
+		  because I like to keep demos, and I wanted to record
+		  comments, names of the players and have some statistics
+		  about my demos.
+
+		  Now it's PURE HEAVEN since DOOMATIC simply calls LMPMAST
+		  with the right options when you activate the 'record demos'
+		  option of Doomatic.
+
+		  If you have some demos in your Doom2 dir , try the
+		  following:
+
+		  LMPMAST /dir
+
+
+ QUICK START
+ ***********
+
+ We have put a default configuration file with Doomatic, so that you can
+ launch a game in two secs and see how cool it is!
+
+ 1. The 'master' (he chooses levels and set the options) needs DOOMATIC.EXE
+    and DOOMATIC.CFG unpacked into Doom2 directory.
+
+    The 'slaves' (who simply join the server) only need DOOMATIC.EXE.
+
+
+ 2. Everybody run a IPX driver, if playing under real DOS. Else, everybody
+    play under Win95 (create a shortcut to DOOMATIC on your desktop, this
+    will leave more memory to the program instead of using the DOS box).
+
+
+ 3. Everybody run DOOMATIC.
+
+
+ 4. In the WADLIST (window to the left), you will see WADSETS, which are
+    the levels you can play.
+
+    Press ENTER on 'hipafrag'. You have created a server!
+
+    Everybody else (up to 4 players) press 'J' to join a server, and
+    choose the newly created server (only when they see it on the right
+    window).
+
+
+ 5. When the master sees that everybody has joined, he presses 'S' to start
+    the game!
+
+    If you have chosen 'HIPAFRAG', the 'hipafrag.wad' will be automatically
+    copied over the IPX network to the other players! Cool uh?!
+
+
+ Now changing the basic options like TIMER , TURBO and such is very easy:
+ the keyboard shortcuts are enclosed in brackets, and displayed in diffe-
+ rent colors. Just press the associated key, or click on the option.
+
+ You might want to look at the 'QUICK OVERVIEW' section to understand the
+ difference between 'Game options' and 'Wadset defaults'.
+
+
+ QUICK SETUP
+ ***********
+
+ 1. Enter your name by clicking on the '[N]ame' box or press 'N' key.
+
+    Your name will be recorded into demos, and it will identify yourself
+    when you create/join a server.
+
+
+ 2. Select your preferred player color by clicking on 'Co[l]or' or use
+    'L' key.
+
+    If multiple players chooses the same preferred color, the first to
+    join will receive their color, the later to join will get the remaining
+    colors.
+
+    This means of course that the server will ALWAYS have his favorite
+    color!
+
+
+ 3. DO NOT change the '[C]onfig' option, unless you use a particular
+    configuration file for Doom which is not 'default.cfg'.
+
+    See 'TIPS' section to know more about how '[C]onfig' can be useful.
+
+
+ QUICK OVERVIEW
+ **************
+
+
+ Let's have a look at the windows:
+
+
+ 'Wadset'	 : the main vertical window to the left. This is where you
+		   choose a level and optional patch to play.
+
+		   Press ENTER on a Wadset to create a server.
+
+		   Press DELETE to delete a Wadset (after confirmation).
+
+		   You can Duplicate, Rename, Create wadsets by using the
+		   WADSET menu options (use right mouse button or ESCAPE).
+
+
+ '[J]oin game'	 : in this window, you will see currently active Doomatic
+		   servers.
+
+		   If a server is already started, you will see 'playing'
+		   next to it. You can't join a game when it's already
+		   started.
+
+		   Press 'J' to join a server (if you see one!).
+
+
+ 'Game options'  : the main game options. These are general options that
+		   are active whatever WADSET you choose.
+
+		   The game options are:
+
+		   'Record [d]emo' : activate it if you want to record demos
+				     (LMP files).
+		   'T[u]rbo'	   : turbo value, enter 0 to disable it.
+		   '[T]imer'	   : timer value, enter 0 to disable timer.
+
+
+ 'Wadset defaults': each WADSET has its own associated settings.
+
+		    THIS IS A REALLY NICE FEATURE!
+
+		    It means that you will always have the right options
+		    for each map.
+
+		    Eg: you can have 'XXX.WAD' which is at MAP02 and is
+			better using 'Old deathmatch', and No monsters.
+
+			you can have 'YYY.WAD' which is at MAP05, plays
+			at skill level 3, with monsters.
+
+		    To set the options for a particular Wadset:
+
+		     1. highlight the Wadset into the WAdset list using
+			cursor [Up] and [Down] keys (don't press Enter!)
+
+		     2. the options for the currently highlighted wadset
+			are displayed in the 'WAdset default' window.
+
+		     3. the WAD files are displayed in the '[W]AD list'
+			window at the bottom of the screen.
+
+		    All the settings are saved when you quit DOOMATIC, so
+		    be careful.
+
+
+ QUICK TEST WADSET
+ *****************
+
+ The 'Quick test WadSet' allow you to quickly test new levels without having
+ to create a WadSet for it.
+
+     - enter the 'WadDir' mode by pressing TAB key. Check the 'WadDir' title
+       at the top of the left window.
+     - the WadDir window displays the current directory and the wad files.
+       Browse through your dirs until and locate a wad file that you'd like
+       to play.
+     - set the right options in the 'Quick test WadSet' window (map number,
+       skill, ...).
+     - if you want to play only this wad file, check that the 'Wad list'
+       window is empty, and press ENTER on the wad file.
+       if you want to use more than one wad file, use the SPACEBAR key to
+       add each wad file to the 'Wad list' window. Once it is done, press
+       the ENTER key.
+     - by pressing the ENTER key, you have created a server, you will be
+       asked a name for it: people who join your game will see it in the
+       Servers window.
+     - wait for other players to join, and use 'S' key as usual to Start
+       the game!
+
+
+ HOW TO CREATE A WADSET
+ **********************
+
+ In the future we will add an 'automatic Wadset creation' which scans for
+ your wad files and creates a Wadset for each one... but for now, you'll
+ have to setup them more or less by hand . Let's see how!
+
+ PLEASE NOTE!
+
+ *   You create WadSets only for the levels that you like to play often,
+     so that you can launch them in a breeze.
+
+ *   You don't need to create a Wadset when you want to quickly test
+     wad files, use the 'WadDir' mode for this (press 'TAB').
+
+ *   Only ONE person (the 'master') need to define WadSets!
+     Everybody who join your game will receive the WadSet, but it is not
+     recorded into their WadSet list (it's just temporary).
+
+ WadSets are very useful for compilations wads like 'DwangoX.wad'. Because
+ you have to remember which cool map you liked is at which map number...
+  with WadSets you can give a description for each cool map that you liked
+ into a Wad compilation, and simply launch each map by looking at its
+ description in the WadSet list.
+
+
+ There is 3 ways to create a Wadset (long to read, quick to do) :
+
+ 1. EASY CREATE A WADSET FROM 'WADDIR' MODE :
+
+    This mode is useful when you don't know exactly the name of your wads:
+
+	- press 'TAB' if you're not in WadDir mode (look at the top of the
+	  left window).
+	- Now you can browse through your directories using the mouse or
+	  keyboard (ENTER, CURSOR UP / DOWN).
+	- Press SPACE to add a WAD file to the Wad list (bottom window).
+	- Press SPACE again to remove a WAD file from the Wad list, or
+	  edit the Wad list (click on it, use 'W' key).
+	- choose the settings in the 'Quick test Wadset', like Map number,
+	  skill...
+	- Pressing 'ENTER' will create a server, like in WadSet mode.
+	- Enter a description that everybody will see when joining your
+	  game.
+
+    Now, suppose you liked that map, and you want to keep it into your
+    WadSet list :
+
+	Press 'INSERT' to add the 'Quick test WadSet' to the WadSet list.
+
+    The 'Quick test WadSet' is simply a temporary WadSet for launching
+    games without having to add it to your WadSet list.
+
+
+ 2. CREATE A WADSET IN 'WADSET' MODE :
+
+	- Choose 'Create Wadset' from the WadSet menu, or use 'INSERT' key.
+	- Enter a description for your Wadset (eg: 'Cool level with stairs')
+	- Your new Wadset is now highlighted in the Wadset list to the left.
+	  Because it is highlighted, you can change the settings for it:
+	  click on the different options in the 'Wadset defaults' window or
+	  use the bracketed keys.
+	- Enter the name of the external WAD files in the 'Wad list' window.
+
+
+    VERY NICE FEATURE !
+
+       Please note that since DOOMATIC does a RECURSIVE SEARCH of the files,
+      you don't need to type the paths to the external wad files : just type
+      the filename (with .WAD extension).
+
+
+
+ 3. CREATE A WADSET FROM AN EXISTING ONE :
+
+    This is useful for wad compilations, when you just have to change the
+    map number, you can duplicate a WadSet to keep the same settings and
+    wad list :
+
+	- Highlight a WadSet that you want to duplicate.
+	- Choose 'Duplicate' from the WadSet menu.
+	- Enter a description for the new Wadset.
+
+
+ USING THE MOUSE
+ ***************
+
+ If like me you like to click-click-click ... here's the tips.
+
+ *   Most options displayed on the screen can be clicked on. The mouse
+     cursor will disappear and the text cursor will appear when you have
+     to enter values with the keyboard. You can always use the ESCAPE key
+     to exit keyboard-edition.
+
+ *   Click once on a WadSet to select it.
+
+ *   Double-click on a WadSet to create a server (start a game).
+
+ *   Click on the upper-left corner of the screen to quit Doomatic.
+
+ *   Click on the [ Up ] and [Down] buttons on the WadDir or WadSet list
+     to move one line up or down. You can keep the button pressed to
+     continue to move.
+
+ *   The menu works like Amiga menus : you have to keep the right mouse
+     button pressed while navigating through the menu options. To select
+     a menu option, just release the right mouse button when the menu
+     option is highlighted. If that annoys you, you can use the ESCAPE
+     key to bring the menu.
+
+ *   Clicking the left mouse button in the 'Wad list' box, will enter the
+     Wad list edition just where you have clicked.
+
+
+
+ USEFUL KEYS
+ ***********
+
+ PLEASE NOTE!!! --> the F1, F2, F3 keys which are displayed in the lower
+		    bar are not implemented!
+
+
+
+ F5  - refresh servers.
+
+
+      DOOMATIC should work very fine by now, but if you have troubles when
+      creating/joining server, you can use:
+
+      Pressing this key will request all connected people over the IPX
+      network and refresh the server window.
+
+
+ F10 - quit Doomatic. You can use the menu option. You can also click on the
+       upper left corner to do this!
+
+
+
+
+ TAB - switch between WadSet and WadDir mode.
+
+       In WADSET mode you can:
+
+	  - create/edit/duplicate/rename/delete Wadsets.
+	  - launch game (press Enter on wadset)
+
+       In WADDIR mode you can:
+
+	  - browse through your drives
+	  - delete WAD files (DELETE key, need to confirm of course).
+	  - quick create wadset: press SPACEBAR on wad files to add them
+	     to the WAD list (bottom window). Choose the right settings,
+	     then press INSERT to add the WADSET to your WADSET list.
+
+	  - use SPACEBAR on wad files to add/remove them from the Wad list.
+
+
+	  - launch a game using current 'Quick test wadset' settings and
+	    Wad files (just try it).
+
+
+ MENU OPTIONS
+ ************
+
+ Most menu options should be self-explanatory, however, here is an overview
+ of the menu options.
+
+ DOOMATIC -> About :
+		     displays author information and version number.
+	  -> Quit  :
+		     guess what it does? ...
+
+ ------< The WadSet menu options are available in WADSET MODE only. >------
+ Switch between WadSet and WadDir mode using the TAB key.
+
+ WADSET   -> Create :
+		     create a WadSet 'by hand'.
+	  -> Delete :
+		     delete currently highlighted WadSet.
+	  -> Duplicate :
+		     create a copy of the current highlighted WadSet.
+	  -> Rename :
+		     change the description of the current highlighted WadSet.
+	  -> Check wadsets :
+		     NOT IMPLEMENTED
+		     this option will check missing wad files in your WadSets.
+
+ ------< The WadDir menu options are available in WADDIR MODE only. >------
+
+ WADDIR   -> Create WadSet :
+		     add the 'Quick test WadSet' to your WadSet list.
+	  -> Delete file :
+		     delete current highlighted wad file.
+	  -> Rename file :
+		     NOT IMPLEMENTED
+		     rename current highlighted wad file.
+
+
+ SERVER   -> Create :
+		     NOT IMPLEMENTED
+		     create a server with current highlighted WadSet.
+	  -> Kick Client :
+		     my favorite feature! Kick undesired client!
+		     The Client's 'Autojoin' feature will be disabled so that
+		     he/she doesn't re-join instantly.
+	  -> Refresh :
+		     refresh/update Servers window.
+
+ --------------------< The TOOL menu is NOT IMPLEMENTED! >-------------------
+
+ TOOLS	  -> Add :
+		     add a tool to the user's tool menu.
+	  -> Remove :
+		     remove a tool from the user's tool menu.
+
+ PREFS	  -> Autojoin :
+		     automatically join a new server! Useful when you play
+		     with friends at home and you know there will be only
+		     one server.
+	  -> Patch Wads first :
+		     NOT IMPLEMENTED
+		     Sorting feature : put the PATCH WadSets at the top of
+		     the WadSet list.
+	  -> Alphabetic sort :
+		     God knows why you would deactivate this.
+		     (of course, it sorts the WadSet list alphabetically)
+	  -> Usage sort :
+		     Sort the WadSet list by usage, most used (started)
+		     WadSets on top.
+	  -> Maxdemo :
+		     NOT IMPLEMENTED
+		     Edit doomatic.cfg if you want to change the maxdemo
+		     value.
+	  -> Run Lmpmast :
+		     When 'record demos' is active, you may or may not want
+		     to use LMPMAST to record the player names, comments,
+		     and see statistics.
+		     If you don't want to call LMPMAST, and God knows why
+		     you wouldn't want to keep the name of the players into
+		     your demos, then uncheck this.
+	  -> Rename demo :
+		     There's a special case where you might want to disable
+		     this feature: 1) you don't want to keep demos
+				   2) but you want to call LMPMAST to see the
+				      statistics.
+		     In this case, activate 'record demos', activate 'Run
+		     Lmpmast', and uncheck 'Rename demo'.
+
+ COLOR	  -> Ocean,
+	     Epicea,
+	     Dark,
+	     Blood,
+	     LSD,
+	     Nature : choose your preferred colors for the interface.
+		      some people are very sensible about colors you know...
+
+
+
+ KEYBOARD SHORTCUTS
+ ******************
+
+  C - Enter your Doom2 config name (default.cfg is used if nothing entered).
+
+  D - Toggle Record demo.
+
+  G - Cycle Gametype between Old deathmatch, deathmatch, cooperative.
+
+  J - Join game (choose a server in the Server window).
+
+  K - Cycle Skill between 1-2-3-4-5.
+
+  L - Cycle Preferred Color between Green-Indigo-Brown-Red.
+      This first to join will be the first to receive their favorite color.
+
+  M - Enter Map number, from 0-32.
+
+  N - Edit your name as player, identify yourself on the network, and
+      is recorded into demos.
+
+  O - Toggle NoMonsters.
+
+  R - Toggle Respawn (respawn monsters like in Nightmare skill).
+
+  S - Start a game (when you have created a server).
+
+  T - Enter Timer value, enter 0 to disable it.
+
+  U - Enter Turbo value, enter 0 to disable it.
+
+  W - Edit wad list for current highlited Wadset. Because of the RECURSIVE
+      search, you don't need to type the paths, but only the filename WITH
+      the .WAD extension.
+
+  X - Edit exe name, WITHOUT .EXE extension.
+
+
+  DEL - Delete a WadSet in WadSet mode,
+	delete a Wad file in WadDir mode (after confirm).
+
+  INS - Create WadSet in WadSet mode,
+	Quick-create WadSet in WadDir mode.
+
+  ESC - Bring up the menu, on the main screen. Use cursor keys to navigate.
+
+  F5  - refresh server window.
+
+  F10 - Quit Doomatic (you won't do such a thing?)
+
+
+
+ TIPS
+ ****
+
+ *   DOOMATIC always do a RECURSIVE SEARCH of the files (EXE and WADs)
+     this means you don't need to type the path for the wad names in the
+     Wad list of each WadSet.
+
+     The RECURSIVE SEARCH starts at the base directory of Doom2 (where
+     Doom2.exe and Doom2.wad is located), and then browse through all
+     subdirectories. It will NOT search on other drives, neither in
+     PARENT directories of Doom2 dir (this would take too much time!).
+
+     This means also that everybody can organize its directories and wad
+     files as he/she wishes. Eg: Player A can have COOL.WAD in 'wads' dir
+     and Player B can have it into a 'coolmaps' dir.
+
+     This is a really nice feature because DOOMATIC won't make multiple
+     copies of the same wad files when copying the files through network.
+
+     Even the EXE patches can be moved into subdirectories, since they are
+     executed from Doom2 base dir. it will work!
+
+
+ *   About the '[C]onfig' option : sometimes you let someone play on your
+     machine but he/she doesn't have the same options... so you run Doom
+     SETUP, change the controls, play, run SETUP again, and so on...
+
+     Now the nightmare is finished:
+
+     Run 'SETUP -config yourname.CFG' for each player who plays on your
+     machine. Eg: SETUP -config fab.CFG, SETUP -config boris.CFG.
+
+     You'll have different .CFG files, now in Doomatic, when somebody else
+     play on your machine, he/she just enter his name into the '[C]onfig'
+     option (the name used when calling SETUP).
+
+     DOOMATIC will warn you when you enter the '[C]onfig' option, if it
+     doesn't find the config file.
+
+
+ *   When you have defined lots of WADSETS, remember to do a backup of the
+     doomatic.cfg file from time to time.
+
+
+ *   DOOMATIC configuration file 'doomatic.cfg' is a text-file, so you
+     can edit it by hand if you wish.
+
+
+ *   If you are developing levels for Doom, you can create a batch file that
+     add some lines to the doomatic.cfg file. This way you can automatically
+     add a WADSET for your level with the right settings, to the user's
+     Wadset list.
+
+     Example:
+
+	Here's a sample of your 'level install' :
+	(I'm not sure whether pure DOS 'ECHO' can echo at the end of a file
+	 that's why I use copy)
+
+	---------------------------< cut here >-------------------------------
+	copy doomatic.cfg dtic.cfg >NUL
+	copy /A mylevel.cfg + dtic.cfg doomatic.cfg >NUL
+	del dtic.cfg >NUL
+	----------------------------------------------------------------------
+
+	Here's what your 'level.cfg' could look like :
+
+	---------------------------< cut here >-------------------------------
+	// <- use this for comment
+	#WADSET
+	desc = "My very cool level!"
+	gametype = 1		  // Old deathmatch
+	wads = "hipafrag.Wad"
+	----------------------------------------------------------------------
+
+
+ *   You can change the 'maxdemo' setting by editing the doomatic.cfg file.
+     (default is 2048).
+
+
+ *   When editing wadnames into the 'Wad list' window (bottom of screen),
+     you can use CURSOR UP / DOWN keys to move to the previous / next wad.
+
+
+ DOOMATIC FEATURES
+ *****************
+
+    Client/Server model …-la-Quake :
+	one person chooses the level and options, everybody else
+	simply joins the game!
+
+    Multiple Servers :
+	if more than 4 persons are using Doomatic, you may see
+	multiple Servers, and join the one of your choice. You
+	can even see games that already started, so you know when
+	people are playing Doom over the network !
+
+    Automatic file transfer if file is missing :
+	when the Server starts the game, everyone who is missing
+	files will receive them via network. You will receive the
+	files in a sub directory of Doom called 'DOWNLOAD'.
+
+    Recursive search of the files :
+	put your wad files wherever you want, DOOMATIC will
+	search for them before copying. So you will never have
+	two copies of the same file in separate directories.
+
+    WADSET collection :
+	a WADSET is a grouping of levels, patches, and game options
+	like 'nomonsters, skill, map #' that are appropriate for the
+	level. Once you have setup a WADSET for your preferred
+	levels, you will never enter the options again, you just
+	press 'Enter' on a WADSET, and the game is launched !
+
+    Automatic WADSET creation :
+	choose the wad files into a directory, enter a description
+	for your wadset and Doomatic adds the Wadset to your Wadset list.
+
+    Edit - Rename - Delete - Duplicate Wadsets :
+	each Wadset has its own description , so you can find easily
+	your preferred levels !
+
+    Usage sort :
+	your WADSETs can be sorted in order of usage! The ones at
+	the top of the list are the ones that you have played the most !
+
+    Enter your Name :
+	when you join a game, everybody else see your name, and
+	the names will be recorded into your demos !
+
+    Choose your Config : if you let
+	someone play on your machine, no need to setup the config
+	again and again, each player can have its own config.
+
+    Choose your preferred Color :
+	the first players to join a game will receive their chosen
+	color, the later to join will receive the remaining
+	colors.
+
+    Support for EXE patches :
+	with each WADSET you can associate an EXE patch. A 'patch'
+	Wadset can be activated on the top of another Wadset. You
+	select the patch Wadset by pressing 'Space' on it, then
+	you press 'Enter' on any other Wadset to launch the game.
+
+    Wad manager :
+	you can rename and delete files from DOOMATIC.
+
+    Nice text-mode interface :
+	with menu and mouse. You can use the keyboard if you like so.
+
+    Clean code, runs under Win95 :
+	provided you have enough memory, DOOMATIC can run in a DOS
+	box and will run perfectly! (You should have at least
+	16mb to run Doom2 under Win95).
+
+    and lot of more!
+	(in Boris's own words)
+
+
+
+
+ USING EXE PATCHES WITH DOOMATIC ( USING TWO WADSETS AT THE SAME TIME )
+ ********************************--------------------------------------
+
+ Quick n dirty info :l
+
+
+    Just create a Wadset with a name like 'my cool patch',
+    then enter the name of the patched Doom2 EXE, WITHOUT .EXE extension,
+    in the 'E[x]e' option of the 'WadSet defaults' window.
+
+    Type in the external wad files that are needed by the patch into
+    the Wad list (bottom window). Eg: 'gfx.wad snd.wad'.
+
+    Now you can activate the patch on top of any other cool map you'd like
+    to play by pressing SPACEBAR on the patch WadSet. You'll see a '*'
+    before it, which indicates that this patch is currently active.
+
+    Press ENTER on any other WadSet to play it with the patch.
+
+    Press SPACEBAR again on the patch WadSet if you want to de-activate it.
+
+    You can only activate ONE patch WadSet at a time.
+
+    IMPORTANT :
+
+     - when you activate a patch WadSet, if you have entered an EXE with it,
+       the EXE of the patch WadSet will be used in place of the one that
+       maybe defined in the other 'level' WadSet.
+
+     - the wad files of the patch WadSet are activated AFTER the ones of the
+       'level' WadSet. This is to ensure that resources needed by the patch
+       will not be replaced by resources defined in the wad files of the
+       'level' WadSet.
+
+     - Other settings like skill, map number, and such doesn't matter for
+       a patch WadSet, the settings of the 'level' WadSet will be used.
+
+
+
+ CONTACT THE WONDERFUL - WUNDERBAR AUTHORS OF THE WONDERFUL - WUNDERBAR
+ ************************** D O O M A T I C ***************************
+
+ Doomatic only supports IPX network by now.
+ We'd like to add TCP/IP support and/or modem support in the future...
+
+ But you should understand that by doing such a util for Doom today in
+ the end of 1997, we'd like to receive some feedback !
+
+ Official DOOMATIC site:
+			   Visit our
+		 -Leprechaun doom- Web site at:
+	   HTTP://student.ulb.ac.be/~bpereira/leprech
+
+ Contact:
+	 Denis Fabrice (DeF-46)     - interface designer
+	 Pereira Boris (TetrisMan)  - IPX code
+
+ Thanks to:
+
+	 lots of people actually (see on our Web page).
+	 well.. everybody in the Doom scene if you want to know.
+
+ Email:
+	     bpereira@ulb.ac.be

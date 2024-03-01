@@ -1,0 +1,56 @@
+Wed Apr 22 19:55:46 1998	<udo@umserver.umnet.de>
+
+	* If the DSP device is busy or no sound card available
+	  sndserver now continues to work, just without playing
+	  the sounds. So XDoom continues to work too in this case
+	  and doesn't terminate anymore.
+
+Tue Mar  3 18:35:53 1998	<udo@umserver.umnet.de>
+
+	* 8 bit sound support improved like done for the xdoom
+	  builtin sound handling, see xdoom's log file too.
+
+Wed Feb 11 13:36:50 1998	<udo@umserver.umnet.de>
+
+	* Ported to Unixware 7.
+
+Mon Jan 26 13:03:35 1998	<udo@umserver.umnet.de>
+
+	* Added test for environment variable DOOM_SOUND_SAMPLEBITS
+	  to override detection of a 16bit sound card and activate
+	  conversion to 8bit sound samples. There are 16bit sound
+	  cards which aren't SoundBlaster compatible and changing
+	  the sources to force it playing 8bit samples worked with
+	  this sound card. I added this environment variable,
+	  so people won't need to modify the source anymore.
+
+	* Support for tnt.wad and plutonia.wad added
+
+	* Changed order so that sndserver looks for the WADs
+	  in the same order then xdoom does.
+
+Thu Jan  1 16:47:37 1998	<udo@umserver.umnet.de>
+
+	* This ChangeLog added, who knows how much work will
+	  be done here, so it's better to have separate log
+	  for sndserver too.
+
+	* The sound card initialization sequence was the opposite
+	  as the 4Front OSS documentation says, how this should
+	  be done. It might cause problems with some sound cards,
+	  I don't know, I just fixed it and it's a better style
+	  anyway to coincide with documented API's.
+
+Wed Dec 31 1997			<udo@umserver.umnet.de>
+
+	* Sound support for 8bit sound cards added. The server
+	  detected the sample format capabilities of the sound
+	  hardware already and the conversion from the signed
+	  short sounds samples to 8bit unsigned is pretty easy
+	  to do. Also I modified the text output, so that it
+	  just shows which type of card it's using, instead of
+	  the original error message, if the hardware isn't
+	  able to play the 16bit signed samples.
+	  This should work with all PC UNIX's, but I have tested
+	  it under UW 2.1.2 only, because that is the only system
+	  I have with old 8bit sound hardware.

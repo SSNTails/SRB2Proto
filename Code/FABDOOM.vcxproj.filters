@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="win32app">
+      <UniqueIdentifier>{b094b7f5-4f84-4b57-9d83-ca44f4fe7ac2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{0a5daa1e-2748-4f92-a0b3-c8f756d201c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logs">
+      <UniqueIdentifier>{766f0310-32f3-4566-bef5-6fd4b15dea0f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="win32\dx_error.c">
+      <Filter>win32app</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\fabdxlib.c">
+      <Filter>win32app</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\Mid2strm.c">
+      <Filter>win32app</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_cd.c">
+      <Filter>win32app</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_dbg.c">
+      <Filter>win32app</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_dll.c">
+      <Filter>win32app</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_main.c">
+      <Filter>win32app</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_net.c">
+      <Filter>win32app</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_snd.c">
+      <Filter>win32app</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_sys.c">
+      <Filter>win32app</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_vid.c">
+      <Filter>win32app</Filter>
+    </ClCompile>
+    <ClCompile Include="Dstrings.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="g_state.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="M_fixed.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="M_swap.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="Tables.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="Am_map.c" />
+    <ClCompile Include="Command.c" />
+    <ClCompile Include="Console.c" />
+    <ClCompile Include="D_clisrv.c" />
+    <ClCompile Include="D_items.c" />
+    <ClCompile Include="D_main.c" />
+    <ClCompile Include="D_net.c" />
+    <ClCompile Include="D_netcmd.c" />
+    <ClCompile Include="D_netfil.c" />
+    <ClCompile Include="Dehacked.c" />
+    <ClCompile Include="F_finale.c" />
+    <ClCompile Include="F_wipe.c" />
+    <ClCompile Include="G_game.c" />
+    <ClCompile Include="G_input.c" />
+    <ClCompile Include="Hu_stuff.c" />
+    <ClCompile Include="i_tcp.c" />
+    <ClCompile Include="Info.c" />
+    <ClCompile Include="M_argv.c" />
+    <ClCompile Include="M_bbox.c" />
+    <ClCompile Include="M_cheat.c" />
+    <ClCompile Include="M_menu.c" />
+    <ClCompile Include="M_misc.c" />
+    <ClCompile Include="M_random.c" />
+    <ClCompile Include="P_ceilng.c" />
+    <ClCompile Include="P_doors.c" />
+    <ClCompile Include="P_enemy.c" />
+    <ClCompile Include="P_fab.c" />
+    <ClCompile Include="P_floor.c" />
+    <ClCompile Include="P_inter.c" />
+    <ClCompile Include="P_lights.c" />
+    <ClCompile Include="P_map.c" />
+    <ClCompile Include="P_maputl.c" />
+    <ClCompile Include="P_mobj.c" />
+    <ClCompile Include="P_plats.c" />
+    <ClCompile Include="P_pspr.c" />
+    <ClCompile Include="P_saveg.c" />
+    <ClCompile Include="P_setup.c" />
+    <ClCompile Include="P_sight.c" />
+    <ClCompile Include="P_spec.c" />
+    <ClCompile Include="P_switch.c" />
+    <ClCompile Include="P_telept.c" />
+    <ClCompile Include="P_tick.c" />
+    <ClCompile Include="P_user.c" />
+    <ClCompile Include="Qmus2mid.c" />
+    <ClCompile Include="R_bsp.c" />
+    <ClCompile Include="R_data.c" />
+    <ClCompile Include="R_draw.c" />
+    <ClCompile Include="R_draw8.c" />
+    <ClCompile Include="R_main.c" />
+    <ClCompile Include="R_plane.c" />
+    <ClCompile Include="R_segs.c" />
+    <ClCompile Include="R_sky.c" />
+    <ClCompile Include="r_splats.c" />
+    <ClCompile Include="R_things.c" />
+    <ClCompile Include="S_sound.c" />
+    <ClCompile Include="Screen.c" />
+    <ClCompile Include="Sounds.c" />
+    <ClCompile Include="St_lib.c" />
+    <ClCompile Include="St_stuff.c" />
+    <ClCompile Include="V_video.c" />
+    <ClCompile Include="W_wad.c" />
+    <ClCompile Include="Wi_stuff.c" />
+    <ClCompile Include="Z_zone.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="win32\fabdxlib.h">
+      <Filter>win32app</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\Mid2strm.h">
+      <Filter>win32app</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\win_dbg.h">
+      <Filter>win32app</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\win_dll.h">
+      <Filter>win32app</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\win_main.h">
+      <Filter>win32app</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\win_vid.h">
+      <Filter>win32app</Filter>
+    </ClInclude>
+    <ClInclude Include="Doomtype.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="g_state.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="M_fixed.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="M_swap.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="Tables.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="Am_map.h" />
+    <ClInclude Include="byteptr.h" />
+    <ClInclude Include="Command.h" />
+    <ClInclude Include="Console.h" />
+    <ClInclude Include="D_clisrv.h" />
+    <ClInclude Include="D_englsh.h" />
+    <ClInclude Include="D_event.h" />
+    <ClInclude Include="D_french.h" />
+    <ClInclude Include="D_items.h" />
+    <ClInclude Include="D_main.h" />
+    <ClInclude Include="D_net.h" />
+    <ClInclude Include="D_netcmd.h" />
+    <ClInclude Include="d_netfil.h" />
+    <ClInclude Include="D_player.h" />
+    <ClInclude Include="D_think.h" />
+    <ClInclude Include="D_ticcmd.h" />
+    <ClInclude Include="Dehacked.h" />
+    <ClInclude Include="Doomdata.h" />
+    <ClInclude Include="Doomdef.h" />
+    <ClInclude Include="Doomstat.h" />
+    <ClInclude Include="Dstrings.h" />
+    <ClInclude Include="F_finale.h" />
+    <ClInclude Include="F_wipe.h" />
+    <ClInclude Include="G_game.h" />
+    <ClInclude Include="G_input.h" />
+    <ClInclude Include="Hu_stuff.h" />
+    <ClInclude Include="I_net.h" />
+    <ClInclude Include="I_sound.h" />
+    <ClInclude Include="I_system.h" />
+    <ClInclude Include="I_video.h" />
+    <ClInclude Include="Info.h" />
+    <ClInclude Include="Keys.h" />
+    <ClInclude Include="M_argv.h" />
+    <ClInclude Include="M_bbox.h" />
+    <ClInclude Include="M_cheat.h" />
+    <ClInclude Include="M_menu.h" />
+    <ClInclude Include="M_misc.h" />
+    <ClInclude Include="M_random.h" />
+    <ClInclude Include="P_fab.h" />
+    <ClInclude Include="P_inter.h" />
+    <ClInclude Include="P_local.h" />
+    <ClInclude Include="p_maputl.h" />
+    <ClInclude Include="P_mobj.h" />
+    <ClInclude Include="P_pspr.h" />
+    <ClInclude Include="P_saveg.h" />
+    <ClInclude Include="P_setup.h" />
+    <ClInclude Include="P_spec.h" />
+    <ClInclude Include="P_tick.h" />
+    <ClInclude Include="R_bsp.h" />
+    <ClInclude Include="R_data.h" />
+    <ClInclude Include="R_defs.h" />
+    <ClInclude Include="R_draw.h" />
+    <ClInclude Include="R_local.h" />
+    <ClInclude Include="R_main.h" />
+    <ClInclude Include="R_plane.h" />
+    <ClInclude Include="R_segs.h" />
+    <ClInclude Include="R_sky.h" />
+    <ClInclude Include="r_splats.h" />
+    <ClInclude Include="R_state.h" />
+    <ClInclude Include="R_things.h" />
+    <ClInclude Include="S_sound.h" />
+    <ClInclude Include="Screen.h" />
+    <ClInclude Include="Sounds.h" />
+    <ClInclude Include="St_lib.h" />
+    <ClInclude Include="St_stuff.h" />
+    <ClInclude Include="V_video.h" />
+    <ClInclude Include="Vid_copy.h" />
+    <ClInclude Include="W_wad.h" />
+    <ClInclude Include="Wi_stuff.h" />
+    <ClInclude Include="Z_zone.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="win32\winlgcy.rc">
+      <Filter>win32app</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="_logs\log.txt">
+      <Filter>Logs</Filter>
+    </Text>
+    <Text Include="_logs\Logboris.txt">
+      <Filter>Logs</Filter>
+    </Text>
+    <Text Include="_logs\tokin.txt">
+      <Filter>Logs</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="win32\valve.ico" />
+  </ItemGroup>
+</Project>

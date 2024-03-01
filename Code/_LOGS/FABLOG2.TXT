@@ -1,0 +1,210 @@
+=======================================================================
+faB log of changes on DOOM LEGACY, continued from the day after release
+v1.20 of Doom LEGACY.
+-----------------------------------------------------------------------
+THE DOOM LEGACY PROJECT		             Contact: <legacy@frag.com>
+                                                   <bpereira@ulb.ac.be>
+=======================================================================
+
+Project:  DOOM Legacy
+Web site:  http://www.frag.com/doomlegacy
+Log author: Denis Fabrice
+
+
+
+Fri 22-05-1998:
+===============
+
+As usual, the neverending story: little bugs to fix this and there..
+we have to choose, we want the most stable version for the best
+enjoyment..thus... boring bug fixes. I want to have fun!! argh..
+
+Most reported bugs:
+-   all demons are now translucent (oops!)
+-   less video modes are detected since I have updated vid_vesa.c
+    for more compatibility with NT.
+-   slow turn in high resolutions : Boris has fixed already.
+-   demos don't record properly, Boris fixed it.
+-   add keypad arrows for console (for shan tsung great bug reporter!)
+-   shift in console pops up menu..
+
+Fab lazy boy:
+-   statusbar draws under the view in fullscreen!!! what a shame.
+
+Todo for next update (very soon!):
+-   finish EDITING.TXT, WHATSNEW.TXT : the later is a in-depth
+    review of the changes, boring TNT style.
+-   put a cool patch on the site as demonstration of sprites in pwad?
+    Anubis is great.
+-   restore water at map30 until it has a real editing-support ?
+    may even add some cheats to play with it, eg: IDFLOOD, flood level :)
+-   get da hands back in the dirty ASM code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    (too much VB5.0 coding)
+-   comment debug messages (p_setup, p_spec, r_things, r_data)
+
+*   console.c : eat the shift keydown, so menu doesn't popup.
+
+
+Sun 24-05-1998:
+===============
+
+*   vid_vesa.c : fixed nasty bug with __tb buffer trashed, and video
+	    modes detection was faulty with some graphics cards.
+
+Mon 25-05-1998:
+===============
+
+*   p_fab.c : Demons are now opaque, for demons/spectres, the MF_SHADOW
+	 bit is used, not per frame (just a line of code removed)
+
+*   p_inter.c : changed frag messages, and removed the FUCK word as
+	   requested.. crazy American people.
+
+*   d_netcmd.c, r_bsp.c : restored the water, but with a 'water' command,
+	  until it is finished. Also set con_cilpviewtop 10 lines
+	  less so that water don't duplicate console bottom lines.
+	  (see console.c)
+
+
+Tue 26-05-1998:
+===============
+
+*   console.c : monstruous hack to center the 'I' letter.. modified
+	   the letter's patch leftoffset during the console draw.
+
+*   console.c : rewritten CONS_Print, fixed word wrap.
+
+*   m_cheat.c : added newline at end of cheat msgs
+
+
+Wed 27-05-1998:
+===============
+
+*   st_stuff.c, .. : added viewsize 12, viewsize 11 = fullscreen + overlay
+		viewsize 12 = fullscreen without overlay.
+
+Wed 16-07-1998:
+===============
+
+At last, I'm back to the code!
+
+*   i_cdmus.c : started cd audio using Brennan Underwood's BCD library.
+	   Cd init/play/info.
+
+Sun 19-07-1998:
+===============
+
+*   i_cdmus.c : finished cd audio, added open/stop/play/reset/remap/...
+	   added 'cd_update' var, as my friend's crap cd driver
+	   took up to a second just to query cd busy status. In
+	   such case 'cd_update 0', will no more query the cd
+	   but then loop/next track are no more automatic.
+
+*   console.txt, legacy.txt : updated for cd commands.
+
+*   legacy.txt : added cheat section 'idcd##' and 'idfly' documented.
+
+*   faq.txt : added 2 trouble-shoot for cd audio music (bad slow driver,
+	 and need of mscdex).
+
+Sat-Sun 26-07-1998:
+===================
+
+*   p_fab.c : changed 'bloodtime' into a multiplayer variable.
+
+*   command.c : added CV_NOINIT so that the 'onchange' function is
+	   not called at the CV_RegisterVar time, for CV_CALL
+	   vars.
+
+Sat 02-08-1998:
+===============
+
+*   r_things.c : add basic skins code, simply check in pwad for
+	    S_SKIN markers, the name of the skin is in the
+	    S_SKIN marker resource. Modified R_AddSpriteDefs
+	    so that a part of it is usable for skins loading
+	    (extracted code into R_AddSingleSpriteDefs)
+
+*   m_menu.c : added skin in multiplayer->setup menu.
+
+    Todo: send skin change through network, put skin in player struct,
+     write skin documentation (how to do a skins wad..)
+
+
+Sun 02-08-1998:
+===============
+
+*   r_things.c, d_netcmd.c : made skin as network and demo record ok.
+			skin uses a name, so that people can have
+			different skins loaded, it doesnt depend on
+			the order.
+
+*   p_mobj.c, p_mobj.h : added 'spritedef' override in mobj_t struct so
+	 that dead bodies retain the skin of the player (when the
+	 player respawns, the mobj is detached from the player).
+	 (more or less hack, should have sprite use skin's sprite)
+
+*   d_main.c : uses '-deh' too for dehacked, like Boom & DosDoom so that
+	  a batch file can use '-deh' for all ports.
+
+
+Tue 04-08-1998:
+===============
+
+
+*   legacy.txt : added '-nocd', forgot to document it in last update.
+
+*   bcd.c, bcd.h : Brennan Underwood fixed the bug, recompiled and
+	      it doesn't crash anymore with Data cd's ! cool!
+
+
+Sat 08-Aug-1998:
+================
+
+*   d_netcmd.c : fixed with Boris forgot demoversion test in skins
+	    for GotNameAndColor().. screwed older demos.
+
+
+Sat 09-Aug-1998:
+================
+
+*   d_main.c : do not render statusbar overlay while in Death view
+	  (just looks better have a clear full view when dead)
+
+*   p_spec : added 'you found a secret area!' message when secret
+	sector is found.
+
+*   p_mobj.c, p_spec.c : added MF_JUSTHITFLOOR so SpecialSector damage
+	does instant damage when landing after a jump, you can't
+	no more escape from lava damage by jumping like a monkey.
+
+*   info.c : added 'MT_SMOK' (not same as MT_SMOKE), for smoke puffs
+	when damaged in lava/slime.
+
+*   sounds.c : added 2 water sounds splash and gloop, gloop when entering
+	  water, splash when moving in
+
+*   info.c : added MT_SPLASH for water splashes
+
+
+
+Thu 13-Aug-1998:
+================
+
+*   f_finale.c : fixed the finale scaling (characters, text & bossback)
+
+
+Wed 19-Aug-1998:
+================
+
+*   infomobj.c : just noticed in MAP23 the barrels didn't explode when
+	    the mancubus shoot at the player.. in fact the barrels
+	    height changed a while ago from 42 to 30 so they could
+	    be climbed but it didn't work anyway.. the height
+	    still need to be smaller than 42, because the graphics
+	    doesn't correspond to that height, but I've set it to
+	    32 instead of 30 and now they explode with the mancubus
+	    shots.
+
+
+[log not updated until v1.25 release.. beat me]

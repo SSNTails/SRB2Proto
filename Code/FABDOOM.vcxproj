@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>fabdoom</ProjectName>
+    <SccProjectName />
+    <SccLocalPath />
+    <ProjectGuid>{8DB52FB0-BC97-4DA8-847F-A2C511BBDB26}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>false</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;__WIN32__;__MSC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Debug\FABDOOM.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Debug\FABDOOM.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x040c</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\FABDOOM.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>dinput8.lib;dxguid.lib;dsound.lib;ddraw.lib;winmm.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+      <Message />
+    </CustomBuildStep>
+    <CustomBuild>
+      <Command>nasm -g -o $(IntDir)%(Filename).obj -f win32 "%(FullPath)"</Command>
+    </CustomBuild>
+    <CustomBuild>
+      <Message>Compiling $(Filename).nas with NASM...</Message>
+    </CustomBuild>
+    <CustomBuild>
+      <Outputs>$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;__WIN32__;__MSC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <PrecompiledHeaderOutputFile>.\Release\FABDOOM.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\FABDOOM.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x040c</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\FABDOOM.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>dxguid.lib;dinput8.lib;dsound.lib;ddraw.lib;winmm.lib;wsock32.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+      <Message />
+    </CustomBuildStep>
+    <CustomBuild>
+      <Command>nasm -g -o $(IntDir)%(Filename).obj -f win32 "%(FullPath)"</Command>
+    </CustomBuild>
+    <CustomBuild>
+      <Message>Compiling $(Filename).nas with NASM...</Message>
+    </CustomBuild>
+    <CustomBuild>
+      <Outputs>$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Am_map.c" />
+    <ClCompile Include="Command.c" />
+    <ClCompile Include="Console.c" />
+    <ClCompile Include="Dehacked.c" />
+    <ClCompile Include="Dstrings.c" />
+    <ClCompile Include="D_clisrv.c" />
+    <ClCompile Include="D_items.c" />
+    <ClCompile Include="D_main.c" />
+    <ClCompile Include="D_net.c" />
+    <ClCompile Include="D_netcmd.c" />
+    <ClCompile Include="D_netfil.c" />
+    <ClCompile Include="F_finale.c" />
+    <ClCompile Include="F_wipe.c" />
+    <ClCompile Include="G_game.c" />
+    <ClCompile Include="G_input.c" />
+    <ClCompile Include="g_state.c" />
+    <ClCompile Include="Hu_stuff.c" />
+    <ClCompile Include="Info.c" />
+    <ClCompile Include="i_tcp.c" />
+    <ClCompile Include="M_argv.c" />
+    <ClCompile Include="M_bbox.c" />
+    <ClCompile Include="M_cheat.c" />
+    <ClCompile Include="M_fixed.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;__WIN32__;__MSC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="M_menu.c" />
+    <ClCompile Include="M_misc.c" />
+    <ClCompile Include="M_random.c" />
+    <ClCompile Include="M_swap.c" />
+    <ClCompile Include="P_ceilng.c" />
+    <ClCompile Include="P_doors.c" />
+    <ClCompile Include="P_enemy.c" />
+    <ClCompile Include="P_fab.c" />
+    <ClCompile Include="P_floor.c" />
+    <ClCompile Include="P_inter.c" />
+    <ClCompile Include="P_lights.c" />
+    <ClCompile Include="P_map.c" />
+    <ClCompile Include="P_maputl.c" />
+    <ClCompile Include="P_mobj.c" />
+    <ClCompile Include="P_plats.c" />
+    <ClCompile Include="P_pspr.c" />
+    <ClCompile Include="P_saveg.c" />
+    <ClCompile Include="P_setup.c" />
+    <ClCompile Include="P_sight.c" />
+    <ClCompile Include="P_spec.c" />
+    <ClCompile Include="P_switch.c" />
+    <ClCompile Include="P_telept.c" />
+    <ClCompile Include="P_tick.c" />
+    <ClCompile Include="P_user.c" />
+    <ClCompile Include="Qmus2mid.c" />
+    <ClCompile Include="R_bsp.c" />
+    <ClCompile Include="R_data.c" />
+    <ClCompile Include="R_draw.c" />
+    <ClCompile Include="R_draw8.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="R_main.c" />
+    <ClCompile Include="R_plane.c" />
+    <ClCompile Include="R_segs.c" />
+    <ClCompile Include="R_sky.c" />
+    <ClCompile Include="r_splats.c" />
+    <ClCompile Include="R_things.c" />
+    <ClCompile Include="Screen.c" />
+    <ClCompile Include="Sounds.c" />
+    <ClCompile Include="St_lib.c" />
+    <ClCompile Include="St_stuff.c" />
+    <ClCompile Include="S_sound.c" />
+    <ClCompile Include="Tables.c" />
+    <ClCompile Include="V_video.c" />
+    <ClCompile Include="win32\dx_error.c" />
+    <ClCompile Include="win32\fabdxlib.c" />
+    <ClCompile Include="win32\Mid2strm.c" />
+    <ClCompile Include="win32\win_cd.c" />
+    <ClCompile Include="win32\win_dbg.c" />
+    <ClCompile Include="win32\win_dll.c" />
+    <ClCompile Include="win32\win_main.c" />
+    <ClCompile Include="win32\win_net.c" />
+    <ClCompile Include="win32\win_snd.c" />
+    <ClCompile Include="win32\win_sys.c" />
+    <ClCompile Include="win32\win_vid.c" />
+    <ClCompile Include="Wi_stuff.c" />
+    <ClCompile Include="W_wad.c" />
+    <ClCompile Include="Z_zone.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Am_map.h" />
+    <ClInclude Include="byteptr.h" />
+    <ClInclude Include="Command.h" />
+    <ClInclude Include="Console.h" />
+    <ClInclude Include="Dehacked.h" />
+    <ClInclude Include="Doomdata.h" />
+    <ClInclude Include="Doomdef.h" />
+    <ClInclude Include="Doomstat.h" />
+    <ClInclude Include="Doomtype.h" />
+    <ClInclude Include="Dstrings.h" />
+    <ClInclude Include="D_clisrv.h" />
+    <ClInclude Include="D_englsh.h" />
+    <ClInclude Include="D_event.h" />
+    <ClInclude Include="D_french.h" />
+    <ClInclude Include="D_items.h" />
+    <ClInclude Include="D_main.h" />
+    <ClInclude Include="D_net.h" />
+    <ClInclude Include="D_netcmd.h" />
+    <ClInclude Include="d_netfil.h" />
+    <ClInclude Include="D_player.h" />
+    <ClInclude Include="D_think.h" />
+    <ClInclude Include="D_ticcmd.h" />
+    <ClInclude Include="F_finale.h" />
+    <ClInclude Include="F_wipe.h" />
+    <ClInclude Include="G_game.h" />
+    <ClInclude Include="G_input.h" />
+    <ClInclude Include="g_state.h" />
+    <ClInclude Include="Hu_stuff.h" />
+    <ClInclude Include="Info.h" />
+    <ClInclude Include="I_net.h" />
+    <ClInclude Include="I_sound.h" />
+    <ClInclude Include="I_system.h" />
+    <ClInclude Include="I_video.h" />
+    <ClInclude Include="Keys.h" />
+    <ClInclude Include="M_argv.h" />
+    <ClInclude Include="M_bbox.h" />
+    <ClInclude Include="M_cheat.h" />
+    <ClInclude Include="M_fixed.h" />
+    <ClInclude Include="M_menu.h" />
+    <ClInclude Include="M_misc.h" />
+    <ClInclude Include="M_random.h" />
+    <ClInclude Include="M_swap.h" />
+    <ClInclude Include="P_fab.h" />
+    <ClInclude Include="P_inter.h" />
+    <ClInclude Include="P_local.h" />
+    <ClInclude Include="p_maputl.h" />
+    <ClInclude Include="P_mobj.h" />
+    <ClInclude Include="P_pspr.h" />
+    <ClInclude Include="P_saveg.h" />
+    <ClInclude Include="P_setup.h" />
+    <ClInclude Include="P_spec.h" />
+    <ClInclude Include="P_tick.h" />
+    <ClInclude Include="R_bsp.h" />
+    <ClInclude Include="R_data.h" />
+    <ClInclude Include="R_defs.h" />
+    <ClInclude Include="R_draw.h" />
+    <ClInclude Include="R_local.h" />
+    <ClInclude Include="R_main.h" />
+    <ClInclude Include="R_plane.h" />
+    <ClInclude Include="R_segs.h" />
+    <ClInclude Include="R_sky.h" />
+    <ClInclude Include="r_splats.h" />
+    <ClInclude Include="R_state.h" />
+    <ClInclude Include="R_things.h" />
+    <ClInclude Include="Screen.h" />
+    <ClInclude Include="Sounds.h" />
+    <ClInclude Include="St_lib.h" />
+    <ClInclude Include="St_stuff.h" />
+    <ClInclude Include="S_sound.h" />
+    <ClInclude Include="Tables.h" />
+    <ClInclude Include="Vid_copy.h" />
+    <ClInclude Include="V_video.h" />
+    <ClInclude Include="win32\fabdxlib.h" />
+    <ClInclude Include="win32\Mid2strm.h" />
+    <ClInclude Include="win32\win_dbg.h" />
+    <ClInclude Include="win32\win_dll.h" />
+    <ClInclude Include="win32\win_main.h" />
+    <ClInclude Include="win32\win_vid.h" />
+    <ClInclude Include="Wi_stuff.h" />
+    <ClInclude Include="W_wad.h" />
+    <ClInclude Include="Z_zone.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="win32\winlgcy.rc">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">0x0409</Culture>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="_logs\log.txt" />
+    <Text Include="_logs\Logboris.txt" />
+    <Text Include="_logs\tokin.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="win32\valve.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
