@@ -14,6 +14,8 @@ Here is a cleaned up copy of the files, with (hopefully) all of the copyrighted 
 
 This prototype is early enough, that while custom EXE changes were going on, the WAD files included are remarkably compatible with vanilla Doom Legacy 1.28. The newer player sprites are contained in test2.wad, while the older, original player sprites are in srb2.wad still. I'm sure someone could rewind the clock on the files a little bit, and load up regular Doom Legacy 1.28 (along with test.deh, which is why it is included), set GRAVITY 0.35, and be on their way!
 
+#### If you get an error, "I_RegisterSong: StreamBufferSetup FAILED", that means you must use the -nomusic parameter to launch the game.
+
 #### File descriptions:
 * autoexec.cfg - Sets up some very interesting camera control bindings on boot
 * realhpz.wad  - Hidden Palace Zone, possibly the FIRST map ever made for SRB2. So early, it was even started in Boom.
