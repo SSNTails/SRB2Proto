@@ -1,5 +1,5 @@
 # Sonic Robo Blast 2
-#### February, 2000 Prototype
+#### March, 2000 Prototype
 #### Release by SSNTails ( www.youtube.com/@ssntails )
 #### https://github.com/SSNTails/SRB2Proto
 #### Special thanks to Saxman for preservation!
@@ -7,7 +7,7 @@
 ## *** REQUIRES A COPY OF DOOM 2 TO RUN ***
 ### Be awesome and buy John Carmack another rocket - he deserves it!
 
-An early build of SRB2 was given to me by my old friend Saxman, who worked with me on Sonic Doom 2 and is best known for starting the Sonic ROM hacking scene. Back in February 2000, I gave him an in-progress build of the game along with a complete copy of the source code.
+An early build of SRB2 was given to me by my old friend Saxman, who worked with me on Sonic Doom 2 and is best known for starting the Sonic ROM hacking scene. Back in March 2000, I gave him an in-progress build of the game along with a complete copy of the source code.
 Recently, we attended Retro World Expo in Hartford, Connecticut in August 2023 together, and he shared with me the original, intact files that I sent him.
 
 Here is a cleaned up copy of the files, with (hopefully) all of the copyrighted DOOM material removed. Perhaps even more interesting, source code is included. At the time, Doom Legacy source code was not exactly 'public' -- you had to e-mail faB and Boris and ask for it. There's some interesting development logs (_LOGS) that provide a lot of insight into Doom Legacy's early development, as well as even a few log entries of my own!
