@@ -1,1 +1,1 @@
-srb2win -file srb2.wad test2.wad tails.wad -nocd
+srb2win -file srb2.wad test2.wad tails.wad srb2z1m1.wad srb2z1m2.wad srb2z1m3.wad srb2z2m1.wad srb2z2m2.wad srb2z2m3.wad srb2z3m1.wad srb2z3m2.wad srb2z3m3.wad srb2z4m1.wad srb2z4m2.wad srb2z4m3.wad srb2z5m1.wad srb2z5m2.wad srb2z5m3.wad srb2z6m1.wad srb2z6m2.wad srb2z6m3.wad srb2z7m1.wad srb2z7m2.wad srb2z8m1.wad srb2z8m3.wad srb2z9m1.wad realhpz.wad -nocd -nomusic
