@@ -16,12 +16,15 @@ This prototype is early enough, that while custom EXE changes were going on, the
 
 #### If you get an error, "I_RegisterSong: StreamBufferSetup FAILED", that means you must use the -nomusic parameter to launch the game.
 
+### Usage: srb2win.exe -file srb2.wad test2.wad tails.wad morefileshere.wad -nomusic -nocd -win
+### You must launch from command line. If you don't know how to do this, you'll need to learn!
+
 #### File descriptions:
 * autoexec.cfg - Sets up some very interesting camera control bindings on boot
 * realhpz.wad  - Hidden Palace Zone, possibly the FIRST map ever made for SRB2. So early, it was even started in Boom.
 * spdhwy.wad   - Speed Highway At Dawn
 * srb2.wad     - What eventually became SRB2.SRB
-* srb2test.bat - Handy .BAT file to run the game (noobs use this)
+* srb2test.bat - Handy .BAT file showing an example of how to load the base wads and a level wad.
 * srb2z1m1.wad - GFZ1 at the time of the prototype. Very similar to SRB2Xmas v0.93
 * srb2z1m1_brak.wad - GFZ1, restored to a long-ago test where mini Black Eggmen were inserted into the map
 * srb2z1m1_restored.wad - GFZ1, restored to what it would look like before the SRB2Xmas 0.93 edits were made.
