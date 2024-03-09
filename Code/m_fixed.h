@@ -3,6 +3,7 @@
 #ifndef __M_FIXED__
 #define __M_FIXED__
 
+#include <stdlib.h>
 #include "doomtype.h"
 
 //
@@ -21,12 +22,24 @@ fixed_t FixedDiv (fixed_t a, fixed_t b);
 fixed_t FixedDiv2 (fixed_t a, fixed_t b);
 */
 
-
+#ifndef USEASM
+    fixed_t FixedMul (fixed_t a, fixed_t b);
+    fixed_t FixedDiv2 (fixed_t a, fixed_t b);
+#else
 #ifdef __WIN32__
     //Microsoft VisualC++
     fixed_t __cdecl FixedMul (fixed_t a, fixed_t b);
     //fixed_t FixedDiv (fixed_t a, fixed_t b);
     fixed_t __cdecl FixedDiv2 (fixed_t a, fixed_t b);
+#elif defined LINUX
+fixed_t	FixedMul (fixed_t a, fixed_t b)
+{
+	return ((int64_t) a * (int64_t) b) >> FRACBITS;
+}
+fixed_t FixedDiv2 (fixed_t a, fixed_t b)
+{
+	return (((abs(a) >> 14) >= abs(b)) ? (((a) ^ (b)) >> 31) ^ MAXINT : FixedDiv2(a, b));
+}
 #else
     #ifdef __WATCOMC__
     #pragma aux FixedMul =  \
@@ -74,6 +87,7 @@ fixed_t FixedDiv2 (fixed_t a, fixed_t b);
   return ret;
         }
     #endif
+#endif
 #endif
 
 static inline fixed_t FixedDiv (fixed_t a, fixed_t b)

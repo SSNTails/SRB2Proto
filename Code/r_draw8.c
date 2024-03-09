@@ -297,6 +297,57 @@ void R_DrawTranslatedColumn_8 (void)
 }
 //#endif
 
+#ifndef USEASM
+// used in tiltview, but never called for now, but who know...
+void R_DrawSpanNoWrap (void)
+{}
+#endif
+
+#ifndef USEASM
+void R_DrawShadeColumn_8 (void)
+{
+    register int     count;
+    register byte*   dest;
+    register fixed_t frac;
+    register fixed_t fracstep;
+
+    // check out coords for src*
+    if((dc_yl<0)||(dc_x>=vid.width))
+      return;
+
+    count = dc_yh - dc_yl;
+    if (count < 0)
+        return;
+
+#ifdef RANGECHECK
+    if ((unsigned)dc_x >= vid.width
+        || dc_yl < 0
+        || dc_yh >= vid.height)
+    {
+        I_Error ( "R_DrawColumn: %i to %i at %i",
+                  dc_yl, dc_yh, dc_x);
+    }
+
+#endif
+
+    // FIXME. As above.
+    //src  = ylookup[dc_yl] + columnofs[dc_x+2];
+    dest = ylookup[dc_yl] + columnofs[dc_x];
+
+
+    // Looks familiar.
+    fracstep = dc_iscale;
+    frac = dc_texturemid + (dc_yl-centery)*fracstep;
+
+    // Here we do an additional index re-mapping.
+    do
+    {
+        *dest = *( colormaps + (dc_source[frac>>FRACBITS] <<8) + (*dest) );
+        dest += vid.width;
+        frac += fracstep;
+    } while (count--);
+}
+#endif
 
 // ==========================================================================
 // SPANS

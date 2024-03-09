@@ -351,7 +351,9 @@ void Got_NameAndcolor(char **cp,int playernum)
 
     // name
     if(demoversion>=128)
-        READSTRING(*cp,player_names[playernum])
+    {
+        READSTRING(*cp,player_names[playernum]);
+    }
     else
     {
         memcpy(player_names[playernum],*cp,MAXPLAYERNAME);

@@ -403,7 +403,7 @@ void R_LoadTextures (void)
     pnames = W_CacheLumpName ("PNAMES", PU_STATIC);
     nummappatches = LONG ( *((int *)pnames) );
     name_p = pnames+4;
-    patchlookup = alloca (nummappatches*sizeof(*patchlookup));
+    patchlookup = malloc (nummappatches*sizeof(*patchlookup));
 
     for (i=0 ; i<nummappatches ; i++)
     {
@@ -503,6 +503,7 @@ void R_LoadTextures (void)
         textureheight[i] = texture->height<<FRACBITS;
     }
 
+    free(patchlookup);
     Z_Free (maptex1);
     if (maptex2)
         Z_Free (maptex2);
