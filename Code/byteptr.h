@@ -44,15 +44,15 @@
 #define READANGLE(p)        ({ angle_t* p_tmp = (angle_t*)p; angle_t b = *p_tmp; p_tmp++; p = (void*)p_tmp; b; })
 #define READDOUBLE(p)       ({ double* p_tmp = (double*)p; double b = *p_tmp; p_tmp++; p = (void*)p_tmp; b; })
 #else
-#define READBYTE(p)         *((byte   *)p)++
-#define READCHAR(p)         *((char   *)p)++
-#define READSHORT(p)        *((short  *)p)++
-#define READUSHORT(p)       *((USHORT *)p)++
-#define READLONG(p)         *((long   *)p)++
-#define READULONG(p)        *((ULONG  *)p)++
-#define READFIXED(p)        *((fixed_t*)p)++
-#define READANGLE(p)        *((angle_t*)p)++
-#define READDOUBLE(p)       *((double *)p)++
+#define READBYTE(p)         *((byte   *)p++)
+#define READCHAR(p)         *((char   *)p++)
+#define READSHORT(p)        *((short  *)p++)
+#define READUSHORT(p)       *((USHORT *)p++)
+#define READLONG(p)         *((long   *)p++)
+#define READULONG(p)        *((ULONG  *)p++)
+#define READFIXED(p)        *((fixed_t*)p++)
+#define READANGLE(p)        *((angle_t*)p++)
+#define READDOUBLE(p)       *((double *)p++)
 #endif
 
 #define READSTRING(p,s)     { int tmp_i = 0; do { s[tmp_i] = READBYTE(p); } while(s[tmp_i++]); }
@@ -80,7 +80,7 @@ static inline void writelong(void * ptr, int val)
 	cp[3] = val ;
 }
 
-static inline void writedouble(void * ptr, INT64 val)
+static inline void writedouble(void * ptr, int64_t val)
 {
 	char * cp = ptr;
 	cp[0] = val ;  val >>= 8;
@@ -93,19 +93,19 @@ static inline void writedouble(void * ptr, INT64 val)
 	cp[7] = val ;
 }
 
-#define WRITEBYTE(p,b)      *((byte   *)p)++ = (byte)(b)
-#define WRITECHAR(p,b)      *((char   *)p)++ = (char)(b)
-#define WRITESHORT(p,b)     writeshort(((short *)p)++,  (short)(b))
-#define WRITEUSHORT(p,b)    writeshort(((u_short*)p)++, (USHORT)(b))
-#define WRITELONG(p,b)      writelong (((long  *)p)++,  (long)(b))
-#define WRITEULONG(p,b)     writelong (((u_long *)p)++, (u_long)(b))
-#define WRITEFIXED(p,b)     writelong (((fixed_t*)p)++, (fixed_t)(b))
-#define WRITEANGLE(p,b)     writelong (((angle_t*)p)++, (angle_t)(b))
+#define WRITEBYTE(p,b)      *((byte   *)p++) = (byte)(b)
+#define WRITECHAR(p,b)      *((char   *)p++) = (char)(b)
+#define WRITESHORT(p,b)     writeshort(((short *)p++),  (short)(b))
+#define WRITEUSHORT(p,b)    writeshort(((u_short*)p++), (USHORT)(b))
+#define WRITELONG(p,b)      writelong (((long  *)p++),  (long)(b))
+#define WRITEULONG(p,b)     writelong (((u_long *)p++), (u_long)(b))
+#define WRITEFIXED(p,b)     writelong (((fixed_t*)p++), (fixed_t)(b))
+#define WRITEANGLE(p,b)     writelong (((angle_t*)p++), (angle_t)(b))
 #define WRITESTRING(p,b)    { int tmp_i=0; do { WRITECHAR(p,b[tmp_i]); } while(b[tmp_i++]); }
 #define WRITESTRINGN(p,b,n) { int tmp_i=0; do { WRITECHAR(p,b[tmp_i]); if(!b[tmp_i]) break;tmp_i++; } while(tmp_i<n); }
 #define WRITEMEM(p,s,n)     memcpy(p, s, n);p+=n
 // New "functions" Tails
-#define WRITEDOUBLE(p,b)      writedouble(((double*)p)++,  *(INT64 *)&b) //Alam_GBC: Test Me!
+#define WRITEDOUBLE(p,b)      writedouble(((double*)p++),  *(int64_t *)&b) //Alam_GBC: Test Me!
 
 // Read a signed quantity from little-endian, unaligned data.
 //
@@ -158,15 +158,15 @@ static inline double readouble(void * ptr)
 	return *(double *)&llr;
 }
 
-#define READBYTE(p)         *((byte   *)p)++
-#define READCHAR(p)         *((char   *)p)++
-#define READSHORT(p)        readshort ( ((short*) p)++)
-#define READUSHORT(p)       readushort(((USHORT*) p)++)
-#define READLONG(p)         readlong  (  ((long*) p)++)
-#define READULONG(p)        readulong ( ((ULONG*) p)++)
-#define READFIXED(p)        readlong  (  ((long*) p)++)
-#define READANGLE(p)        readulong ( ((ULONG*) p)++)
-#define READDOUBLE(p)       readouble (((double*)p)++) //Alam_GBC: Test Me!
+#define READBYTE(p)         *((byte   *)p++)
+#define READCHAR(p)         *((char   *)p++)
+#define READSHORT(p)        readshort ( ((short*) p++))
+#define READUSHORT(p)       readushort(((USHORT*) p++))
+#define READLONG(p)         readlong  (  ((long*) p++))
+#define READULONG(p)        readulong ( ((ULONG*) p++))
+#define READFIXED(p)        readlong  (  ((long*) p++))
+#define READANGLE(p)        readulong ( ((ULONG*) p++))
+#define READDOUBLE(p)       readouble (((double*)p++)) //Alam_GBC: Test Me!
 #define READSTRING(p,s)     { int tmp_i=0; do { s[tmp_i]=READBYTE(p);  } while(s[tmp_i++]); }
 #define SKIPSTRING(p)       while(READBYTE(p))
 #define READMEM(p,s,n)      memcpy(s, p, n);p+=n
