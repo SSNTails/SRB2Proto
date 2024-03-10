@@ -130,6 +130,7 @@ static unsigned char x_red_offset = 0;
 static unsigned char x_green_offset = 0;
 static unsigned char x_blue_offset = 0;
 
+static void Expand4(unsigned *, double *);
 //
 //  Translates the key currently in X_event
 //
@@ -750,7 +751,6 @@ void I_FinishUpdate(void)
     else if (multiply == 4)
     {
 	// Broken. Gotta fix this some day.
-	static void Expand4(unsigned *, double *);
   	Expand4 ((unsigned *)(screens[0]), (double *) (image->data));
     }
 

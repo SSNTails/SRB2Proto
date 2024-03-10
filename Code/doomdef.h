@@ -39,7 +39,7 @@
 //#define CLIENTPREDICTION      // not finished
 //#define TILTVIEW              // not finished
 //#define PERSPCORRECT          // not finished
-#define SPLITSCREEN             // not finished
+//#define SPLITSCREEN             // not finished
 #define ABSOLUTEANGLE           // work fine, soon #ifdef and old code remove
 //#define JOININGAME              // next incoming feature to do
 

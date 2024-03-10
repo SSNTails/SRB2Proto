@@ -178,6 +178,30 @@ void V_CopyRect
     }
 }
 
+#if !defined(USEASM) || defined(WIN32)
+// --------------------------------------------------------------------------
+// Copy a rectangular area from one bitmap to another (8bpp)
+// srcPitch, destPitch : width of source and destination bitmaps
+// --------------------------------------------------------------------------
+void VID_BlitLinearScreen (byte* srcptr, byte* destptr,
+                           int width, int height,
+                           int srcrowbytes, int destrowbytes)
+{
+    if (srcrowbytes==destrowbytes)
+    {
+        memcpy (destptr, srcptr, srcrowbytes * height);
+    }
+    else
+    {
+        while (height--)
+        {
+            memcpy (destptr, srcptr, width);
+            destptr += destrowbytes;
+            srcptr += srcrowbytes;
+        }
+    }
+}
+#endif
 
 //
 //  V_DrawMappedPatch : like V_DrawScaledPatch, but with a colormap.

@@ -180,7 +180,7 @@ void P_ArchiveWorld (void)
 //                *((short *)put)++=(short)ss->tag;
         }
     }
-    *((unsigned short *)put)++=0xffff;
+    *((unsigned short *)put++)=0xffff;
     /*
     // do sectors
     for (i=0, sec = sectors ; i<numsectors ; i++,sec++)
@@ -303,7 +303,7 @@ void P_UnArchiveWorld (void)
 
     while (1)
     {
-        i=*((unsigned short *)get)++;
+        i=*((unsigned short *)get++);
 
         if (i==0xffff)
             break;
