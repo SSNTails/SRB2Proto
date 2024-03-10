@@ -1,0 +1,81 @@
+// first version, problem with corner clipping
+//
+int    ClipWallToFrustum (wallVert3D *inVerts, wallVert3D *poutvert)
+{
+    float       tl,tu;
+    float       deltax, deltay, deltaz;
+
+    int         i;
+    int         nrClipVerts;
+    wallVert3D  *pinvert;
+    wallVert3D  *nextvert;
+    //wallVert3D  temp[8];    //temporary clipped vertices for left/right border
+
+    // set texture coordinates
+    pinvert = inVerts;
+
+    pinvert[0].s = 0.0f;
+    pinvert[3].s = 0.0f;
+    pinvert[2].s = 255.0f;
+    pinvert[1].s = 255.0f;
+    pinvert[3].t = 0.0f;
+    pinvert[2].t = 0.0f;
+    pinvert[0].t = 199.0f;
+    pinvert[1].t = 199.0f;
+
+    nrClipVerts = 0;
+
+    for (i=0; i<4; i++)
+    {
+        nextvert = &inVerts[ (i + 1) & 3 ];
+    
+        tl = 0; tu = 1;
+        deltax = nextvert->x - pinvert->x;
+        deltaz = nextvert->z - pinvert->z;
+        if ( ClipT( -deltax - deltaz, pinvert->x + pinvert->z, &tl, &tu ) ) {
+            if ( ClipT( deltax - deltaz, pinvert->z - pinvert->x, &tl, &tu ) ) {
+                deltay = nextvert->y - pinvert->y;
+                if ( ClipT( -deltay - deltaz, pinvert->y + pinvert->z, &tl, &tu ) ) {
+                    if ( ClipT( deltay - deltaz, pinvert->z - pinvert->y, &tl, &tu ) ) {
+                        // clipped start point
+                        if ( tl > 0 ) {
+                            poutvert->x = pinvert->x + tl * deltax;
+                            poutvert->y = pinvert->y + tl * deltay;
+                            poutvert->z = pinvert->z + tl * deltaz;
+
+                            poutvert->w = pinvert->w + tl * (nextvert->w - pinvert->w);
+                            poutvert->s = pinvert->s + tl * (nextvert->s - pinvert->s);
+                            poutvert->t = pinvert->t + tl * (nextvert->t - pinvert->t);
+                        }
+                        else {
+                            // copy as it is
+                            *poutvert = *pinvert;
+                        }
+                        poutvert++;
+                        nrClipVerts++;
+                        
+                        // clipped end point
+                        if ( tu < 1 ) {
+                            poutvert->x = pinvert->x + tu * deltax;
+                            poutvert->y = pinvert->y + tu * deltay;
+                            poutvert->z = pinvert->z + tu * deltaz;
+                        
+                            poutvert->w = pinvert->w + tu * (nextvert->w - pinvert->w);
+                            poutvert->s = pinvert->s + tu * (nextvert->s - pinvert->s);
+                            poutvert->t = pinvert->t + tu * (nextvert->t - pinvert->t);
+                            
+                            poutvert++;
+                            nrClipVerts++;
+                        }
+
+                        // ??
+                    }
+                }
+            }
+        }
+        
+        pinvert++;
+    }
+
+    return nrClipVerts;
+}
