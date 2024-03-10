@@ -1,0 +1,513 @@
+// r_glide.c : 3Dfx Glide Renderer Interface DLL
+
+#include "../../doomdef.h"
+#include "../../i_video.h"
+#include "../../g_game.h"  //hack test player health
+#include "../../command.h"
+
+#include "../win_vid.h"
+#include "../win_main.h"
+
+#include "fabfxlib.h"
+#include "vidglide.h"
+
+#define _CREATE_DLL_
+#include "r_glide.h"
+
+#include "hwr_data.h"
+
+// ==========================================================================
+//                                     CURRENT GLIDE STATES TO USE BY V_VIDEO
+// ==========================================================================
+
+
+
+
+
+typedef struct fabTexture_s {
+       GrTexInfo    grInfo;
+       FxU32        startAddress;
+       FxU32        textureSize;
+} fabTexture_t;
+
+
+
+
+EXPORT BOOL HWRAPI( Init ) (void) ;
+EXPORT void HWRAPI( Shutdown ) (void) ;
+EXPORT void HWRAPI( GetExtraModes ) (void) ;
+EXPORT void HWRAPI( SetMode ) (void) ;
+EXPORT void HWRAPI( SetPalette ) (PALETTEENTRY* pal) ;
+EXPORT void HWRAPI( FinishUpdate ) (void) ;
+
+
+
+
+// ==========================================================================
+// Protos
+// ==========================================================================
+static  void    GLIDE_BufferClear (void);
+static  void    GLIDE_SetMode (int mode);
+
+static  void    GLIDE_InitStuff (void);
+static  void    GLIDE_FreeStuff (void);
+static  void    CrazyHouse (void);
+static  void    CrazyHouseInit (void);
+
+//
+//
+//
+
+
+
+
+
+    int glide_view=1;
+    int glide_console = 0;
+
+
+//
+//
+//
+EXPORT void HWRAPI( GLIDE_Printf ) (char* txt)
+{
+    if (!glide_display)
+        return;
+
+    tlConOutput (txt);
+}
+
+
+//
+// show doom screen on 3dfx card, use a polygon & texture.. lame-o but so I know what's going on
+// the screen until all is done.
+//
+static unsigned char* myTextureData = NULL;
+//static unsigned char* wallTextureData = NULL;
+
+    fabTexture_t myTexture;
+
+/*
+    fabTexture_t wallTexture;
+static  void        InitWallTexture (void)
+{
+    int x,y;
+    FxU32 textureSize, startAddress;
+    GrTexInfo* info;
+    
+    //draw a nice XOR pattern
+    wallTextureData = malloc (256*256);
+    if (!wallTextureData)
+        dl.I_Error ("no mem billy 2");
+    for (x=0;x<256;x++) {
+        for (y=0; y<256; y++)
+            *(wallTextureData + (y<<8) + x) = (unsigned char)x ^ y;
+    }
+
+    // setup the texture
+    info = &wallTexture.grInfo;
+    info->smallLodLog2 = GR_LOD_LOG2_256;
+    info->largeLodLog2 = GR_LOD_LOG2_256;
+    info->aspectRatioLog2 = GR_ASPECT_LOG2_1x1;
+    info->format = GR_TEXFMT_P_8;
+    info->data = (void*)wallTextureData;
+    
+    textureSize = grTexTextureMemRequired(GR_MIPMAPLEVELMASK_BOTH, info);
+    startAddress = lastStartAddress;
+    if ((startAddress + textureSize)> grTexMaxAddress(GR_TMU0)) {
+        dl.I_Error ("error: texture too big for TMU0\n");
+    }
+
+    wallTexture.textureSize = textureSize;
+    wallTexture.startAddress = startAddress;
+    
+    grTexDownloadMipMap (GR_TMU0, wallTexture.startAddress, GR_MIPMAPLEVELMASK_BOTH, &wallTexture.grInfo);
+}*/
+
+static void     *state = NULL;      // used to save current Glide state
+static  void        CrazyHouseInit (void)
+{
+    FxU32 textureSize, startAddress;
+    GrTexInfo* info;
+
+    dl.CONS_Printf ("GLIDE Screen Texture Init..\n");
+
+    if (state == NULL)
+    {
+        FxI32 state_size;
+        grGet (GR_GLIDE_STATE_SIZE, 4, &state_size);
+        state = malloc(state_size);
+    }
+
+    myTextureData = malloc (256*256);
+    if (!myTextureData)
+        dl.I_Error ("no mem billy");
+
+    // setup the texture
+    info = &myTexture.grInfo;
+    info->smallLodLog2 = GR_LOD_LOG2_256;
+    info->largeLodLog2 = GR_LOD_LOG2_256;
+    info->aspectRatioLog2 = GR_ASPECT_LOG2_1x1;
+    info->format = GR_TEXFMT_P_8;
+    info->data = (void*)myTextureData;
+    
+    textureSize = grTexTextureMemRequired(GR_MIPMAPLEVELMASK_BOTH, info);
+    //MEGA-CRAPPY !!! load it at end - 65536, coz console of 3dfx uses max 256x256 characters texture
+    // so put screen just before it, so don't mess with my cache textures from minaddress.. yech
+    startAddress = grTexMaxAddress(GR_TMU0) - textureSize - (65536);
+    if ((startAddress + textureSize)> grTexMaxAddress(GR_TMU0))
+        dl.I_Error ("error: texture too big for TMU0\n");
+
+    myTexture.textureSize = textureSize;
+    myTexture.startAddress = startAddress;
+
+    
+
+
+//    InitWallTexture ();
+}
+
+// ==========================================================================
+// Vertex definitions
+// ==========================================================================
+
+typedef struct {
+	float	x,y;
+	unsigned long   argb;
+	float	oow;			// one-over-w
+
+    float   sow;            /* s texture ordinate (s over w) */
+    float   tow;            /* t texture ordinate (t over w) */  
+} myVertex2Dw;
+
+// Polygon chtuff for screen texture :)
+static  myVertex2Dw  outVerts[4];		//projected vertices
+
+// setup the texture coordinates into a face, draw 2 triangles
+static void DrawFaceTex (int a, int b, int c, int d)
+{
+    // set texture coordinates
+    outVerts[a].sow = 0.0f * outVerts[a].oow;
+    outVerts[d].sow = 0.0f * outVerts[d].oow;
+    outVerts[c].sow = 255.0f * outVerts[c].oow;
+    outVerts[b].sow = 255.0f * outVerts[b].oow;
+    outVerts[d].tow = 0.0f * outVerts[d].oow;
+    outVerts[c].tow = 0.0f * outVerts[c].oow;
+    outVerts[a].tow = 199.0f * outVerts[a].oow;
+    outVerts[b].tow = 199.0f * outVerts[b].oow;
+    
+    grDrawTriangle (&outVerts[a],&outVerts[c],&outVerts[b]);
+    grDrawTriangle (&outVerts[a],&outVerts[d],&outVerts[c]);
+}
+
+static  void  CrazyHouse (void)
+{
+    //float w,h;
+
+    // save current state and vertex layout
+    grGlideGetState( state );
+    
+    // lame-o  copy part of screen to texture buffer
+    dl.VID_BlitLinearScreen (vid.buffer+32, myTextureData,
+						  256, MIN(vid.height,256),
+						  vid.width*vid.bpp, 256 );
+
+    // download doom screen as texture :)
+    grTexDownloadMipMap (GR_TMU0, myTexture.startAddress, GR_MIPMAPLEVELMASK_BOTH, &myTexture.grInfo);
+
+    grCullMode (GR_CULL_DISABLE); //POSITIVE);
+    grDepthBufferFunction( GR_CMP_ALWAYS );
+    grAlphaTestReferenceValue( 0x1 );
+
+    // setup to use the texture
+    grTexCombine (GR_TMU0, GR_COMBINE_FUNCTION_LOCAL,
+                           GR_COMBINE_FACTOR_NONE,
+                           GR_COMBINE_FUNCTION_LOCAL,
+                           GR_COMBINE_FACTOR_NONE,
+                           FXFALSE, FXFALSE );
+	grTexFilterMode( GR_TMU0,
+                     GR_TEXTUREFILTER_BILINEAR,
+                     GR_TEXTUREFILTER_BILINEAR );
+    
+	grTexMipMapMode( GR_TMU0,
+                     GR_MIPMAP_DISABLE,         // no mipmaps based on depth
+                     FXFALSE );
+
+    grColorCombine( GR_COMBINE_FUNCTION_SCALE_OTHER,        // factor * Color other
+                    GR_COMBINE_FACTOR_LOCAL,                 // local color is factor
+                    GR_COMBINE_LOCAL_CONSTANT,              // local is constant color
+                    GR_COMBINE_OTHER_TEXTURE,               // color from texture map
+                    FXFALSE );
+    grAlphaCombine( GR_COMBINE_FUNCTION_SCALE_OTHER,        // factor * Alpha other
+                    GR_COMBINE_FACTOR_ONE,                  // factor = 1
+                    GR_COMBINE_LOCAL_NONE,                  // unspecified alpha
+                    GR_COMBINE_OTHER_CONSTANT,               // alpha from texture map
+                    FXFALSE );
+    grTexSource (GR_TMU0, myTexture.startAddress, GR_MIPMAPLEVELMASK_BOTH, &myTexture.grInfo);
+
+    /*grColorCombine(GR_COMBINE_FUNCTION_LOCAL,
+				GR_COMBINE_FACTOR_NONE,
+				GR_COMBINE_LOCAL_ITERATED,
+				GR_COMBINE_OTHER_NONE,
+				FXFALSE );*/
+
+    // set texture coordinates
+    outVerts[0].oow = 1.0f/3.0f;
+    outVerts[1].oow = 1.0f/3.0f;
+    outVerts[2].oow = 1.0f/3.0f;
+    outVerts[3].oow = 1.0f/3.0f;
+    
+    outVerts[0].argb = 0xffff80c0;  //in case of see colours are used
+    outVerts[1].argb = 0xff80ffc0;
+    outVerts[2].argb = 0xffc080ff;
+    outVerts[3].argb = 0xff80c0ff;
+
+    // 3-2
+    // | |
+    // 0-1
+    // the software render screen texture is 256x200
+    outVerts[0].x = outVerts[3].x = GLIDE_WIDTH - 160;
+    outVerts[1].x = outVerts[2].x = GLIDE_WIDTH - 1;
+    outVerts[0].y = outVerts[1].y = 100;
+    outVerts[3].y = outVerts[2].y = 0;
+
+    grConstantColorValue (0xffffffff);
+    DrawFaceTex (0,1,2,3);
+
+    // restore last Glide state
+    grGlideSetState(state);
+}
+
+
+
+static void GLIDE_FreeStuff (void)
+{
+    GR_FreeStuff ();
+
+//    if (wallTextureData)
+//        free (wallTextureData);
+    if (state)
+        free(state);
+    if (myTextureData)
+        free (myTextureData);
+}
+
+
+
+
+// create flat texture with alpha channel test
+/*
+static GlideMipmap_t* grmiptest;
+void   HWR_crappytestinit(void)
+{
+    GlideMipmap_t* grmip;
+    byte* data;
+    byte* dest;
+    int x,y;
+
+    grmip = malloc(sizeof(GlideMipmap_t));
+    if (!grmip)
+        I_Error ("damn grmip error");
+   
+    grmip->grInfo.smallLodLog2 = GR_LOD_LOG2_64;
+    grmip->grInfo.largeLodLog2 = GR_LOD_LOG2_64;
+    grmip->grInfo.aspectRatioLog2 = GR_ASPECT_LOG2_1x1;
+    grmip->grInfo.format = GR_TEXFMT_AP_88;
+    grmip->downloaded = false;
+
+    // the flat raw data needn't be converted with palettized textures
+    data = W_CacheLumpName ("GRNROCK", PU_CACHE);
+    dest = malloc (64*64*2);
+    if (!dest)
+        I_Error ("damn test error");
+
+    grmip->grInfo.data = dest;
+    for (y=0;y<64;y++) {
+        for (x=0;x<64;x++) {
+            *(dest++) = data[(y<<6)+x];
+            *(dest++) = (x&1) ? 0xff : 0;
+        }
+    }
+    
+    HWR_DownloadMipmap (grmip);
+    
+    grmiptest = grmip;
+    Z_Free(data);
+}
+
+void HWR_crappytestdraw (void)
+{
+    GlideMipmap_t*  grmip;
+    wallVert2D      v[4];
+
+    grmip = grmiptest;
+    grTexSource (GR_TMU0, grmip->startAddress, GR_MIPMAPLEVELMASK_BOTH, &grmip->grInfo);
+
+    v[0].x = v[3].x = 0;
+    v[2].x = v[1].x = 255;
+    v[3].y = v[2].y = 0;
+    v[0].y = v[1].y = 255;
+
+    v[0].oow = v[1].oow = v[2].oow = v[3].oow = 1;
+
+    v[0].sow = v[3].sow = 0.5f;
+    v[2].sow = v[1].sow = 255.5f;
+    v[3].tow = v[2].tow = 0.5f;
+    v[0].tow = v[1].tow = 255.5f;
+
+    grDepthMask( FXFALSE );
+
+            grAlphaBlendFunction (
+                 GR_BLEND_SRC_ALPHA,
+                 GR_BLEND_ONE_MINUS_SRC_ALPHA,
+                 GR_BLEND_ONE,
+                 GR_BLEND_ZERO );    
+            grConstantColorValue ((0x80<<24) | 0xff0000);
+        grAlphaCombine( GR_COMBINE_FUNCTION_SCALE_OTHER,
+                GR_COMBINE_FACTOR_ONE,
+                GR_COMBINE_LOCAL_NONE,
+                GR_COMBINE_OTHER_TEXTURE,
+                FXFALSE );
+
+        grAlphaTestReferenceValue (0x80);
+        grAlphaTestFunction (GR_CMP_GEQUAL);
+
+    HWD.pfnDrawPolygon (v,4,0);
+
+        grAlphaTestFunction (GR_CMP_ALWAYS);
+            grAlphaBlendFunction(GR_BLEND_ONE, GR_BLEND_ZERO, GR_BLEND_ONE, GR_BLEND_ZERO);
+    grDepthMask( FXTRUE );
+}
+*/
+
+
+/*
+// HWR_DrawColumnInCache
+// Clip and draw a column from a patch into a cached post.
+//
+void HWR_DrawColumnInCache (column_t*	 patch,
+			   byte*	 cache,
+			   int		 originy,
+			   int		 cacheheight )
+{
+    int 	count;
+    int 	position;
+    byte*	source;
+    byte*	dest;
+
+    dest = (byte *)cache; //+ 3;
+
+    while (patch->topdelta != 0xff)
+    {
+	source = (byte *)patch + 3;
+	count = patch->length;
+	position = originy + patch->topdelta;
+
+	if (position < 0)
+	{
+	    count += position;
+	    position = 0;
+	}
+
+	if (position + count > cacheheight)
+	    count = cacheheight - position;
+
+	if (count > 0)
+	    memcpy (cache + position, source, count);
+
+	patch = (column_t *)(  (byte *)patch + patch->length + 4);
+    }
+}
+*/
+
+
+// =====================================================================================================
+//                                    DEBUGGING CRAP
+// =====================================================================================================
+
+    /*
+    if (wClipVerts>=2 && gr_backsector)
+    {
+        if (bottom) {
+            outVerts[0].argb = 0xff8080c0;
+	        outVerts[1].argb = 0xffc08080;
+            grDrawLine (&outVerts[0],&outVerts[1]);
+        }
+        if (top) {
+            outVerts[3].argb = 0xff2040c0;
+	        outVerts[2].argb = 0xffc04020;
+            grDrawLine (&outVerts[3],&outVerts[2]);
+        }
+    }
+
+
+    //HWR_Triangulate ();
+
+    /*outVerts[0].argb = 0xff40f030;  //green for floor
+	outVerts[1].argb = 0xff30ff40;
+	outVerts[2].argb = 0xff40c0ff;  //cyan for sky (ceiling)
+	outVerts[3].argb = 0xff40c0f0;*/
+    
+    /*
+    if (!gr_backsector) {
+        //debug
+        if (gr_linedef - lines == 12) {
+            
+            tlConOutput ("tri 0 clipverts %d %d %d\n", sidetri[0].p1,
+                                                       sidetri[0].p2,
+                                                       sidetri[0].p3);
+            tlConOutput ("tri 1 clipverts %d %d %d\n", sidetri[1].p1,
+                                                       sidetri[1].p2,
+                                                       sidetri[1].p3);
+            tlConOutput ("clip tl x(%#08f) y(%#08f) z(%#08f)\n", clVerts[3].x,clVerts[3].y,clVerts[3].z);
+            tlConOutput ("clip tr x(%#08f) y(%#08f) z(%#08f)\n", clVerts[2].x,clVerts[2].y,clVerts[2].z);
+            tlConOutput ("clip bl x(%#08f) y(%#08f) z(%#08f)\n", clVerts[0].x,clVerts[0].y,clVerts[0].z);
+            tlConOutput ("clip br x(%#08f) y(%#08f) z(%#08f)\n", clVerts[1].x,clVerts[1].y,clVerts[1].z);
+
+            tlConOutput ("2d   tl x(%f) y(%f)\n", outVerts[3].x, outVerts[3].y);
+            tlConOutput ("2d   tr x(%f) y(%f)\n", outVerts[2].x, outVerts[2].y);
+            tlConOutput ("2d   bl x(%f) y(%f)\n", outVerts[0].x, outVerts[0].y);
+            tlConOutput ("2d   br x(%f) y(%f)\n", outVerts[1].x, outVerts[1].y);
+
+
+            col = 0xffc0d0ff;
+        }//debug
+        else
+            col = 0xffff0000;
+#if 0
+        for (i=0; i<nrTris; i++) {
+            outVerts[sidetri[i].p1].argb = col;
+            outVerts[sidetri[i].p2].argb = col | 0x80;
+            outVerts[sidetri[i].p3].argb = col | 0xf0;
+
+            if (outVerts[sidetri[i].p1].x > 1280.0f ||
+                outVerts[sidetri[i].p1].x < -640.0f)
+                continue;
+            if (outVerts[sidetri[i].p1].y > 900.0f ||
+                outVerts[sidetri[i].p1].y < -500.0f)
+                continue;
+            if (outVerts[sidetri[i].p2].x > 1280.0f ||
+                outVerts[sidetri[i].p2].x < -640.0f)
+                continue;
+            if (outVerts[sidetri[i].p2].y > 900.0f ||
+                outVerts[sidetri[i].p2].y < -500.0f)
+                continue;
+            if (outVerts[sidetri[i].p3].x > 1280.0f ||
+                outVerts[sidetri[i].p3].x < -640.0f)
+                continue;
+            if (outVerts[sidetri[i].p3].y > 900.0f ||
+                outVerts[sidetri[i].p3].y < -500.0f)
+                continue;
+            grDrawTriangle (outVerts + sidetri[i].p1,
+                            outVerts + sidetri[i].p2,
+                            outVerts + sidetri[i].p3);
+            col = col ^ 0xff00;
+        }
+#endif
+    }
+    else
+    {
+        //grDrawLine (outVerts, outVerts+1);
+        //grDrawLine (outVerts+2, outVerts+3);
+    }
+    */

@@ -1,0 +1,29 @@
+--------------------Configuration: r_glide - Win32 Release--------------------
+Begining build with project "J:\DevStudio\MyProjects\legacy\win32\r_glide\r_glide.dsp", at root.
+Active configuration is Win32 (x86) Dynamic-Link Library (based on Win32 (x86) Dynamic-Link Library)
+
+Project's tools are:
+			"32-bit C/C++ Compiler for 80x86" with flags "/nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "__WIN32__" /D "__MSC__" /Fp"Release/r_glide.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c "
+			"OLE Type Library Maker" with flags "/nologo /D "NDEBUG" /mktyplib203 /o NUL /win32 "
+			"Win32 Resource Compiler" with flags "/l 0x40c /d "NDEBUG" "
+			"Browser Database Maker" with flags "/nologo /o"Release/r_glide.bsc" "
+			"COFF Linker for 80x86" with flags "glide3x.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:"Release/r_glide.pdb" /machine:I386 /out:"h:\jeux\doom2dev\r_glide.dll" /implib:"Release/r_glide.lib" "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating temp file "D:\TEMP\RSPF220.TMP" with contents </nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "__WIN32__" /D "__MSC__" /Fp"Release/r_glide.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
+"J:\DevStudio\MyProjects\legacy\win32\r_glide\r_glide.c"
+>
+Creating command line "cl.exe @D:\TEMP\RSPF220.TMP" 
+Creating temp file "D:\TEMP\RSPF221.TMP" with contents <glide3x.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:"Release/r_glide.pdb" /machine:I386 /out:"h:\jeux\doom2dev\r_glide.dll" /implib:"Release/r_glide.lib" 
+.\Release\fabfxlib.obj
+.\Release\r_glide.obj>
+Creating command line "link.exe @D:\TEMP\RSPF221.TMP" 
+Compiling...
+r_glide.c
+Linking...
+   Creating library Release/r_glide.lib and object Release/r_glide.exp
+
+
+
+r_glide.dll - 0 error(s), 0 warning(s)
