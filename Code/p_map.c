@@ -545,7 +545,7 @@ boolean PIT_CheckThing (mobj_t* thing)
         }
 
 // Start fan code Tails 12-03-99
-           if (tmthing->z >= tmfloorz)
+           if (tmthing->player && tmthing->z >= tmfloorz)
                {
                switch(thing->type) {
                  case MT_MISC34:
