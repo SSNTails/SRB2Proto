@@ -635,7 +635,6 @@ void R_InitLightTables (void)
     //  for each level / distance combination.
     for (i=0 ; i< LIGHTLEVELS ; i++)
     {
-        CONS_Printf("\nR_InitLightTables: i %i", i);
         startmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
         for (j=0 ; j<MAXLIGHTZ ; j++)
         {
@@ -1044,7 +1043,7 @@ void R_SetupFrame (player_t* player)
 
     if ( rendermode == render_soft ) 
     {
-        // clip it in the case we are looking a 3dfx 90° full aiming
+        // clip it in the case we are looking a 3dfx 90Â° full aiming
         // (lmps, nework and use F12...)
         G_ClipAimingPitch(&aimingangle);
 
