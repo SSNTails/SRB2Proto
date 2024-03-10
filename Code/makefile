@@ -23,7 +23,8 @@ WFLAGS=-Wall # -W -Wno-unused -Wno-sign-compare
 #indicate platform and what interface use with
 # posible value for now : DJGPPDOS
 #			  LINUX
-#DJGPPDOS = 1
+#if you want to build for linux, just change the comment
+DJGPPDOS = 1
 #LINUX=1
 
 ifdef LINUX
