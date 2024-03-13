@@ -178,7 +178,7 @@ void V_CopyRect
     }
 }
 
-#if !defined(USEASM) || defined(WIN32)
+#if !(defined(USEASM) || defined(WIN32))
 // --------------------------------------------------------------------------
 // Copy a rectangular area from one bitmap to another (8bpp)
 // srcPitch, destPitch : width of source and destination bitmaps
