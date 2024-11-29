@@ -129,7 +129,6 @@ void COM_BufExecute (void)
         com_wait--;
         return;
     }
-    return;
 
     while (com_text.cursize)
     {
